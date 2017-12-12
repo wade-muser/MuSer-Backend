@@ -1,0 +1,16 @@
+{
+  "name": "authmodule",
+  "version": "1.0.0",
+  "description": "MuSer Authentication Module",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lila.lazar@info.uaic.ro",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.168.0",
+    "dotenv": "^4.0.0",
+    "jsonwebtoken": "^8.1.0"
+  }
+}

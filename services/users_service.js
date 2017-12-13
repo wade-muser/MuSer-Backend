@@ -1,6 +1,8 @@
 require("dotenv").config({
     path: "env/config.env"
 });
+const CustomError = require("../utils/custom_error");
+const HTTP_STATUS_CODES = require("../utils/status_codes");
 const aws = require('aws-sdk');
 const config = {
     accessKeyId: process.env.DB_ACCESS_KEY_ID,
@@ -18,7 +20,8 @@ function findAll() {
     return new Promise((resolve, reject) => {
         dynamoDB.scan(query, (err, data) => {
             if (err) {
-                reject(err);
+                console.log(err);
+                reject(new CustomError("Some error occurred", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
                 return;
             }
             resolve(data.Items);
@@ -35,7 +38,8 @@ function insertUser(item) {
     return new Promise((resolve, reject) => {
         dynamoDB.put(query, (err, data) => {
             if (err) {
-                reject(err);
+                console.log(err);
+                reject(new CustomError("Some error occurred", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
                 return;
             }
             resolve(JSON.stringify(data, null, 4));
@@ -58,7 +62,8 @@ function find(email) {
     return new Promise((resolve, reject) => {
         dynamoDB.query(query, (err, data) => {
             if (err) {
-                reject(err);
+                console.log(err);
+                reject(new CustomError("Some error occurred", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
                 return;
             }
             const items = data.Items;

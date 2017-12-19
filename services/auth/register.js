@@ -1,6 +1,6 @@
-const AuthenticationService = require("../../services/authentication_service");
-const HTTP_STATUS_CODE = require("../../utils/status_codes");
-const HttpResponse = require("../../utils/http_response");
+const AuthenticationService = require("./authentication_service");
+const HttpResponse = require("../../commons/utils/http_response");
+const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 
 module.exports.handler = (event, context, callback) => {
@@ -15,7 +15,7 @@ module.exports.handler = (event, context, callback) => {
     if (!AuthenticationService.validateCredentials(credentials)) {
         console.log("Not all fields were completed");
         const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-            .statusCode(HTTP_STATUS_CODE.BAD_REQUEST)
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
             .body({
                 message: "Complete all fields"
             })
@@ -31,7 +31,7 @@ module.exports.handler = (event, context, callback) => {
         .then(() => {
             console.log("User was registered");
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(HTTP_STATUS_CODE.CREATED)
+                .statusCode(HTTP_STATUS_CODES.CREATED)
                 .body({
                     message: "Account was created"
                 })
@@ -44,7 +44,7 @@ module.exports.handler = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.httpStatusCode || HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred"
                 })

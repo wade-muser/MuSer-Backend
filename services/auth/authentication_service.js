@@ -1,9 +1,11 @@
-const CustomError = require("../utils/custom_error");
-const UsersService = require('./users_service');
 const crypto = require('crypto');
-const TokenService = require("./token_service");
+
+const CustomError = require("../../commons/utils/custom_error");
+const UsersService = require('../users/users_service');
+const TokenService = require("./utils/token_service");
+
 const HASH_ALGORITHM = "sha256";
-const HTTP_STATUS_CODES = require("../utils/status_codes");
+const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 
 function authenticate(credentials) {
@@ -23,6 +25,7 @@ function authenticate(credentials) {
                 const hash = crypto.createHash(HASH_ALGORITHM);
                 hash.update(credentials.password);
                 const hashPassword = hash.digest("hex");
+                
                 if (dbPassword === hashPassword) {
                     // Passwords matches
                     // Generate tokens

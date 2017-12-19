@@ -1,8 +1,7 @@
 require("dotenv").config({
     path: "env/config.env"
 });
-const CustomError = require("../utils/custom_error");
-const HTTP_STATUS_CODES = require("../utils/status_codes");
+
 const aws = require('aws-sdk');
 const config = {
     accessKeyId: process.env.DB_ACCESS_KEY_ID,
@@ -10,8 +9,11 @@ const config = {
     region: process.env.DB_REGION
 };
 aws.config.update(config);
-const dynamoDB = new aws.DynamoDB.DocumentClient();
 const USERS_TABLE_NAME = process.env.DB_USERS_TABLE_NAME;
+const dynamoDB = new aws.DynamoDB.DocumentClient();
+
+const CustomError = require("../../commons/utils/custom_error");
+const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 function findAll() {
     const query = {

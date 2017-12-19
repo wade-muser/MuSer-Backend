@@ -7,6 +7,7 @@ const tokenOptions = {
     expiresIn: process.env.JWT_EXPIRATION_TIME,
     algorithm: "RS256"
 };
+
 const publicKey = fs.readFileSync(process.env.JWT_PUBLIC_KEY_PATH);
 const privateKey = fs.readFileSync(process.env.JWT_PRIVATE_KEY_PATH);
 

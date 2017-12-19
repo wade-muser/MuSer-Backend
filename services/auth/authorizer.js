@@ -1,6 +1,6 @@
-const TokenService = require('../../services/token_service');
-const HTTP_CODE = require("../../utils/status_codes");
-const PolicyBuilder = require("./iam_policy_builder");
+const TokenService = require('./utils/token_service');
+const PolicyBuilder = require("./utils/iam_policy_builder");
+const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 
 module.exports.handler = (event, context, callback) => {
@@ -10,7 +10,7 @@ module.exports.handler = (event, context, callback) => {
             message: "Token not provided"
         };
         const body = {
-            statusCode: HTTP_CODE.UNAUTHORIZED,
+            statusCode: HTTP_STATUS_CODES.UNAUTHORIZED,
             body: JSON.stringify(messageBody)
         };
         console.log("[Authorizer] Token not provided");

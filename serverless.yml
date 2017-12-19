@@ -25,10 +25,6 @@ provider:
   stage : dev
   region: eu-west-1
 
-
-
-
-
 functions:
   authorizer:
     handler : functions/authorizer/authorizer.handler

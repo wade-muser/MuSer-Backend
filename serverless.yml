@@ -27,7 +27,6 @@ provider:
 functions:
   authorizer:
     handler : services/auth/authorizer.handler
-  
   login:
     handler: services/auth/login.handler
     events:
@@ -35,7 +34,6 @@ functions:
           path: login
           method: post
           cors: true
-
   register:
     handler: services/auth/register.handler
     events:
@@ -43,7 +41,43 @@ functions:
           path: register  
           method: post
           cors: true
+
+
+  getGenres:
+    handler: services/genres/genres.getGenres
+    events:
+      - http:
+          path: genres
+          method: get
+          cors: true
+          authorizer: authorizer
+  getGenreById:
+    handler: services/genres/genres.getGenreById
+    events:
+      - http:
+          path: genres/{id}
+          method: get
+          cors: true
+          authorizer: authorizer
+  getGenresRelatedById:
+    handler: services/genres/genres.getGenresRelatedById
+    events:
+      - http:
+          path: genres/{id}/related
+          method: get
+          cors: true
+          authorizer: authorizer
+  getTimelineForGenre:
+    handler: services/genres/genres.getTimelineForGenre
+    events:
+      - http:
+          path: genres/{id}/timeline
+          method: get
+          cors: true
+          authorizer: authorizer
+
   
+
   test:
     handler: functions/test/test.handler
     events:

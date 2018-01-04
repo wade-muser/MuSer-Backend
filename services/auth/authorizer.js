@@ -1,5 +1,7 @@
+//@ts-check
 const TokenService = require('./utils/token_service');
 const PolicyBuilder = require("./utils/iam_policy_builder");
+const HttpResponse = require("../../commons/utils/http_response");
 const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 
@@ -20,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
 
     TokenService.validate(token)
         .then(payload => {
-            console.log("[Authorizer]" + payload);
+            console.log("[Authorizer]" + JSON.stringify(payload));
             const email = payload.email;
             const effect = "Allow";
             const isAllowed = true;
@@ -33,7 +35,8 @@ module.exports.handler = (event, context, callback) => {
         })
         .catch(err => {
             console.log(err);
-            callback(err.message);
+            callback("Unauthorized");
+            // callback(err.message);
         });
 
 };

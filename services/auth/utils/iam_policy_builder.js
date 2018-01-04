@@ -5,7 +5,7 @@
  * @param {String} userId - user id
  * @param {String} effect  - Allow / Deny
  * @param {String} resource - resource ARN
- * @param {String} context - response context
+ * @param {Object} context - response context
  * @returns {Object} policyDocument
  */
 const buildIAMPolicy = (userId, effect, resource, context) => {

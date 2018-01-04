@@ -58,7 +58,8 @@ typings/
 **/*.env
 
 #Serverless Module
-.serverless/*
+.serverless/
 
 #Config Folder
-config/*
+config/
+.vscode/

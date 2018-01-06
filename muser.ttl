@@ -6,8 +6,8 @@
 @prefix foaf:   <http://xmlns.com/foaf/0.1> .
 
 @prefix dbo:    <http://dbpedia.org/ontology/> .
-@prefix dbr:    <http://dbpedia.org/resource> .
-@prefix dbp:    <http://dbpedia.org/property> .
+@prefix dbr:    <http://dbpedia.org/resource/> .
+@prefix dbp:    <http://dbpedia.org/property/> .
 
 @prefix wde: <http://www.wikidata.org/entity/> .
 @prefix wds: <http://www.wikidata.org/entity/statement/> .
@@ -27,6 +27,17 @@
 @prefix wdprn: <http://www.wikidata.org/prop/reference/value-normalized/> .
 @prefix wdwdno: <http://www.wikidata.org/prop/novalue/> .
 @prefix muser: <http://example.com/muser#> .
+
+# xsd:nonNegativeInteger
+# rdfs:subClassOf
+# rdfs:subPropertyOf
+# owl:sameAs - for individuals; equivalentProperty - for props; owl:equivalentClass - for classes;
+# owl:SymmetricProperty
+# owl:FunctionalProperty
+# owl:ReflexiveProperty
+# owl:unionOf
+# owl:Restriction
+# owl:hasKey
 
 # Properties
 muser:uuid          rdf:type       owl:DatatypeProperty ,
@@ -55,18 +66,37 @@ muser:name          rdf:type       owl:DatatypeProperty ,
                     rdfs:comment   "Name of the resource (string)" ;
                     rdfs:domain    muser:MusicalEntity, muser:Event, muser:MusicalPlaylist ;
                     rdfs:range     xsd:string ;
-                    owl:sameAs     rdfs:label .
+                    owl:equivalentProperty     rdfs:label .
+
+muser:gender        rdf:type       owl:DatatypeProperty ;
+                    rdfs:comment   "Sex of the MusicalArtist" ;
+                    rdfs:domain    muser:MusicalArtist ;
+                    rdfs:range     xsd:string ;
+                    owl:oneOf      ("male" "female") ;
+                    owl:equivalentProperty foaf:gender .
+
+muser:firstName     rdf:type       owl:DatatypeProperty ;
+                    rdfs:comment   "First name of a MusicalArtist" ;
+                    rdfs:domain    muser:MusicalArtist ;
+                    rdfs:range     xsd:string ;
+                    owl:equivalentProperty     foaf:givenName .
+
+muser:lastName      rdf:type       owl:DatatypeProperty ;
+                    rdfs:comment   "Last name of a MusicalArtist" ;
+                    rdfs:domain    muser:MusicalArtist ;
+                    rdfs:range     xsd:string ;
+                    owl:equivalentProperty     foaf:familyName .
 
 muser:about         rdf:type       owl:DatatypeProperty ;
                     rdfs:comment   "Description of the entity" ;
                     rdfs:domain    muser:MusicalArtist, muser:Event ;
                     rdfs:range     xsd:string ;
-                    owl:sameAs     rdfs:comment .
+                    owl:equivalentProperty     rdfs:comment .
 
 muser:duration      rdf:type       owl:DatatypeProperty ;
                     rdfs:comment   "Number of seconds of playtime for an audio creative work" ;
                     rdfs:domain    muser:Song, muser:Album ;
-                    rdfs:range     xsd:integer .
+                    rdfs:range     xsd:nonNegativeInteger .
 
 
 muser:relatedMusicalGenres rdf:type        owl:ObjectProperty ;
@@ -89,7 +119,7 @@ muser:musicalArtistCountry:   rdfs:type       owl:DatatypeProperty ;
                               rdfs:comment    "Origin country of the MusicalArtist" ;
                               rdfs:domain     muser:MusicalArtist ;
                               rdfs:range      xsd:string ;
-                              owl:sameAs      schema:Country .
+                              owl:equivalentProperty      schema:Country .
 
 
 muser:performs                rdfs:type       owl:ObjectProperty ;
@@ -158,19 +188,19 @@ muser:eventCountry            rdfs:type       owl:DatatypeProperty ;
                               rdfs:comment    "Country of the Event" ;
                               rdfs:domain     muser:Event ;
                               rdfs:range      xsd:string ;
-                              owl:sameAs      schema:Country .
+                              owl:equivalentProperty      schema:Country .
 
 muser:eventCity               rdfs:type       owl:DatatypeProperty ;
                               rdfs:comment    "City of the Event" ;
                               rdfs:domain     muser:Event ;
                               rdfs:range      xsd:string ;
-                              owl:sameAs      schema:City .
+                              owl:equivalentProperty      schema:City .
 
 muser:eventPlace              rdfs:type       owl:DatatypeProperty ;
                               rdfs:comment    "Place of the Event" ;
                               rdfs:domain     muser:Event ;
                               rdfs:range      xsd:string ;
-                              owl:sameAs      schema:Place .
+                              owl:equivalentProperty      schema:Place .
 
 muser:performAt               rdfs:type       owl:ObjectProperty ;
                               rdfs:comment    "MusicalArtist perform at Event" ;
@@ -210,107 +240,118 @@ muser:partOf                  rdfs:type       owl:ObjectProperty ;
 muser:MusicalEntity    rdf:type       owl:Class ;
                        owl:oneOf      (muser:MusicalArtist muser:MusicalGenre muser:Song muser:Album) .
 
-muser:MusicalArtist    rdf:type       owl:Class, foaf:Person, schema:Person ;
-                       rdfs:comment   "A musical artist" .
+muser:MusicalArtist    rdf:type        owl:Class ;
+                       rdfs:subClassOf foaf:Person, schema:Person ;
+                       rdfs:comment    "A musical artist" .
 
-muser:MusicalGenre     rdf:type       owl:Class, owl:Thing ;
-                       rdfs:comment   "Entity depicting the genre of a musical piece" .
+muser:MusicalGenre     rdf:type        owl:Class ;
+                       rdfs:subClassOf owl:Thing ;
+                       rdfs:comment    "Entity depicting the genre of a musical piece" .
 
-muser:Song             rdf:type       owl:Class, owl:Thing ;
-                       rdfs:comment   "An audio creative work" .
+muser:Song             rdf:type        owl:Class ;
+                       rdfs:subClassOf owl:Thing ;
+                       rdfs:comment    "An audio creative work" .
 
-muser:Album            rdf:type       owl:Class, owl:Thing ;
-                       rdfs:comment   "A suite of audio creative works" .
+muser:Album            rdf:type        owl:Class ;
+                       rdfs:subClassOf rdf:Seq ;
+                       rdfs:comment    "A sequence of audio creative works" .
 
-muser:Event            rdf:type       owl:Class, owl:Thing ;
-                       rdfs:comment   "An organized event" .
+muser:Event            rdf:type        owl:Class ;
+                       rdfs:subClassOf owl:Thing ;
+                       rdfs:comment    "An organized event" .
 
-muser:MusicalPlaylist  rdfs:type      owl:Class, owl:Thing ;
-                       rdfs:comment   "A list of songs customly created" .
+muser:MusicalPlaylist  rdfs:type       owl:Class ;
+                       rdfs:subClassOf owl:Seq ;
+                       rdfs:comment    "A sequence of songs customly created" .
 
 
 
 # Sample Instances
 muser:HipHop    rdf:type            muser:MusicalGenre ;
-                muser:name          "Hip-Hop"^^xsd:string ;
-                muser:uuid          "123-abc-qwe"^^xsd:string ;
-                muser:idWikidata    "Q123456"^^xsd:string ;
-                muser:idDbpedia     "HipHop"^^xsd:string ;
-                muser:idSpotify     "ABC"^^xsd:string ;
+                muser:name          "Hip-Hop" ;
+                muser:uuid          "123-abc-qwe" ;
+                muser:idWikidata    "Q123456" ;
+                muser:idDbpedia     "HipHop" ;
+                muser:idSpotify     "ABC" ;
                 muser:relatedMusicalGenres muser:TripHop, muser:RnB.
 
 muser:TripHop   rdf:type            muser:MusicalGenre ;
-                muser:name          "Trip-Hop"^^xsd:string ;
-                muser:uuid          "124-abc-qwe"^^xsd:string ;
-                muser:idWikidata    "Q123457"^^xsd:string ;
-                muser:idDbpedia     "TripHop"^^xsd:string ;
-                muser:idSpotify     "ABD"^^xsd:string ;
+                muser:name          "Trip-Hop" ;
+                muser:uuid          "124-abc-qwe" ;
+                muser:idWikidata    "Q123457" ;
+                muser:idDbpedia     "TripHop" ;
+                muser:idSpotify     "ABD" ;
                 muser:relatedMusicalGenres muser:HipHop .
 
 muser:RnB       rdf:type            muser:MusicalGenre ;
-                muser:name          "RnB"^^xsd:string ;
-                muser:UUID          "125-abc-qwe"^^xsd:string ;
-                muser:idWikidata    "Q123458"^^xsd:string ;
-                muser:idDbpedia     "RnB"^^xsd:string ;
-                muser:idSpotify     "ABE"^^xsd:string ;
+                muser:name          "RnB" ;
+                muser:UUID          "125-abc-qwe" ;
+                muser:idWikidata    "Q123458" ;
+                muser:idDbpedia     "RnB" ;
+                muser:idSpotify     "ABE" ;
                 muser:relatedMusicalGenres muser:HipHop .
 
 
 muser:GEazy     rdf:type            muser:MusicalArtist ;
-                muser:name          "G-Eazy"^^xsd:string ;
-                muser:uuid          "126-abc-qwe"^^xsd:string ;
-                muser:idWikidata    "Q123459"^^xsd:string ;
-                muser:idDbpedia     "GEazy"^^xsd:string ;
-                muser:idSpotify     "G-eazy"^^xsd:string ;
-                muser:about         "Hot firah nigga"^^xsd:string ;
+                owl:sameAs          dbr:G-Eazy ;
+                muser:uuid          "126-abc-qwe" ;
+                muser:idWikidata    "Q123459" ;
+                muser:idDbpedia     "GEazy" ;
+                muser:idSpotify     "G-eazy" ;
+                muser:name          "G-Eazy" ;
+                muser:firstName     "Gerald Earl" ;
+                muser:lastName      "Gillum" ;
+                muser:gender        "male" ;
+                muser:about         "Hot firah nigga" ;
                 muser:relatedMusicalGenres        muser:RnB, muser:HipHop ;
-                muser:country       "USA"^^xsd:string ;
+                muser:country       "USA" ;
                 muser:inceptionDate "2012-01-01"^^xsd:date ;
                 muser:performs       muser:HimAndI, muser:FavoriteGirl, muser:ThePlan ;
                 muser:released       muser:TheBeautifulAndTheDamned .
+                
 
 muser:TheBeautifulAndTheDamned      rdf:type        muser:Album ;
-                                    muser:uuid      "126-abc-qwe"^^xsd:string ;
-                                    muser:idWikidata "Q123459"^^xsd:string ;
-                                    muser:idDbpedia "TbatD"^^xsd:string ;
-                                    muser:idSpotify "TheBeaandTheDmnd"^^xsd:string ;
-                                    muser:name      "The Beautiful And The Damned"^^xsd:string ;
+                                    muser:uuid      "126-abc-qwe" ;
+                                    muser:idWikidata "Q123459" ;
+                                    muser:idDbpedia "TbatD" ;
+                                    muser:idSpotify "TheBeaandTheDmnd" ;
+                                    muser:name      "The Beautiful And The Damned" ;
                                     muser:releaseDate      "2017-12-25"^^xsd:date ;
-                                    muser:duration  "1200"^^xsd:integer ;
+                                    muser:duration  "1200"^^xsd:nonNegativeInteger ;
                                     muser:relatedMusicalGenres muser:HipHop ;
                                     muser:releasedBy muser:GEazy ;
                                     muser:contains   muser:HimAndI, muser:FavoriteGirl, muser:ThePlan .
 
 muser:HimAndI       rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe"^^xsd:string ;
-                    muser:idWikidata           "Q123459"^^xsd:string ;
-                    muser:idDbpedia            "Himandi"^^xsd:string ;
-                    muser:idSpotify            "HimAndI"^^xsd:string ;
-                    muser:name                 "Him & I"^^xsd:string ;
-                    muser:duration             "300"^^xsd:integer ;
+                    muser:uuid                 "126-abc-qwe" ;
+                    muser:idWikidata           "Q123459" ;
+                    muser:idDbpedia            "Himandi" ;
+                    muser:idSpotify            "HimAndI" ;
+                    muser:name                 "Him & I" ;
+                    muser:duration             "300"^^xsd:nonNegativeInteger ;
                     muser:performedBy          muser:GEazy ;
                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
                     muser:relatedMusicalGenres muser:HipHop .
 
 
 muser:FavoriteGirl  rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe"^^xsd:string ;
-                    muser:idWikidata           "Q123459"^^xsd:string ;
-                    muser:idDbpedia            "FavGirl"^^xsd:string ;
-                    muser:idSpotify            "FavoriteGirl"^^xsd:string ;
-                    muser:name                 "Favorite Girl"^^xsd:string ;
-                    muser:duration             "301"^^xsd:integer ;
+                    muser:uuid                 "126-abc-qwe" ;
+                    muser:idWikidata           "Q123459" ;
+                    muser:idDbpedia            "FavGirl" ;
+                    muser:idSpotify            "FavoriteGirl" ;
+                    muser:name                 "Favorite Girl" ;
+                    muser:duration             "301"^^xsd:nonNegativeInteger ;
                     muser:performedBy          muser:GEazy ;
                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
                     muser:relatedMusicalGenres muser:HipHop .
 
 muser:ThePlan       rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe"^^xsd:string ;
-                    muser:idWikidata           "Q123459"^^xsd:string ;
-                    muser:idDbpedia            "ThePln"^^xsd:string ;
-                    muser:idSpotify            "ThePlan"^^xsd:string ;
-                    muser:name                 "Favorite Girl"^^xsd:string ;
-                    muser:duration             "302"^^xsd:integer ;
+                    muser:uuid                 "126-abc-qwe" ;
+                    muser:idWikidata           "Q123459" ;
+                    muser:idDbpedia            "ThePln" ;
+                    muser:idSpotify            "ThePlan" ;
+                    muser:name                 "Favorite Girl" ;
+                    muser:duration             "302"^^xsd:nonNegativeInteger ;
                     muser:performedBy          muser:GEazy ;
                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
                     muser:relatedMusicalGenres muser:HipHop .
@@ -321,23 +362,23 @@ muser:HipHop    muser:embracedBy    muser:HimAndI ,
                                     muser:FavoriteGirl .
 
 muser:OpenCamp          rdf:type               muser:Event ;
-                        muser:name            "Open Camp"^^xsd:string ;
+                        muser:name            "Open Camp" ;
                         muser:startDate       "17-07-03"^^xsd:date ;
                         muser:endDate         "17-07-06"^^xsd:date ;
-                        muser:eventCountry    "Romania"^^xsd:string ;
-                        muser:eventCity       "Vaslui"^^xsd:string ;
-                        muser:eventPlace      "Poligon Paiu"^^xsd:string ;
-                        muser:about           "A great event"^^xsd:string ;
+                        muser:eventCountry    "Romania" ;
+                        muser:eventCity       "Vaslui" ;
+                        muser:eventPlace      "Poligon Paiu" ;
+                        muser:about           "A great event" ;
                         muser:performers      muser:GEazy .
 muser:GEazy             muser:performAt       muser:OpenCamp .
 
 
 muser:MyPlaylist        rdf:type            muser:MusicalPlaylist ;
-                        muser:uuid          "123-abc-qwer"^^xsd:string ;
-                        muser:name          "My Cool Playlist 1"^^xsd:string ;
+                        muser:uuid          "123-abc-qwer" ;
+                        muser:name          "My Cool Playlist 1" ;
                         muser:dateCreated   "2018-01-05"^^xsd:date ;
-                        muser:uuidCreator   "qwertyuiop"^^xsd:string ;
-                        muser:duration      "8863"^^xsd:integer ;
+                        muser:uuidCreator   "qwertyuiop" ;
+                        muser:duration      "8863"^^xsd:nonNegativeInteger ;
                         muser:has           muser:FavoriteGirl, muser:HimAndI .
 muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .
 muser:HimAndI           muser:partOf        muser:MyPlaylist .

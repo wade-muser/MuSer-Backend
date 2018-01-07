@@ -5,8 +5,8 @@
         WD:
             Wikidata property for items about people: Q18608871
             instance of:   P31
-            occupation:    P106
             field of work: P101
+            occupation:    P106
             performer:     P175
             part of:       P361
             genre:         P136
@@ -54,6 +54,20 @@
 */
 
 const MAPPINGS = {
+    common_prefixes: {
+        rdf:    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
+        rdfs:   '<http://www.w3.org/2000/01/rdf-schema#>',
+        xsd:    '<http://www.w3.org/2001/XMLSchema#>',
+        owl:    '<http://www.w3.org/2002/07/owl#>',
+        schema: '<http://schema.org/>',
+        foaf:   '<http://xmlns.com/foaf/0.1>',
+    },
+    
+    wd_prefixes: {
+        wde: '<http://www.wikidata.org/entity/>',
+        wdp: '<http://www.wikidata.org/prop/>',
+        wdt: '<http://www.wikidata.org/prop/direct/>',
+    },
     wd: {
         //props
         instance_of:   "P31",
@@ -80,6 +94,11 @@ const MAPPINGS = {
         music_genre:   "Q188451",
     },
 
+    dbp_prefixes: {
+        dbo: '<http://dbpedia.org/ontology/>',
+        dbr: '<http://dbpedia.org/resource/>',
+        dbp: '<http://dbpedia.org/property/>',
+    },
     dbp: {
         //props
         genre:         "dbo:genre",

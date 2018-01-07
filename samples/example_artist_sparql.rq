@@ -1,0 +1,38 @@
+# Artist Meta-data Sparql WIKIDATA
+SELECT ?artistSpotifyId WHERE{
+  wde:Q5608 wdt:P1902 ?artistSpotifyId.
+  }
+
+# Artist Meta-data Sparql DBPedia
+SELECT ?wikidataArtist  ?artistName ?artistFirstName
+?artistLastName ?artistBirthName ?artistGender ?artistCountryName ?artistActivityStartYear WHERE {
+  ?dbpediaArtist rdf:type ?type;
+                 rdfs:label ?artistName;
+                 dbo:abstract ?aboutArtist;
+                 dbo:birthPlace ?artistBirthPlace;
+                 dbo:activeYearsStartYear ?artistActivityStartYear.
+  ?artistBirthPlace dbo:country ?country.
+  ?country rdfs:label ?artistCountryName
+  OPTIONAL {
+    ?dbpediaArtist owl:sameAs ?wikidataArtist
+  }
+  OPTIONAL {
+    ?dbpediaArtist foaf:givenName ?artistFirstName
+  }
+  OPTIONAL {
+    ?dbpediaArtist foaf:surname ?artistLastName
+  }
+  OPTIONAL {
+    ?dbpediaArtist dbo:birthName ?artistBirthName
+  }	
+  OPTIONAL {
+    ?dbpediaArtist foaf:gender ?artistGender
+  }
+  FILTER (?dbpediaArtist = dbr:Eminem)
+  FILTER  (?type IN (dbo:MusicalArtist, dbo:Band))
+  FILTER regex( ?wikidataArtist, 'wikidata.org/entity')
+  FILTER (lang(?artistName) = 'en')
+  FILTER (lang(?aboutArtist) = "en")
+  FILTER (lang(?artistCountryName)= "en")
+  FILTER (regex(str(?artistName), 'Eminem'))
+} LIMIT 10

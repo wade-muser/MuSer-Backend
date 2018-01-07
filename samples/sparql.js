@@ -41,3 +41,23 @@ function insertExample(value) {
             console.log(err);
         });
 }
+
+function deleteExample(value) {
+    return client.query(SPARQL `
+        PREFIX muser: <http://example.com/muser#>
+        DELETE DATA {
+            muser:GEazy muser:musicalArtistCountry  ?value
+        }
+    `)
+        .bind("value", value)
+        .execute()
+        .then(response => {
+            console.log(response);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+
+deleteExample("AlCeva");

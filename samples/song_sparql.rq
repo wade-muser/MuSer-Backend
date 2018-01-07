@@ -1,0 +1,89 @@
+######################## DBPEDIA ########################
+# Get info for a Song
+SELECT * WHERE {
+  ?song rdfs:label        ?label ;
+  		rdf:type   		  ?type ;
+  		dbo:album  		  ?album ;
+    	dbo:musicalArtist ?artist ;
+     	dbo:genre		  ?genre ;	
+     	dbo:runtime		  ?duration	;
+      	owl:sameAs        ?same .
+  
+  FILTER (?song=dbr:Bohemian_Rhapsody)
+  FILTER (?type IN (dbo:MusicalWork))
+  FILTER (?type NOT IN (dbo:Album))
+  FILTER regex(str(?same), 'wikidata.org/entity') 
+  FILTER (lang(?label) = 'en')
+} LIMIT 10
+
+# Get Songs performed by an Artist
+SELECT * WHERE {
+  ?song rdfs:label        ?label ;
+  		rdf:type   		  ?type ;
+    	dbo:musicalArtist ?artist ;
+      	owl:sameAs        ?same .
+  
+  FILTER (?artist=<http://dbpedia.org/resource/Queen_(band)>)
+  FILTER (?type IN (dbo:MusicalWork))
+  FILTER (?type NOT IN (dbo:Album))
+  FILTER regex(str(?same), 'wikidata.org/entity') 
+  FILTER (lang(?label) = 'en')
+} LIMIT 100
+
+# Get Songs contained by an Album
+SELECT * WHERE {
+  ?song rdfs:label        ?label ;
+  		rdf:type   		  ?type ;
+    	dbo:album         ?album ;
+      	owl:sameAs        ?same .
+  
+  FILTER (?album=<http://dbpedia.org/resource/A_Night_at_the_Opera_(Queen_album)>)
+  FILTER (?type IN (dbo:MusicalWork))
+  FILTER (?type NOT IN (dbo:Album))
+  FILTER regex(str(?same), 'wikidata.org/entity') 
+  FILTER (lang(?label) = 'en')
+} LIMIT 100
+
+
+######################## WIKIDATA ########################
+# Get info for a Song
+SELECT DISTINCT ?song ?label ?artist ?youtubeId WHERE {
+  ?song rdfs:label ?label ;
+        wdt:P31    ?instance ;
+        wdt:P175   ?artist ;
+        wdt:P361   ?album  .
+  OPTIONAL { ?song  wdt:P1651  ?youtubeId }
+  
+  FILTER (?song = wd:Q187745)
+  FILTER (?instance IN (wd:Q2031291, wd:Q2188189, wd:Q7302866, wd:Q134556, wd:Q7366, wd:Q169930))
+  FILTER (?instance NOT IN (wd:Q482994))
+  FILTER (lang(?label) = 'en')
+} LIMIT 10
+
+# Get Songs performed by an Artist
+SELECT * WHERE {
+  ?song rdfs:label ?label ;
+        wdt:P31    ?instance ;
+        wdt:P175   ?artist .
+  OPTIONAL { ?song wdt:P1651  ?youtubeId }
+  
+  FILTER (?artist = wd:Q15862)
+  FILTER (?instance IN (wd:Q2031291, wd:Q2188189, wd:Q7302866, wd:Q134556, wd:Q7366, wd:Q169930))
+  FILTER (?instance NOT IN (wd:Q482994))
+  FILTER (lang(?label) = 'en')
+} LIMIT 10
+
+
+# Get Songs contained by an Album
+SELECT distinct ?song ?label ?artist ?youtubeId WHERE {
+  ?song rdfs:label ?label ;
+        wdt:P31    ?instance ;
+        wdt:P361   ?album .
+  OPTIONAL { ?song wdt:P1651  ?youtubeId }
+  
+  FILTER (?album = wd:Q245353)
+  FILTER (?instance IN (wd:Q2031291, wd:Q2188189, wd:Q7302866, wd:Q134556, wd:Q7366, wd:Q169930))
+  FILTER (?instance NOT IN (wd:Q482994))
+  FILTER (lang(?label) = 'en')
+}
+

@@ -166,8 +166,13 @@ muser:musicalArtistMember   rdf:type            owl:ObjectProperty ;
                             rdfs:domain         muser:MusicalArtist ;
                             rdfs:range          muser:MusicalArtist .
 
+muser:relatedMusicalArtist  rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
+                            rdfs:comment        "MusicalArtist Related MusicalArtist" ;
+                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:range          muser:MusicalArtist ;
+
 muser:relatedMusicalGenre   rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
-                            rdfs:comment        "Related MusicalGenre" ;
+                            rdfs:comment        "MusicalGenre Related MusicalGenre" ;
                             rdfs:domain         muser:MusicalGenre ;
                             rdfs:range          muser:MusicalGenre .
 
@@ -350,7 +355,7 @@ muser:FavoriteGirl  rdf:type                   muser:Song ;
                     muser:duration             "301"^^xsd:nonNegativeInteger ;
                     muser:performedBy          muser:GEazy ;
                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
-                    muser:relatedMusicalGenres muser:HipHop .
+                    muser:hasMusicalGenre      muser:HipHop .
 
 muser:ThePlan       rdf:type                   muser:Song ;
                     muser:uuid                 "126-abc-qwe" ;
@@ -361,7 +366,7 @@ muser:ThePlan       rdf:type                   muser:Song ;
                     muser:duration             "302"^^xsd:nonNegativeInteger ;
                     muser:performedBy          muser:GEazy ;
                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
-                    muser:relatedMusicalGenres muser:HipHop .
+                    muser:hasMusicalGenre      muser:HipHop .
 
 muser:HipHop    muser:embracedBy    muser:GEazy .
 muser:HipHop    muser:embracedBy    muser:TheBeautifulAndTheDamned .

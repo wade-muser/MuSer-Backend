@@ -1,19 +1,20 @@
 ## ############### DBPEDIA #######################
 # Get Info about an artist
-SELECT ?wikidataArtist  ?artistName ?artistFirstName
-?artistLastName ?artistBirthName ?artistGender ?artistBirthPlace ?artistActivityStartYear ?artistActivityEndYear WHERE {
+SELECT ?type ?wikidataArtist  ?artistName ?artistFirstName
+?artistLastName ?artistBirthName ?artistGender ?artistBirthPlace ?bandHomeTown ?artistActivityStartYear ?artistActivityEndYear WHERE {
   ?dbpediaArtist rdf:type                 ?type ;
                  rdfs:label               ?artistName ;
-                 dbo:abstract             ?aboutArtist ;
-                 dbo:birthPlace           ?artistBirthPlace .
-                
+                 dbo:abstract             ?aboutArtist .
+
+  OPTIONAL { ?dbpediaArtist dbo:hometown             ?bandHomeTown            }            
+  OPTIONAL { ?dbpediaArtist dbo:birthPlace           ?artistBirthPlace        }              
   OPTIONAL { ?dbpediaArtist dbo:activeYearsStartYear ?artistActivityStartYear }
-  OPTIONAL { ?dbpediaArtist dbo:activeYearsEndYear   ?artistActivityEndYear }
-  OPTIONAL { ?dbpediaArtist dbo:birthName            ?artistBirthName }
-  OPTIONAL { ?dbpediaArtist foaf:givenName           ?artistFirstName }
-  OPTIONAL { ?dbpediaArtist foaf:surname             ?artistLastName }
-  OPTIONAL { ?dbpediaArtist foaf:gender              ?artistGender }
-  OPTIONAL { ?dbpediaArtist owl:sameAs               ?wikidataArtist }
+  OPTIONAL { ?dbpediaArtist dbo:activeYearsEndYear   ?artistActivityEndYear   }
+  OPTIONAL { ?dbpediaArtist dbo:birthName            ?artistBirthName         }
+  OPTIONAL { ?dbpediaArtist foaf:givenName           ?artistFirstName         }
+  OPTIONAL { ?dbpediaArtist foaf:surname             ?artistLastName          }
+  OPTIONAL { ?dbpediaArtist foaf:gender              ?artistGender            }
+  OPTIONAL { ?dbpediaArtist owl:sameAs               ?wikidataArtist          }
   
   FILTER (?dbpediaArtist = dbr:Eminem)
   FILTER (?type IN (dbo:MusicalArtist, dbo:Band))

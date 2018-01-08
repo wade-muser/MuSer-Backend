@@ -1,15 +1,12 @@
 ## ############### DBPEDIA #######################
 # Get Info about an artist
 SELECT ?wikidataArtist  ?artistName ?artistFirstName
-?artistLastName ?artistBirthName ?artistGender ?artistCountryName ?artistActivityStartYear ?artistActivityEndYear WHERE {
+?artistLastName ?artistBirthName ?artistGender ?artistBirthPlace ?artistActivityStartYear ?artistActivityEndYear WHERE {
   ?dbpediaArtist rdf:type                 ?type ;
                  rdfs:label               ?artistName ;
                  dbo:abstract             ?aboutArtist ;
                  dbo:birthPlace           ?artistBirthPlace .
-                 
-  ?artistBirthPlace dbo:country ?country.
-  ?country          rdfs:label  ?artistCountryName
-  
+                
   OPTIONAL { ?dbpediaArtist dbo:activeYearsStartYear ?artistActivityStartYear }
   OPTIONAL { ?dbpediaArtist dbo:activeYearsEndYear   ?artistActivityEndYear }
   OPTIONAL { ?dbpediaArtist dbo:birthName            ?artistBirthName }
@@ -23,8 +20,6 @@ SELECT ?wikidataArtist  ?artistName ?artistFirstName
   FILTER (regex(?wikidataArtist, "wikidata.org/entity"))
   FILTER (lang(?artistName) = "en")
   FILTER (lang(?aboutArtist) = "en")
-  FILTER (lang(?artistCountryName)= "en")
-  # FILTER (regex(str(?artistName), 'Eminem'))
 } LIMIT 10
 
 # Get related artists for an artist 

@@ -12,6 +12,7 @@
     "aws-sdk": "^2.168.0",
     "dotenv": "^4.0.0",
     "jsonwebtoken": "^8.1.0",
+    "normalize-diacritics": "^0.4.4",
     "sparql-client-2": "^0.6.2"
   }
 }

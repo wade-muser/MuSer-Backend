@@ -1,64 +1,47 @@
 ## ############### DBPEDIA #######################
 # Get Info about an artist
-SELECT ?artistSpotifyId WHERE{
-  wde:Q5608 wdt:P1902 ?artistSpotifyId.
-  }
+SELECT ?wikidataArtist  ?artistName ?artistFirstName
+?artistLastName ?artistBirthName ?artistGender ?artistCountryName ?artistActivityStartYear ?artistActivityEndYear WHERE {
+  ?dbpediaArtist rdf:type                 ?type ;
+                 rdfs:label               ?artistName ;
+                 dbo:abstract             ?aboutArtist ;
+                 dbo:birthPlace           ?artistBirthPlace .
+                 
+  ?artistBirthPlace dbo:country ?country.
+  ?country          rdfs:label  ?artistCountryName
+  
+  OPTIONAL { ?dbpediaArtist dbo:activeYearsStartYear ?artistActivityStartYear }
+  OPTIONAL { ?dbpediaArtist dbo:activeYearsEndYear   ?artistActivityEndYear }
+  OPTIONAL { ?dbpediaArtist dbo:birthName            ?artistBirthName }
+  OPTIONAL { ?dbpediaArtist foaf:givenName           ?artistFirstName }
+  OPTIONAL { ?dbpediaArtist foaf:surname             ?artistLastName }
+  OPTIONAL { ?dbpediaArtist foaf:gender              ?artistGender }
+  OPTIONAL { ?dbpediaArtist owl:sameAs               ?wikidataArtist }
+  
+  FILTER (?dbpediaArtist = dbr:Eminem)
+  FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
+  FILTER (regex(?wikidataArtist, "wikidata.org/entity"))
+  FILTER (lang(?artistName) = "en")
+  FILTER (lang(?aboutArtist) = "en")
+  FILTER (lang(?artistCountryName)= "en")
+  # FILTER (regex(str(?artistName), 'Eminem'))
+} LIMIT 10
 
-# Get related artists of an artist 
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dbo: <http://dbpedia.org/ontology/>
-PREFIX dbr: <http://dbpedia.org/resource/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
+# Get related artists for an artist 
 SELECT DISTINCT * WHERE {
-  ?associatedArtist dbo:associatedMusicalArtist ?artist;
-                    owl:sameAs ?same;
-                    rdf:type ?artistType;
-                    rdfs:label ?associatedArtistName
-  FILTER ( ?artist = dbr:Eminem).
-  FILTER ( ?artistType IN (dbo:MusicalArtist))
-  FILTER ( ?artistType NOT IN(dbo:Band, dbo:Group))
-  FILTER regex(str(?same),"http://www.wikidata.org/entity")
-  FILTER ( lang(?associatedArtistName)="en")
-}  
+  ?associatedArtist dbo:associatedMusicalArtist ?artist ;
+                    rdfs:label                  ?associatedArtistName ;
+                    rdf:type                    ?artistType ;
+                    owl:sameAs                  ?same .
 
-
-
-
-
+  FILTER (?artist = dbr:Eminem)
+  FILTER (?artistType IN (dbo:MusicalArtist, dbo:Band))
+  FILTER (regex(str(?same),"http://www.wikidata.org/entity"))
+  FILTER (lang(?associatedArtistName)="en")
+}
 
 ################# WIKIDATA #########################
 # Get Info about an artist
-SELECT ?wikidataArtist  ?artistName ?artistFirstName
-?artistLastName ?artistBirthName ?artistGender ?artistCountryName ?artistActivityStartYear WHERE {
-  ?dbpediaArtist rdf:type ?type;
-                 rdfs:label ?artistName;
-                 dbo:abstract ?aboutArtist;
-                 dbo:birthPlace ?artistBirthPlace;
-                 dbo:activeYearsStartYear ?artistActivityStartYear.
-  ?artistBirthPlace dbo:country ?country.
-  ?country rdfs:label ?artistCountryName
-  OPTIONAL {
-    ?dbpediaArtist owl:sameAs ?wikidataArtist
-  }
-  OPTIONAL {
-    ?dbpediaArtist foaf:givenName ?artistFirstName
-  }
-  OPTIONAL {
-    ?dbpediaArtist foaf:surname ?artistLastName
-  }
-  OPTIONAL {
-    ?dbpediaArtist dbo:birthName ?artistBirthName
-  }	
-  OPTIONAL {
-    ?dbpediaArtist foaf:gender ?artistGender
-  }
-  FILTER (?dbpediaArtist = dbr:Eminem)
-  FILTER  (?type IN (dbo:MusicalArtist, dbo:Band))
-  FILTER regex( ?wikidataArtist, 'wikidata.org/entity')
-  FILTER (lang(?artistName) = 'en')
-  FILTER (lang(?aboutArtist) = "en")
-  FILTER (lang(?artistCountryName)= "en")
-  FILTER (regex(str(?artistName), 'Eminem'))
-} LIMIT 10
+SELECT ?artistSpotifyId WHERE {
+    wde:Q5608 wdt:P1902 ?artistSpotifyId .
+}

@@ -169,7 +169,7 @@ muser:musicalArtistMember   rdf:type            owl:ObjectProperty ;
 muser:relatedMusicalArtist  rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
                             rdfs:comment        "MusicalArtist Related MusicalArtist" ;
                             rdfs:domain         muser:MusicalArtist ;
-                            rdfs:range          muser:MusicalArtist ;
+                            rdfs:range          muser:MusicalArtist .
 
 muser:relatedMusicalGenre   rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
                             rdfs:comment        "MusicalGenre Related MusicalGenre" ;
@@ -396,3 +396,4 @@ muser:MyPlaylist        rdf:type            muser:MusicalPlaylist ;
                         muser:has           muser:FavoriteGirl, muser:HimAndI .
 muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .
 muser:HimAndI           muser:partOf        muser:MyPlaylist .
+muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .

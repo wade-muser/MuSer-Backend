@@ -1,12 +1,56 @@
 ###################### DBPEDIA ###############################
+# Get info of a Genre
+SELECT * WHERE {
+  ?genre     rdfs:label    ?label ;
+             rdf:type	   ?type ;
+             dbo:abstract  ?abstract ;
+  			     owl:sameAs    ?same .
+  FILTER (?genre = dbr:Hip_hop_music)
+  FILTER (?type IN (dbo:MusicGenre))
+  FILTER (regex(str(?same), "wikidata.org/entity"))
+  FILTER (lang(?label) = "en")
+  FILTER (lang(?abstract) = "en")
+} LIMIT 50
+
 # Get Related Genres of a Genre
 SELECT * WHERE {
-  ?genre dbo:derivative ?relatedGenre.
-  ?relatedGenre foaf:name ?relatedGenreLabel.
-  FILTER (?genre=dbr:Hip_hop_music)
+  ?genre        dbo:derivative ?relatedGenre .
+  ?relatedGenre foaf:name ?relatedGenreLabel .
+
+  FILTER (?genre = dbr:Hip_hop_music)
   FILTER (lang(?relatedGenreLabel)="en")
-} 
-LIMIT 50
+} LIMIT 50
+
+# Get genres of a Song
+SELECT * WHERE {
+  ?genre     rdfs:label    ?label ;
+             rdf:type	   ?type ;
+             dbo:abstract  ?abstract ;
+  			 owl:sameAs    ?same .
+      		 
+  <http://dbpedia.org/resource/Money_in_the_Bank_(Lil_Scrappy_song)>  dbo:genre ?genre . 	 
+ 
+  FILTER (?type IN (dbo:MusicGenre))
+  FILTER (regex(str(?same), "wikidata.org/entity"))
+  FILTER (lang(?label) = "en")
+  FILTER (lang(?abstract) = "en")
+} LIMIT 50
+
+# Get genres of an Album
+SELECT * WHERE {
+  ?genre     rdfs:label    ?label ;
+             rdf:type	   ?type ;
+             dbo:abstract  ?abstract ;
+  			 owl:sameAs    ?same .
+      		 
+  <http://dbpedia.org/resource/Bred_2_Die_-_Born_2_Live>  dbo:genre ?genre .
+ 
+  FILTER (?type IN (dbo:MusicGenre))
+  FILTER (regex(str(?same), "wikidata.org/entity"))
+  FILTER (lang(?label) = "en")
+  FILTER (lang(?abstract) = "en")
+} LIMIT 50
+
 
 
 

@@ -33,6 +33,7 @@ SELECT * WHERE {
 # Get Songs contained by an Album
 SELECT * WHERE {
   ?song rdfs:label        ?label ;
+      # foaf:name     ?label;  // Label contains also the disambiguation and foaf:name doesn't`
   		rdf:type   		  ?type ;
     	dbo:album         ?album ;
       	owl:sameAs        ?same .

@@ -13,25 +13,25 @@ const client = new SparqlClient(SPARQL_ENDPOINT, {
 
 
 // MusicalArtist   - musicalArtistMember  - MusicalArtist
-// MusicalArtist   - relatedMusicalArtist - MusicalArtist
-// MusicalArtist   - hasMusicalGenre      - MusicalGenre
-// MusicalArtist   - released             - Album
-// MusicalArtist   - performs             - Song
+// MusicalArtist   - relatedMusicalArtist - MusicalArtist  //DBP    
+// MusicalArtist   - hasMusicalGenre      - MusicalGenre   //DBP (info about a song)
+// MusicalArtist   - released             - Album          //DBP
+// MusicalArtist   - performs             - Song           //DBP
 // MusicalArtist   - performAt            - Event
 
-// MusicalGenre    - relatedMusicalGenre  - MusicalGenre
-// MusicalGenre    - embracedBy           - MusicalArtist
+// MusicalGenre    - relatedMusicalGenre  - MusicalGenre   //DPB
+// MusicalGenre    - embracedBy           - MusicalArtist  
 // MusicalGenre    - embracedBy           - Song
 // MusicalGenre    - embracedBy           - Album
 
-// Song            - hasMusicalGenre      - MusicalGenre
-// Song            - performedBy          - MusicalArtist
-// Song            - containedBy          - Album
-// Song            - partOf               - MusicalPlaylist
+// Song            - hasMusicalGenre      - MusicalGenre    //DBP
+// Song            - performedBy          - MusicalArtist   //DBP WIKI
+// Song            - containedBy          - Album           //DBP WIKI
+// Song            - partOf               - MusicalPlaylist 
 
-// Album           - hasMusicalGenre      - MusicalGenre
-// Album           - releasedBy           - MusicalArtist
-// Album           - contains             - Song
+// Album           - hasMusicalGenre      - MusicalGenre    //DBP WIKI
+// Album           - releasedBy           - MusicalArtist   //DBP WIKI
+// Album           - contains             - Song            //DBP WIKI
 
 // Event           - performers           - MusicalArtist
 

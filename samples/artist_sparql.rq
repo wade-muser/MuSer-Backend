@@ -1,9 +1,35 @@
-# Artist Meta-data Sparql WIKIDATA
+## ############### DBPEDIA #######################
+# Get Info about an artist
 SELECT ?artistSpotifyId WHERE{
   wde:Q5608 wdt:P1902 ?artistSpotifyId.
   }
 
-# Artist Meta-data Sparql DBPedia
+# Get related artists of an artist 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+SELECT DISTINCT * WHERE {
+  ?associatedArtist dbo:associatedMusicalArtist ?artist;
+                    owl:sameAs ?same;
+                    rdf:type ?artistType;
+                    rdfs:label ?associatedArtistName
+  FILTER ( ?artist = dbr:Eminem).
+  FILTER ( ?artistType IN (dbo:MusicalArtist))
+  FILTER ( ?artistType NOT IN(dbo:Band, dbo:Group))
+  FILTER regex(str(?same),"http://www.wikidata.org/entity")
+  FILTER ( lang(?associatedArtistName)="en")
+}  
+
+
+
+
+
+
+################# WIKIDATA #########################
+# Get Info about an artist
 SELECT ?wikidataArtist  ?artistName ?artistFirstName
 ?artistLastName ?artistBirthName ?artistGender ?artistCountryName ?artistActivityStartYear WHERE {
   ?dbpediaArtist rdf:type ?type;

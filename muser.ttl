@@ -54,16 +54,6 @@ muser:uuidCreator       rdfs:type               owl:DatatypeProperty, owl:Functi
                         rdfs:comment            "Creator's Universal Unique Identifier" ;
                         rdfs:subPropertyOf      dbr:Universally_unique_identifier .
 
-muser:idWikidata        rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
-                        rdfs:comment            "Wikidata ID (string)" ;
-                        rdfs:domain             muser:MusicalEntity ;
-                        rdfs:range              xsd:string .
-
-muser:idDbpedia         rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
-                        rdfs:comment            "Dbpedia ID (string)" ;
-                        rdfs:domain             muser:MusicalEntity ;
-                        rdfs:range              xsd:string .
-
 muser:idSpotify         rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
                         rdfs:comment            "Spotify ID (string)" ;
                         rdfs:domain             muser:MusicalEntity ;
@@ -96,7 +86,7 @@ muser:gender            rdf:type                owl:DatatypeProperty, owl:Functi
 
 muser:about             rdf:type                owl:DatatypeProperty ;
                         rdfs:comment            "Description of the entity" ;
-                        rdfs:domain             muser:MusicalArtist, muser:MusicalEvent ;
+                        rdfs:domain             muser:MusicalAgent, muser:MusicalEvent, muser:MusicalGenre ;
                         rdfs:range              xsd:string ;
                         owl:equivalentProperty  rdfs:comment .
 
@@ -106,20 +96,19 @@ muser:duration          rdf:type                owl:DatatypeProperty, owl:Functi
                         rdfs:range              xsd:nonNegativeInteger .
 
 
-muser:musicalArtistCountry  rdfs:type           owl:DatatypeProperty ;
-                            rdfs:comment        "Origin country of the MusicalArtist" ;
-                            rdfs:domain         muser:MusicalArtist ;
-                            rdfs:range          xsd:string ;
-                            rdfs:subPropertyOf  schema:Country .
+muser:musicalAgentOrigin   rdfs:type           owl:ObjectProperty ;
+                            rdfs:comment        "Origin place of the MusicalAgent" ;
+                            rdfs:domain         muser:MusicalAgent ;
+                            rdfs:range          dbo:Place .
 
 muser:inceptionDate         rdfs:type           owl:DatatypeProperty ;
-                            rdfs:comment        "The inception date of the MusicalArtist - since when the MusicalArtist perfoms" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:comment        "The inception date of the MusicalAgent - since when the MusicalAgent perfoms" ;
+                            rdfs:domain         muser:MusicalAgent ;
                             rdfs:range          xsd:date .
 
 muser:retiringDate          rdfs:type           owl:DatatypeProperty ;
-                            rdfs:comment        "The retiring date of the MusicalArtist - when the MusicalArtist stopped performing" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:comment        "The retiring date of the MusicalAgent - when the MusicalAgent stopped performing" ;
+                            rdfs:domain         muser:MusicalAgent ;
                             rdfs:range          xsd:date .
 
 muser:releaseDate           rdfs:type           owl:DatatypeProperty, owl:FunctionalProperty ;
@@ -163,13 +152,13 @@ muser:eventPlace            rdfs:type           owl:DatatypeProperty, owl:Functi
 
 muser:musicalArtistMember   rdf:type            owl:ObjectProperty ;
                             rdfs:comment        "Musical members of a band (also MusicalArtist)" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:domain         muser:MusicalBand ;
                             rdfs:range          muser:MusicalArtist .
 
-muser:relatedMusicalArtist  rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
-                            rdfs:comment        "MusicalArtist Related MusicalArtist" ;
-                            rdfs:domain         muser:MusicalArtist ;
-                            rdfs:range          muser:MusicalArtist .
+muser:relatedMusicalAgent  rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
+                            rdfs:comment        "MusicalAgent Related MusicalAgent" ;
+                            rdfs:domain         muser:MusicalAgent ;
+                            rdfs:range          muser:MusicalAgent .
 
 muser:relatedMusicalGenre   rdf:type            owl:ObjectProperty, owl:SymmetricProperty ;
                             rdfs:comment        "MusicalGenre Related MusicalGenre" ;
@@ -178,38 +167,38 @@ muser:relatedMusicalGenre   rdf:type            owl:ObjectProperty, owl:Symmetri
 
 muser:hasMusicalGenre       rdf:type            owl:ObjectProperty ;
                             rdfs:comment        "Musical Genre describing the entity" ;
-                            rdfs:domain         muser:MusicalArtist, muser:Song, muser:Album ;
+                            rdfs:domain         muser:MusicalAgent, muser:Song, muser:Album ;
                             rdfs:range          muser:MusicalGenre ;
                             owl:inverseOf       muser:embracedBy .
 
 muser:embracedBy            rdf:type            owl:ObjectProperty ;
-                            rdfs:comment        "MusicalGenre embracedBy MusicalArtist, Song, Album" ;
+                            rdfs:comment        "MusicalGenre embracedBy MusicalAgent, Song, Album" ;
                             rdfs:domain         muser:MusicalGenre ;
-                            rdfs:range          muser:MusicalArtist, muser:Song, muser:Album ;
+                            rdfs:range          muser:MusicalAgent, muser:Song, muser:Album ;
                             owl:inverseOf       muser:hasMusicalGenre .
 
 muser:performs              rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "MusicalArtist performs a Song" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:comment        "MusicalAgent performs a Song" ;
+                            rdfs:domain         muser:MusicalAgent ;
                             rdfs:range          muser:Song ;
                             owl:inverseOf       muser:performedBy .
 
 muser:performedBy           rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "Song performedBy a MusicalArtist" ;
+                            rdfs:comment        "Song performedBy a MusicalAgent" ;
                             rdfs:domain         muser:Song ;
-                            rdfs:range          muser:MusicalArtist ;
+                            rdfs:range          muser:MusicalAgent ;
                             owl:inverseOf       muser:performs .
 
 muser:released              rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "Artist released Album" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:comment        "MusicalAgent released Album" ;
+                            rdfs:domain         muser:MusicalAgent ;
                             rdfs:range          muser:Album ;
                             owl:inverseOf       muser:releasedBy .
 
 muser:releasedBy            rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "Album releaseBy Artist" ;
+                            rdfs:comment        "Album releaseBy MusicalAgent" ;
                             rdfs:domain         muser:Album ;
-                            rdfs:range          muser:MusicalArtist ;
+                            rdfs:range          muser:MusicalAgent ;
                             owl:inverseOf       muser:released .
 
 muser:contains              rdfs:type           owl:ObjectProperty ;
@@ -225,15 +214,15 @@ muser:containedBy           rdfs:type           owl:ObjectProperty ;
                             owl:inverseOf       muser:contains .
 
 muser:performAt             rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "MusicalArtist performAt MusicalEvent" ;
-                            rdfs:domain         muser:MusicalArtist ;
+                            rdfs:comment        "MusicalAgent performAt MusicalEvent" ;
+                            rdfs:domain         muser:MusicalAgent ;
                             rdfs:range          muser:MusicalEvent ;
                             owl:inverseOf       muser:performers .
 
 muser:performers            rdfs:type           owl:ObjectProperty ;
-                            rdfs:comment        "MusicalEvent performers (MusicalArtist)" ;
+                            rdfs:comment        "MusicalEvent performers (MusicalAgent)" ;
                             rdfs:domain         muser:MusicalEvent ;
-                            rdfs:range          muser:MusicalArtist ;
+                            rdfs:range          muser:MusicalAgent ;
                             owl:inverseOf       muser:performAt .
 
 muser:has                   rdfs:type           owl:ObjectProperty ;
@@ -250,22 +239,30 @@ muser:partOf                rdfs:type           owl:ObjectProperty ;
 
 # Classes
 muser:MusicalEntity    rdf:type        owl:Class ;
-                       owl:oneOf       (muser:MusicalArtist muser:MusicalGenre muser:Song muser:Album) .
+                       rdfs:comment    "Generic musical entity" .
+
+muser:MusicalAgent     rdf:type        owl:Class ;
+                       rdfs:subClassOf muser:MusicalEntity ;
+                       rdfs:comment    "Generic MusicalAgent (1-* individuals that perform) " .
 
 muser:MusicalArtist    rdf:type        owl:Class ;
-                       rdfs:subClassOf foaf:Person ;
-                       rdfs:comment    "A musical artist" .
+                       rdfs:subClassOf muser:MusicalAgent, foaf:Person ;
+                       rdfs:comment    "A single musical agent" .
+
+muser:MusicalBand      rdf:type        owl:Class ;
+                       rdfs:subClassOf muser:MusicalAgent, foaf:Group ;
+                       rdfs:comment    "A group of musical agents" .
 
 muser:MusicalGenre     rdf:type        owl:Class ;
-                       rdfs:subClassOf schema:genre ;
+                       rdfs:subClassOf muser:MusicalEntity ;
                        rdfs:comment    "Entity depicting the genre of a musical piece" .
 
 muser:Song             rdf:type        owl:Class ;
-                       rdfs:subClassOf schema:CreativeWork ;
+                       rdfs:subClassOf muser:MusicalEntity ;
                        rdfs:comment    "An audio creative work" .
 
 muser:Album            rdf:type        owl:Class ;
-                       rdfs:subClassOf schema:CreativeWork ;
+                       rdfs:subClassOf muser:MusicalEntity ;
                        rdfs:comment    "A sequence of audio creative works" .
 
 muser:MusicalEvent     rdf:type        owl:Class ;
@@ -282,24 +279,18 @@ muser:MusicalPlaylist  rdfs:type       owl:Class ;
 muser:HipHop    rdf:type            muser:MusicalGenre ;
                 muser:name          "Hip-Hop" ;
                 muser:uuid          "123-abc-qwe" ;
-                muser:idWikidata    "Q123456" ;
-                muser:idDbpedia     "HipHop" ;
                 muser:idSpotify     "ABC" ;
                 muser:relatedMusicalGenre muser:TripHop, muser:RnB.
 
 muser:TripHop   rdf:type            muser:MusicalGenre ;
                 muser:name          "Trip-Hop" ;
                 muser:uuid          "124-abc-qwe" ;
-                muser:idWikidata    "Q123457" ;
-                muser:idDbpedia     "TripHop" ;
                 muser:idSpotify     "ABD" ;
                 muser:relatedMusicalGenre muser:HipHop .
 
 muser:RnB       rdf:type            muser:MusicalGenre ;
                 muser:name          "RnB" ;
                 muser:UUID          "125-abc-qwe" ;
-                muser:idWikidata    "Q123458" ;
-                muser:idDbpedia     "RnB" ;
                 muser:idSpotify     "ABE" ;
                 muser:relatedMusicalGenre muser:HipHop .
 
@@ -307,8 +298,6 @@ muser:RnB       rdf:type            muser:MusicalGenre ;
 muser:GEazy     rdf:type            muser:MusicalArtist ;
                 owl:sameAs          dbr:G-Eazy ;
                 muser:uuid          "126-abc-qwe" ;
-                muser:idWikidata    "Q123459" ;
-                muser:idDbpedia     "GEazy" ;
                 muser:idSpotify     "G-eazy" ;
                 muser:name          "G-Eazy" ;
                 muser:firstName     "Gerald Earl" ;
@@ -316,16 +305,15 @@ muser:GEazy     rdf:type            muser:MusicalArtist ;
                 muser:gender        "male" ;
                 muser:about         "Hot firah nigga" ;
                 muser:hasMusicalGenre   muser:RnB, muser:HipHop ;
-                muser:country       "USA" ;
+                muser:musicalAgentOrigin       "USA" ;
                 muser:inceptionDate "2012-01-01"^^xsd:date ;
                 muser:performs       muser:HimAndI, muser:FavoriteGirl, muser:ThePlan ;
-                muser:released       muser:TheBeautifulAndTheDamned .
+                muser:released       muser:TheBeautifulAndTheDamned ;
+                owl:sameAs           dbr:Q5511893, wde:G-Eazy .
 
 
 muser:TheBeautifulAndTheDamned      rdf:type         muser:Album ;
                                     muser:uuid       "126-abc-qwe" ;
-                                    muser:idWikidata "Q123459" ;
-                                    muser:idDbpedia  "TbatD" ;
                                     muser:idSpotify  "TheBeaandTheDmnd" ;
                                     muser:name       "The Beautiful And The Damned" ;
                                     muser:releaseDate      "2017-12-25"^^xsd:date ;
@@ -337,8 +325,6 @@ muser:TheBeautifulAndTheDamned      rdf:type         muser:Album ;
 
 muser:HimAndI       rdf:type                   muser:Song ;
                     muser:uuid                 "126-abc-qwe" ;
-                    muser:idWikidata           "Q123459" ;
-                    muser:idDbpedia            "Himandi" ;
                     muser:idSpotify            "HimAndI" ;
                     muser:name                 "Him & I" ;
                     muser:duration             "300"^^xsd:nonNegativeInteger ;
@@ -348,8 +334,6 @@ muser:HimAndI       rdf:type                   muser:Song ;
 
 muser:FavoriteGirl  rdf:type                   muser:Song ;
                     muser:uuid                 "126-abc-qwe" ;
-                    muser:idWikidata           "Q123459" ;
-                    muser:idDbpedia            "FavGirl" ;
                     muser:idSpotify            "FavoriteGirl" ;
                     muser:name                 "Favorite Girl" ;
                     muser:duration             "301"^^xsd:nonNegativeInteger ;
@@ -359,8 +343,6 @@ muser:FavoriteGirl  rdf:type                   muser:Song ;
 
 muser:ThePlan       rdf:type                   muser:Song ;
                     muser:uuid                 "126-abc-qwe" ;
-                    muser:idWikidata           "Q123459" ;
-                    muser:idDbpedia            "ThePln" ;
                     muser:idSpotify            "ThePlan" ;
                     muser:name                 "Favorite Girl" ;
                     muser:duration             "302"^^xsd:nonNegativeInteger ;

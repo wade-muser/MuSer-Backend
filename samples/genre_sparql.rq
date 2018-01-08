@@ -1,0 +1,13 @@
+###################### DBPEDIA ###############################
+# Get Related Genres of a Genre
+SELECT * WHERE {
+  ?genre dbo:derivative ?relatedGenre.
+  ?relatedGenre foaf:name ?relatedGenreLabel.
+  FILTER (?genre=dbr:Hip_hop_music)
+  FILTER (lang(?relatedGenreLabel)="en")
+} 
+LIMIT 50
+
+
+
+

@@ -1,74 +1,57 @@
-# Get Albums released by an artist  (DBP)
+# Get info for an Album
 SELECT * WHERE {
-  ?artist rdf:type ?type;
-          owl:sameAs ?same.
-  ?artistWork dbo:artist ?artist;
-              rdf:type  ?artistWorkType;
-              dbo:genre ?genre.
-  ?genre  foaf:name ?genreLabel
-  FILTER (?artist = dbr:Eminem)
-  FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
-  FILTER (?artistWorkType IN(dbo:Album))
-  FILTER (?artistWorkType NOT IN(dbo:Single, dbo:Song))
-  FILTER regex( ?same, 'wikidata.org/entity')
-}
-
-
-# Get Genre, Performer, Release Date, Duration of an Album
-SELECT * WHERE {
-  ?album rdf:type ?type;
-         dbo:artist ?performer;
-         dbo:genre ?genre;
-         dbo:releaseDate ?date;
-         dbo:runtime ?duration.
-  ?genre foaf:name ?genreName
+  ?album rdf:type ?type ;
+         dbo:artist ?performer ;
+    	   rdfs:label  ?label ;
+         dbo:releaseDate ?date ;
+         dbo:runtime ?duration ;
+         owl:sameAs  ?same .
+  
   FILTER (?album = <http://dbpedia.org/resource/Recovery_(Eminem_album)>)
   FILTER (?type IN (dbo:Album))
-  FILTER (lang(?genreName)="en") 
+  FILTER (regex(str(?same), "wikidata.org/entity"))
+  FILTER (lang(?label)="en") 
 } 
 
+# Get Albums released by an artist  (DBP)
+SELECT * WHERE {
+  ?artistWork dbo:artist ?artist ;
+              rdf:type  ?artistWorkType .
+  ?artist rdf:type ?type;
+          owl:sameAs ?same.
 
-
-
-
-
-
-
+  FILTER (?artist = dbr:Eminem)
+  FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
+  FILTER (?artistWorkType IN (dbo:Album))
+  FILTER (?artistWorkType NOT IN (dbo:Single, dbo:Song))
+  FILTER (regex(?same, 'wikidata.org/entity'))
+}
 
 ################## WIKIDATA ############################
 # Get Albums released by an artist
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX wd: <http://www.wikidata.org/entity/>
 SELECT * WHERE {
   ?album rdfs:label ?label;
          wdt:P31 ?instance;
          wdt:P175 ?performer;
-         wdt:P136 ?genre.    # An album doesn't have a gender. Optional should be used
-  ?genre rdfs:label ?genreLabel.
+         
   FILTER(?performer = wd:Q5608)
   FILTER(?instance IN (wd:Q482994))
   FILTER(?instance NOT IN (wd:Q2031291, wd:Q2188189, wd:Q7302866, wd:Q134556, wd:Q7366, wd:Q169930))
   FILTER(lang(?label)="en")
-  FILTER(lang(?genreLabel)="en")
 } 
 LIMIT 50
 
 # Get Genre, Performer, Release Date, Duration of an Album
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
 SELECT * WHERE {
   ?album wdt:P31   ?instance;
-         wdt:P136  ?genre;
          wdt:P175  ?performer;
          wdt:P577  ?releaseDate;
-         wdt:P2047 ?duration.
-  ?genre rdfs:label ?genreLabel
+         wdt:P2047 ?duration ;
+         rdfs:label ?label .
+
   FILTER (?album = wd:Q274533)
   FILTER(?instance IN (wd:Q482994))
   FILTER(?instance NOT IN (wd:Q2031291, wd:Q2188189, wd:Q7302866, wd:Q134556, wd:Q7366, wd:Q169930))
-  FILTER(lang(?genreLabel)="en")
+  FILTER(lang(?label)="en")
 } 

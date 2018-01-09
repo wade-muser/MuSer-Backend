@@ -70,6 +70,9 @@ const MAPS_PREFIXES = {
         dbr: '<http://dbpedia.org/resource/>',
         dbp: '<http://dbpedia.org/property/>',
     },
+    muser: {
+        muser: '<http://example.com/muser#>',
+    },
 };
 
 const MAPS_PROPS = {

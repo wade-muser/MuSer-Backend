@@ -1,55 +1,28 @@
-'use strict';
+// MusicalArtist   - musicalArtistMember  - MusicalArtist
+// MusicalArtist   - relatedMusicalArtist - MusicalArtist  //DBP    
+// MusicalArtist   - hasMusicalGenre      - MusicalGenre   //DBP (info about a song)
+// MusicalArtist   - released             - Album          //DBP
+// MusicalArtist   - performs             - Song           //DBP
+// MusicalArtist   - performAt            - Event
 
-const M = require('./mappings');
+// MusicalGenre    - relatedMusicalGenre  - MusicalGenre   //DPB
+// MusicalGenre    - embracedBy           - MusicalArtist  
+// MusicalGenre    - embracedBy           - Song
+// MusicalGenre    - embracedBy           - Album
 
-const SPARQL_ENDPOINT = 'http://localhost:7200/repositories/muser-rdf';
-const SPARQL_ENDPOINT_INSERT = 'http://localhost:7200/repositories/muser-rdf/statements';
+// Song            - hasMusicalGenre      - MusicalGenre    //DBP
+// Song            - performedBy          - MusicalArtist   //DBP WIKI
+// Song            - containedBy          - Album           //DBP WIKI
+// Song            - partOf               - MusicalPlaylist 
 
-const { SparqlClient, SPARQL } = require('sparql-client-2');
-const client = new SparqlClient(SPARQL_ENDPOINT, {
-    updateEndpoint: SPARQL_ENDPOINT_INSERT,
-    defaultParameters: {
-        format: 'json',
-    },
-});
+// Album           - hasMusicalGenre      - MusicalGenre    //DBP WIKI
+// Album           - releasedBy           - MusicalArtist   //DBP WIKI
+// Album           - contains             - Song            //DBP WIKI
 
-function getQuery(statement, prefixes) {
-    let prefixesString = '';
-    let query = '';
-    let builtQuery;
+// Event           - performers           - MusicalArtist
 
-    Object.keys(M.common_prefixes).forEach((key, index) => {
-        prefixesString += `PREFIX ${key}: ${M.common_prefixes[key]}\n`;
-    });
-    prefixesString += `PREFIX muser: <http://example.com/muser#>\n`;
+// MusicalPlaylist - has                - Song
 
-    query = `${prefixesString}${statement}`;
-    console.log(query);
-    builtQuery = client.query(`${query}`);
-
-    return builtQuery;
-};
-
-function insertStatements(statements) {
-    let insertQuery;
-    let statementsString = '';
-
-    statements.forEach(st => {
-        statementsString += `${st} .\n`
-    });
-    
-    insertQuery = getQuery(`INSERT DATA { ${statementsString} }`);
-
-    insertQuery.execute()
-    .then(res => {
-        console.log("Okay !" + res);
-        console.log(statements);
-    })
-    .catch(err => {
-        console.error(err);
-    });
-}
-
-module.exports = {
-    insertStatements : insertStatements
-};
+// foreach k in res
+    //     ob = $map[k].type !== undefined ? `'{$res[k]}'{$map[k].type}` : ob = $res[k]
+    //     st = muser:sub $map[k][predicate]  $ob .

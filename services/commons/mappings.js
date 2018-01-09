@@ -51,7 +51,7 @@
             (rdf:type)  dbo:MusicalGenre
 */
 
-const MAPPINGS = {
+const MAPS_PREFIXES = {
     common_prefixes: {
         rdf:    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
         rdfs:   '<http://www.w3.org/2000/01/rdf-schema#>',
@@ -60,14 +60,20 @@ const MAPPINGS = {
         schema: '<http://schema.org/>',
         foaf:   '<http://xmlns.com/foaf/0.1>',
     },
-    
     wd_prefixes: {
         wde: '<http://www.wikidata.org/entity/>',
         wdp: '<http://www.wikidata.org/prop/>',
         wdt: '<http://www.wikidata.org/prop/direct/>',
     },
+    dbp_prefixes: {
+        dbo: '<http://dbpedia.org/ontology/>',
+        dbr: '<http://dbpedia.org/resource/>',
+        dbp: '<http://dbpedia.org/property/>',
+    },
+};
+
+const MAPS_PROPS = {
     wd: {
-        //props
         instance_of:   "P31",
         occupation:    "P106",
         field_of_work: "P101",
@@ -91,14 +97,7 @@ const MAPPINGS = {
         art_genre:     "Q1792379",
         music_genre:   "Q188451",
     },
-
-    dbp_prefixes: {
-        dbo: '<http://dbpedia.org/ontology/>',
-        dbr: '<http://dbpedia.org/resource/>',
-        dbp: '<http://dbpedia.org/property/>',
-    },
     dbp: {
-        //props
         genre:         "dbo:genre",
 
         MusicalArtist: "dbo:MusicalArtist",
@@ -118,4 +117,130 @@ const MAPPINGS = {
     }
 };
 
-module.exports = MAPPINGS;
+const MAPS_SPARQL_VAR_TO_MUSER = {
+    "sameDbp": {
+        "predicate": "owl:sameAs",
+    },
+    "sameWd": {
+        "predicate": "owl:sameAs",
+    },
+    "idSpotify": {
+        "predicate": "muser:idSpotify",
+        "type": "^^xsd:string",
+    },
+    "name": {
+        "predicate": "muser:name",
+        "type": "^^xsd:string",
+    },
+    "firstName": {
+        "predicate": "muser:firstName",
+        "type": "^^xsd:string",
+    },
+    "lastName": {
+        "predicate": "muser:lastName",
+        "type": "^^xsd:string"
+    },
+    "gender": {
+        "predicate": "muser:gender",
+        "type": "^^xsd:string",
+    },
+    "about": {
+        "predicate": "muser:about",
+        "type": "^^xsd:string"
+    },
+    "duration": {
+        "predicate": "muser:duration",
+        "type": "^^xsd:string",
+    },
+    "musicalAgentOrigin": {
+        "predicate": "muser:musicalAgentOrigin",
+    },
+    "inceptionDate": {
+        "predicate": "muser:inceptionDate",
+        "type": "^^xsd:date",
+    },
+    "retiringDate": {
+        "predicate": "muser:retiringDate",
+        "type": "^^xsd:date",
+    },
+    "releaseDate": {
+        "predicate": "muser:releaseDate",
+        "type": "^^xsd:date",
+    },
+    "startDate": {
+        "predicate": "muser:startDate",
+        "type": "^^xsd:date",
+    },
+    "endDate": {
+        "predicate": "muser:endDate",
+        "type": "^^xsd:date",
+    },
+    "dateCreated": {
+        "predicate": "muser:dateCreated",
+        "type": "^^xsd:date",
+    },
+    "eventCountry": {
+        "predicate": "muser:eventCountry",
+        "type": "^^xsd:string",
+    },
+    "eventCity": {
+        "predicate": "muser:eventCity ",
+        "type": "^^xsd:string",
+    },
+    "eventPlace": {
+        "predicate": "muser:eventPlace",
+        "type": "^^xsd:string",
+    },
+    "musicalArtistMember": {
+        "predicate": "muser:musicalArtistMember",
+    },
+    "relatedMusicalAgent": {
+        "predicate": "muser:relatedMusicalAgent",
+    },
+    "relatedMusicalGenre": {
+        "predicate": "muser:relatedMusicalGenre",
+    },
+    "hasMusicalGenre": {
+        "predicate": "muser:hasMusicalGenre",
+    },
+    "embracedBy": {
+        "predicate": "muser:embracedBy",
+    },
+    "performs": {
+        "predicate": "muser:performs",
+    },
+    "performedBy": {
+        "predicate": "muser:performedBy",
+    },
+    "released": {
+        "predicate": "muser:released",
+    },
+    "releasedBy": {
+        "predicate": "muser:releasedBy",
+    },
+    "contains": {
+        "predicate": "muser:contains",
+    },
+    "containedBy": {
+        "predicate": "muser:containedBy",
+    },
+    "performAt": {
+        "predicate": "muser:performAt",
+    },
+    "performers": {
+        "predicate": "muser:performers",
+    },
+    "has": {
+        "predicate": "muser:has",
+    },
+    "partOf": {
+        "predicate": "muser:partOf",
+    },
+};
+
+
+module.exports = { 
+    prefixes: MAPS_PREFIXES,
+    props: MAPS_PROPS,
+    varToMuser: MAPS_SPARQL_VAR_TO_MUSER,
+};

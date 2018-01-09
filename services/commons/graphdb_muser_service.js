@@ -1,28 +1,26 @@
-// MusicalArtist   - musicalArtistMember  - MusicalArtist
-// MusicalArtist   - relatedMusicalArtist - MusicalArtist  //DBP    
-// MusicalArtist   - hasMusicalGenre      - MusicalGenre   //DBP (info about a song)
-// MusicalArtist   - released             - Album          //DBP
-// MusicalArtist   - performs             - Song           //DBP
-// MusicalArtist   - performAt            - Event
+require("dotenv").config({ path: "env/config.env" });
 
-// MusicalGenre    - relatedMusicalGenre  - MusicalGenre   //DPB
-// MusicalGenre    - embracedBy           - MusicalArtist  
-// MusicalGenre    - embracedBy           - Song
-// MusicalGenre    - embracedBy           - Album
+const SPARQL_ENDPOINT = process.env.MUSER_RDF_SPARQL_ENDPOINT;
+const SPARQL_ENDPOINT_UPDATE = process.env.MUSER_RDF_SPARQL_ENDPOINT_UPDATE;
+const COMMON_PREFIXES = require('./mappings').prefixes.common;
+const DBP_PREFIXES = require('./mappings').prefixes.dbp;
+const WD_PREFIXES = require('./mappings').prefixes.wd;
+const MUSER_PREFIXES = require('./mappings').prefixes.muser;
 
-// Song            - hasMusicalGenre      - MusicalGenre    //DBP
-// Song            - performedBy          - MusicalArtist   //DBP WIKI
-// Song            - containedBy          - Album           //DBP WIKI
-// Song            - partOf               - MusicalPlaylist 
+const SparqlService = require('./sparql_service');
+const SparqlQueryFactory = require('./sparql_query_factory');
 
-// Album           - hasMusicalGenre      - MusicalGenre    //DBP WIKI
-// Album           - releasedBy           - MusicalArtist   //DBP WIKI
-// Album           - contains             - Song            //DBP WIKI
+class GraphdbMuserService extends SparqlService {
+    constructor() {
+        super(SPARQL_ENDPOINT, undefined, [
+                COMMON_PREFIXES, DBP_PREFIXES, WD_PREFIXES,
+                MUSER_PREFIXES
+            ]
+        );
+        
+        this.sparqlQueryFactory = new SparqlQueryFactory();
+    };
+};
 
-// Event           - performers           - MusicalArtist
 
-// MusicalPlaylist - has                - Song
-
-// foreach k in res
-    //     ob = $map[k].type !== undefined ? `'{$res[k]}'{$map[k].type}` : ob = $res[k]
-    //     st = muser:sub $map[k][predicate]  $ob .
+module.exports = DbpediaService;

@@ -1,0 +1,11 @@
+SELECT ?name ?about ?sameWd WHERE {
+  ?genre     rdfs:label    ?name ;
+             rdf:type	   ?type ;
+             dbo:abstract  ?about ;
+  		     owl:sameAs    ?sameWd .
+  FILTER (?genre = ${dbpInstance})
+  FILTER (?type IN (dbo:MusicGenre))
+  FILTER (regex(str(?sameWd), "wikidata.org/entity"))
+  FILTER (lang(?name) = "en")
+  FILTER (lang(?about) = "en")
+} LIMIT 50

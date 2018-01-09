@@ -1,9 +1,9 @@
 # Get genres of a Song
 SELECT ?genre ?name ?about ?sameWd  WHERE {
   ?genre     rdfs:label    ?name ;
-             rdf:type	   ?type ;
+             rdf:type	     ?type ;
              dbo:abstract  ?about ;
-  			 owl:sameAs    ?sameWd .
+  			     owl:sameAs    ?sameWd .
       		 
   ${dbpInstance}  dbo:genre ?genre . 	 
  

@@ -52,7 +52,7 @@
 */
 
 const MAPS_PREFIXES = {
-    common_prefixes: {
+    common: {
         rdf:    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
         rdfs:   '<http://www.w3.org/2000/01/rdf-schema#>',
         xsd:    '<http://www.w3.org/2001/XMLSchema#>',
@@ -60,12 +60,12 @@ const MAPS_PREFIXES = {
         schema: '<http://schema.org/>',
         foaf:   '<http://xmlns.com/foaf/0.1>',
     },
-    wd_prefixes: {
+    wd: {
         wde: '<http://www.wikidata.org/entity/>',
         wdp: '<http://www.wikidata.org/prop/>',
         wdt: '<http://www.wikidata.org/prop/direct/>',
     },
-    dbp_prefixes: {
+    dbp: {
         dbo: '<http://dbpedia.org/ontology/>',
         dbr: '<http://dbpedia.org/resource/>',
         dbp: '<http://dbpedia.org/property/>',
@@ -139,6 +139,10 @@ const MAPS_SPARQL_VAR_TO_MUSER = {
     "lastName": {
         "predicate": "muser:lastName",
         "type": "^^xsd:string"
+    },
+    "birthName": {
+        "predicate": "muser:birthName",
+        "type": "^^xsd:string",
     },
     "gender": {
         "predicate": "muser:gender",

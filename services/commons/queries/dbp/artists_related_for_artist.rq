@@ -1,0 +1,10 @@
+SELECT ?relatedArtist ?name ?sameWd WHERE {
+    ?relatedArtist  rdfs:label                  ?name ;
+                    rdf:type                    ?type ;
+                    owl:sameAs                  ?sameWd ;
+    			    dbo:associatedMusicalArtist ${dbpInstance} .
+  
+    FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
+    FILTER (regex(str(?sameWd), "http://www.wikidata.org/entity"))
+    FILTER (lang(?name) = "en")
+}

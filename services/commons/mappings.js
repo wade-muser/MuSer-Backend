@@ -1,5 +1,3 @@
-'use strict';
-
 /*
     *Props:
         WD:
@@ -120,4 +118,4 @@ const MAPPINGS = {
     }
 };
 
-module.exports = MAPPINGS
+module.exports = MAPPINGS;

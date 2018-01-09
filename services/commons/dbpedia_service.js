@@ -1,15 +1,179 @@
-'use strict';
-
 const M = require('./mappings');
 const SPARQL_ENDPOINT = 'http://dbpedia.org/sparql';
 
-const { SparqlClient, SPARQL } = require('sparql-client-2');
+const {
+    SparqlClient,
+    SPARQL
+} = require('sparql-client-2');
 const client = new SparqlClient(SPARQL_ENDPOINT, {
     defaultParameters: {
         format: 'json',
     }
 });
 const GraphdbMuserService = require('./graphdb_muser_service');
+
+const mapping_dictionary = {
+    "default": {
+        "dbpediaArtist": {
+            "predicate": "owl:sameAs",
+        },
+        "wikidataArtist": {
+            "predicate": "owl:sameAs",
+        },
+        "idSpotify": {
+            "predicate": "muser:idSpotify",
+            "type": "^^xsd:string",
+        },
+        "name": {
+            "predicate": "muser:name",
+            "type": "^^xsd:string",
+        },
+        "firstName": {
+            "predicate": "muser:firstName",
+            "type": "^^xsd:string",
+        },
+        "lastName": {
+            "predicate": "muser:lastName",
+            "type": "^^xsd:string"
+        },
+        "gender": {
+            "predicate": "muser:gender",
+            "type": "^^xsd:string",
+        },
+        "about": {
+            "predicate": "muser:about",
+            "type": "^^xsd:string"
+        },
+        "duration": {
+            "predicate": "muser:duration",
+            "type": "^^xsd:string",
+        },
+        "musicalAgentOrigin": {
+            "predicate": "muser:musicalAgentOrigin",
+        },
+        "inceptionDate": {
+            "predicate": "muser:inceptionDate",
+            "type": "^^xsd:date",
+        },
+        "retiringDate": {
+            "predicate": "muser:retiringDate",
+            "type": "^^xsd:date",
+        },
+        "releaseDate": {
+            "predicate": "muser:releaseDate",
+            "type": "^^xsd:date",
+        },
+        "startDate": {
+            "predicate": "muser:startDate",
+            "type": "^^xsd:date",
+        },
+        "endDate": {
+            "predicate": "muser:endDate",
+            "type": "^^xsd:date",
+        },
+        "dateCreated": {
+            "predicate": "muser:dateCreated",
+            "type": "^^xsd:date",
+        },
+        "eventCountry": {
+            "predicate": "muser:eventCountry",
+            "type": "^^xsd:string",
+        },
+        "eventCity": {
+            "predicate": "muser:eventCity ",
+            "type": "^^xsd:string",
+        },
+        "eventPlace": {
+            "predicate": "muser:eventPlace",
+            "type": "^^xsd:string",
+        },
+        "musicalArtistMember": {
+            "predicate": "muser:musicalArtistMember",
+        },
+        "relatedMusicalAgent": {
+            "predicate": "muser:relatedMusicalAgent",
+        },
+        "relatedMusicalGenre": {
+            "predicate": "muser:relatedMusicalGenre",
+        },
+        "hasMusicalGenre": {
+            "predicate": "muser:hasMusicalGenre",
+        },
+        "embracedBy": {
+            "predicate": "muser:embracedBy",
+        },
+        "performs": {
+            "predicate": "muser:performs",
+        },
+        "performedBy": {
+            "predicate": "muser:performedBy",
+        },
+        "released": {
+            "predicate": "muser:released",
+        },
+        "releasedBy": {
+            "predicate": "muser:releasedBy",
+        },
+        "contains": {
+            "predicate": "muser:contains",
+        },
+        "containedBy": {
+            "predicate": "muser:containedBy",
+        },
+        "performAt": {
+            "predicate": "muser:performAt",
+        },
+        "performers": {
+            "predicate": "muser:performers",
+        },
+        "has": {
+            "predicate": "muser:has",
+        },
+        "partOf": {
+            "predicate": "muser:partOf",
+        },
+
+    },
+    "artist_info": {
+        "dbpediaArtist": {
+            "predicate": "owl:sameAs",
+        },
+        "wikidataArtist": {
+            "predicate": "owl:sameAs",
+        },
+        "artistName": {
+            "predicate": "muser:name",
+            "type": "^^xsd:string",
+        },
+        "artistFirstName": {
+            "predicate": "muser:firstName",
+            "type": "^^xsd:string",
+        },
+        "lastName": {
+            "predicate": "muser:lastName",
+            "type": "^^xsd:string",
+        },
+        "birthName": {
+            "predicate": "muser:name",
+            "type": "^^xsd:date",
+        },
+        "artistGender": {
+            "predicate": "muser:gender",
+            "type": "^^xsd:string",
+        },
+        "artistBirthPlace": {
+            "predicate": "muser:musicalAgentOrigin",
+        },
+        "artistActivityStartYear": {
+            "predicate": "muser:inceptionDate",
+            "type": "^^xsd:date",
+        },
+        "artistActivityEndYear": {
+            "predicate": "muser:retiringDate",
+            "type": "^^xsd:date",
+        },
+    }
+};
 
 
 
@@ -39,7 +203,7 @@ const GraphdbMuserService = require('./graphdb_muser_service');
 // MusicalPlaylist - has                - Song
 
 
-function getQuerySelect(statement, prefixes=M.dbp_prefixes) {
+function getQuerySelect(statement, prefixes = M.dbp_prefixes) {
     let prefixesString = '';
     let query = '';
     let builtQuery;
@@ -56,7 +220,7 @@ function getQuerySelect(statement, prefixes=M.dbp_prefixes) {
     builtQuery = client.query(`${query}`);
 
     return builtQuery;
-};
+}
 
 function parseQueryResult(result) {
     let cleanResult = {};
@@ -69,8 +233,9 @@ function parseQueryResult(result) {
 }
 
 function getArtist(dbpInstance) {
+
     getQuerySelect(
-    `SELECT ?dbpediaArtist ?wikidataArtist  ?artistName ?artistFirstName
+            `SELECT ?dbpediaArtist ?wikidataArtist  ?artistName ?artistFirstName
     ?artistLastName ?artistBirthName ?artistGender ?artistBirthPlace ?artistActivityStartYear ?artistActivityEndYear WHERE {
       ?dbpediaArtist rdf:type                 ?type ;
                      rdfs:label               ?artistName ;
@@ -91,29 +256,29 @@ function getArtist(dbpInstance) {
       FILTER (lang(?artistName) = "en")
       FILTER (lang(?aboutArtist) = "en")
     } LIMIT 10`)
-    .execute()
-    .then(res => {
-        console.log(parseQueryResult(res.results.bindings[0]));
+        .execute()
+        .then(res => {
+            console.log(parseQueryResult(res.results.bindings[0]));
 
-        return parseQueryResult(res.results.bindings[0]);
-    })
-    .then(artist => {
-        // let statements = [];
-        // Object.keys(artist).forEach(prop => {
-        //     statements.append('');
-        // });
+            return parseQueryResult(res.results.bindings[0]);
+        })
+        .then(artist => {
+            // let statements = [];
+            // Object.keys(artist).forEach(prop => {
+            //     statements.append('');
+            // });
 
-        GraphdbMuserService.insertStatements(
-            [
-                `muser:${artist.artistName} rdf:type muser:MusicalArtist`,
-                `muser:${artist.artistName} owl:sameAs <${artist.wikidataArtist}>`,
-                `muser:${artist.artistName} muser:inceptionDate '${artist.artistActivityStartYear}'^^xsd:date`
-            ]
-        );
-    })
-    .catch(err => {
-        console.error(err);
-    });
+            GraphdbMuserService.insertStatements(
+                [
+                    `muser:${artist.artistName} rdf:type muser:MusicalArtist`,
+                    `muser:${artist.artistName} owl:sameAs <${artist.wikidataArtist}>`,
+                    `muser:${artist.artistName} muser:inceptionDate '${artist.artistActivityStartYear}'^^xsd:date`
+                ]
+            );
+        })
+        .catch(err => {
+            console.error(err);
+        });
 }
 
 function getSong(id) {

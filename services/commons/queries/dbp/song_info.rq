@@ -1,0 +1,12 @@
+SELECT ?name ?duration ?sameWd WHERE {
+  ${dbpInstance}     rdfs:label             ?name ;
+                     rdf:type   		    ?type ;
+                    #  dbo:musicalArtist      ?artist ;
+                     dbo:runtime		    ?duration	;
+                     owl:sameAs             ?sameWd .
+  
+  FILTER (?type IN (dbo:MusicalWork))
+  FILTER (?type NOT IN (dbo:Album))
+  FILTER (regex(str(?sameWd), 'wikidata.org/entity'))
+  FILTER (lang(?name) = 'en')
+}

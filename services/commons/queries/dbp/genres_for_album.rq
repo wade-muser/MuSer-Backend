@@ -1,0 +1,11 @@
+SELECT ?genre ?label ?sameWd WHERE {
+  ?genre          rdfs:label    ?name ;
+                  rdf:type	    ?type ;
+  			      owl:sameAs    ?sameWd .
+      		 
+  ${dbpInstance}  dbo:genre  ?genre .
+ 
+  FILTER (?type IN (dbo:MusicGenre))
+  FILTER (regex(str(?sameWd), "wikidata.org/entity"))
+  FILTER (lang(?name) = "en")
+}

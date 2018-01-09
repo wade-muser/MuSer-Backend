@@ -58,10 +58,6 @@ class SparqlService {
         return cleanResult;
     };
 
-    stringTemplate(literal, params) {
-        return new Function(params, "return `" + literal + "`;");
-    };
-
 };
 
 module.exports = SparqlService;

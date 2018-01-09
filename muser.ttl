@@ -77,6 +77,11 @@ muser:lastName          rdf:type                owl:DatatypeProperty ;
                         rdfs:range              xsd:string ;
                         owl:equivalentProperty  foaf:familyName .
 
+muser:birthName         rdf:type                owl:DatatypeProperty ;
+                        rdfs:comment            "Birth name of a MusicalArtist" ;
+                        rdfs:domain             muser:MusicalArtist ;
+                        rdfs:range              xsd:string .
+
 muser:gender            rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
                         rdfs:comment            "Sex of the MusicalArtist" ;
                         rdfs:domain             muser:MusicalArtist ;

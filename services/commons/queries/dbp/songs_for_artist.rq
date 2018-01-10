@@ -1,6 +1,6 @@
-SELECT ?song ?name ?label ?sameWd WHERE {
-  ?song     rdfs:label          ?label ;
-            foaf:name           ?label ;
+SELECT ?entity ?name ?label ?sameWd WHERE {
+  ?entity     rdfs:label          ?label ;
+            foaf:name           ?name ;
   		      rdf:type   		      ?type ;
     	      dbo:musicalArtist   ${dbpInstance} ;
       	    owl:sameAs          ?sameWd .

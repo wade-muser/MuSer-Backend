@@ -1,22 +1,22 @@
-SELECT  ?artist ?sameWd ?label ?name ?firstName ?lastName ?birthDate ?birthName ?gender ?musicalAgentOrigin ?inceptionDate ?retiringDate WHERE {
-          ?artist   rdf:type                 ?type ;
+SELECT  ?entity ?sameWd ?label ?name ?firstName ?lastName ?birthDate ?birthName ?gender ?musicalAgentOrigin ?inceptionDate ?retiringDate WHERE {
+          ?entity   rdf:type                 ?type ;
                     rdfs:label               ?label ;
                     foaf:name			           ?name ;
                     dbo:abstract             ?aboutArtist .
         
           OPTIONAL { 
-            ?artist ?originPredicate     ?musicalAgentOrigin .
+            ?entity ?originPredicate     ?musicalAgentOrigin .
             FILTER (?originPredicate IN (dbo:hometown, dbo:birthPlace))
   		    }
-          OPTIONAL { ?artist dbo:activeYearsStartYear ?inceptionDate }
-          OPTIONAL { ?artist dbo:activeYearsEndYear   ?retiringDate }
-          OPTIONAL { ?artist dbo:birthName            ?birthName }
-          OPTIONAL { ?artist foaf:givenName           ?firstName }
-          OPTIONAL { ?artist foaf:surname             ?lastName }
-          OPTIONAL { ?artist foaf:gender              ?gender }
-          OPTIONAL { ?artist owl:sameAs               ?sameWd }
+          OPTIONAL { ?entity dbo:activeYearsStartYear ?inceptionDate }
+          OPTIONAL { ?entity dbo:activeYearsEndYear   ?retiringDate }
+          OPTIONAL { ?entity dbo:birthName            ?birthName }
+          OPTIONAL { ?entity foaf:givenName           ?firstName }
+          OPTIONAL { ?entity foaf:surname             ?lastName }
+          OPTIONAL { ?entity foaf:gender              ?gender }
+          OPTIONAL { ?entity owl:sameAs               ?sameWd }
           
-  		    FILTER (?artist = ${dbpInstance})
+  		    FILTER (?entity = ${dbpInstance})
           FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
           FILTER (regex(?sameWd, "wikidata.org/entity"))
           FILTER (lang(?label) = "en")

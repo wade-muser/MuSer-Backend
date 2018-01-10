@@ -67,5 +67,6 @@ function populateMuser(artist) {
     // insert muser related genres
 }
 
-let artist = '<http://dbpedia.org/resource/Cashis>';
-populateMuser(artist);
+let artist1 = '<http://dbpedia.org/resource/Cashs>';
+let artist2 = '<http://dbpedia.org/resource/Eminem>';
+populateMuser(artist2);

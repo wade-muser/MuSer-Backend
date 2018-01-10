@@ -20,16 +20,22 @@ class DbpediaService extends SparqlService {
             );
             console.log(queryArtistInfo.originalText);
 
+            let statements = [];
             queryArtistInfo.execute()
                 .then(res => {
-                    let cleanResult = DbpediaService.parseQueryResult(res.results.bindings);
-                    let rdfSubject = DbpediaService.getCleanUniqueIdentifier(prefix, cleanResult.label[0]);
-                    console.log(cleanResult);
+                    let cleanResults = DbpediaService.parseQueryResult(res.results.bindings);
+                    Object.keys(cleanResults).forEach(key => {
+                        let cleanResult = cleanResults[key];
+                        let rdfSubject = DbpediaService.getCleanUniqueIdentifier(prefix, cleanResult.label[0]);
+                        console.log(cleanResult);
 
-                    delete cleanResult.artist;
-                    delete cleanResult.label;
+                        delete cleanResult.entity;
+                        delete cleanResult.label;
 
-                    let statements = DbpediaService.buildStatements(rdfSubject, cleanResult);
+                        let statement = DbpediaService.buildStatements(rdfSubject, cleanResult);
+                        statements.push(statement);
+
+                    });
                     resolve(statements);
                 })
                 .catch(err => {
@@ -40,12 +46,37 @@ class DbpediaService extends SparqlService {
         return new Promise(promisifiedFunction);
     }
 
-    getSongsForArtistStatements(dbpArtist) {
-        let querySongsForArtist = this.getQuery(
-            this.sparqlQueryFactory.getQuery(SparqlQueryFactory.SONGS_FOR_ARTIST, dbpArtist)
-        );
+    getSongsForArtistStatements(dbpArtist, prefix) {
 
-        return querySongsForArtist;
+        let promisifiedFunction = (resolve, reject) => {
+            let querySongsForArtist = this.getQuery(
+                this.sparqlQueryFactory.getQuery(SparqlQueryFactory.SONGS_FOR_ARTIST, dbpArtist)
+            );
+            console.log(querySongsForArtist.originalText);
+
+            let statements = [];
+            querySongsForArtist.execute()
+                .then(res => {
+                    let cleanResults = DbpediaService.parseQueryResult(res.results.bindings);
+                    Object.keys(cleanResults).forEach(key => {
+                        let cleanResult = cleanResults[key];
+                        let rdfSubject = DbpediaService.getCleanUniqueIdentifier(prefix, cleanResult.label[0]);
+                        console.log(cleanResult);
+
+                        delete cleanResult.entity;
+                        delete cleanResult.label;
+
+                        let statement = DbpediaService.buildStatements(rdfSubject, cleanResult);
+                        statements.push(statement);
+                    });
+                    resolve(statements);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        };
+
+        return new Promise(promisifiedFunction);
     }
 }
 

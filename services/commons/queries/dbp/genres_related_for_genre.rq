@@ -1,5 +1,6 @@
-SELECT ?relatedGenre ?name ?sameWd WHERE {
+SELECT ?relatedGenre ?name ?label ?sameWd WHERE {
     ?relatedGenre       foaf:name 		?name ;
+                        rdfs:label      ?label ;
                         rdf:type		?type ;
                         owl:sameAs      ?sameWd .
 
@@ -8,4 +9,6 @@ SELECT ?relatedGenre ?name ?sameWd WHERE {
     FILTER (?type IN (dbo:MusicGenre))
     FILTER (regex(str(?sameWd), "wikidata.org/entity"))
     FILTER (lang(?name) = "en")
+    FILTER (lang(?label) = 'en')
+ 
 }

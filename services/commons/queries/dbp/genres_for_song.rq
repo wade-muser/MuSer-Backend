@@ -1,6 +1,7 @@
 # Get genres of a Song
-SELECT ?genre ?name ?about ?sameWd  WHERE {
-  ?genre     rdfs:label    ?name ;
+SELECT ?genre ?name ?label ?about ?sameWd  WHERE {
+  ?genre     rdfs:label    ?label ;
+             foaf:name     ?name  ;
              rdf:type	     ?type ;
              dbo:abstract  ?about ;
   			     owl:sameAs    ?sameWd .
@@ -11,4 +12,6 @@ SELECT ?genre ?name ?about ?sameWd  WHERE {
   FILTER (regex(str(?sameWd), "wikidata.org/entity"))
   FILTER (lang(?name) = "en")
   FILTER (lang(?about) = "en")
+  FILTER (lang(?label) = 'en')
+
 } LIMIT 50

@@ -1,4 +1,6 @@
 const { SparqlClient, SPARQL } = require('sparql-client-2');
+const { normalize, normalizeSync } = require('normalize-diacritics');
+const VAR_TO_MUSER = require('./mappings').varToMuser;
 
 class SparqlService {
     constructor(
@@ -27,7 +29,7 @@ class SparqlService {
     
         this.prefixesSet.forEach(prefixes => {
             Object.keys(prefixes).forEach((key, index) => {
-                prefixesString += `PREFIX ${key}: ${prefixes[key]}\n`;
+                prefixesString += `PREFIX ${key}: <${prefixes[key]}>\n`;
             });
         });
         
@@ -65,6 +67,40 @@ class SparqlService {
         
         return cleanResult;
     };
+
+    static getCleanUniqueIdentifier(prefix, rawName, needsNormalized=false) {
+        if (needsNormalized) {
+            rawName = normalizeSync(rawName);
+        };
+    
+        rawName = rawName.split(/\s/).join('_');
+    
+        return `<${prefix}${rawName}>`;
+    }
+
+    static buildStatements(rdfSubject, result) {
+        let statements = [];
+        let rdfPredicate, rdfObject;
+    
+        Object.keys(result).forEach(key => {
+            rdfPredicate = VAR_TO_MUSER[key].predicate;
+    
+            result[key].forEach(resRdfObj => {
+                if (VAR_TO_MUSER[key].type !== undefined) {
+                    rdfObject = `"${resRdfObj}"${VAR_TO_MUSER[key].type}` ;
+                } else {
+                    rdfObject = resRdfObj;
+                    if (rdfObject.toLowerCase().startsWith('http://')) {
+                        rdfObject = `<${rdfObject}>`;
+                    }
+                }
+    
+                statements.push(`${rdfSubject}    ${rdfPredicate}     ${rdfObject}`);
+            });
+        });
+    
+        return statements;
+    }
 
 };
 

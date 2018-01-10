@@ -26,12 +26,17 @@
 const PREFIXES = require('./mappings').prefixes;
 const DbpediaService = require('./dbpedia_service');
 const GraphdbMuserService = require('./graphdb_muser_service');
+const SparqlQueryFactory = require('./sparql_query_factory');
+
+const sparqlQueryFactory = new SparqlQueryFactory();
 
 function populateMuser(artist) {
     let dbpediaService = new DbpediaService();
     let graphdbMuserService = new GraphdbMuserService();
 
-    dbpediaService.getArtistInfoStatements(artist, PREFIXES.muser.muser)
+    let query = sparqlQueryFactory.getQuery(SparqlQueryFactory.ARTISTS_RELATED_FOR_ARTIST, artist);
+
+    dbpediaService.getStatements(query, artist, PREFIXES.muser.muser)
         .then(statements => {
             console.log(statements);
         })
@@ -41,7 +46,7 @@ function populateMuser(artist) {
 
     // get dbp artist info (Done)
     // insert muser artist info
-    // get dbp songs for artist
+    // get dbp songs for artist 
     // insert muser song <-> artist
     // get dbp songs info 
     // insert muser songs info
@@ -67,6 +72,6 @@ function populateMuser(artist) {
     // insert muser related genres
 }
 
-let artist1 = '<http://dbpedia.org/resource/Cashs>';
+let artist1 = '<http://dbpedia.org/resource/Cashis>';
 let artist2 = '<http://dbpedia.org/resource/Eminem>';
 populateMuser(artist2);

@@ -79,17 +79,18 @@ class SparqlService {
         let cleanResults = {};
 
         results.forEach(result => {
-            let cleanResult = {};
+            if (cleanResults[result.entity.value] === undefined) {
+                cleanResults[result.entity.value] = {};
+            }
             Object.keys(result).forEach(key => {
-                if (cleanResult[key] === undefined) {
-                    cleanResult[key] = [];
+                if (cleanResults[result.entity.value][key] === undefined) {
+                    cleanResults[result.entity.value][key] = [];
                 }
 
-                if (cleanResult[key].indexOf(result[key]['value']) == -1) {
-                    cleanResult[key].push(result[key]['value']);
+                if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
+                    cleanResults[result.entity.value][key].push(result[key].value);
                 }
             });
-            cleanResults[result.entity.value] = cleanResult;
         });
 
         return cleanResults;

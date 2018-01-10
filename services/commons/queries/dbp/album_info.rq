@@ -1,5 +1,5 @@
-SELECT ?name ?label ?releaseDate ?duration ?releasedBy ?sameWd WHERE {
-    ${dbpInstance}    rdf:type        ?type ;
+SELECT ?entity ?name ?label ?releaseDate ?duration ?releasedBy ?sameWd WHERE {
+    ?entity           rdf:type        ?type ;
                       rdfs:label      ?label ;
                       foaf:name       ?name ;
                       # dbo:artist      ?releasedBy ;
@@ -7,6 +7,7 @@ SELECT ?name ?label ?releaseDate ?duration ?releasedBy ?sameWd WHERE {
                       dbo:runtime     ?duration ;
                       owl:sameAs      ?sameWd .
     
+    FILTER (?entity = ${dbpInstance})
     FILTER (?type IN (dbo:Album))
     FILTER (regex(str(?sameWd), "wikidata.org/entity"))
     FILTER (lang(?name) = "en") 

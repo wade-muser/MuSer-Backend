@@ -1,17 +1,15 @@
-# Get genres of a Song
-SELECT ?genre ?name ?label ?about ?sameWd  WHERE {
-  ?genre     rdfs:label    ?label ;
-             foaf:name     ?name  ;
-             rdf:type	     ?type ;
-             dbo:abstract  ?about ;
-  			     owl:sameAs    ?sameWd .
-      		 
-  ${dbpInstance}  dbo:genre ?genre . 	 
- 
-  FILTER (?type IN (dbo:MusicGenre))
-  FILTER (regex(str(?sameWd), "wikidata.org/entity"))
-  FILTER (lang(?name) = "en")
-  FILTER (lang(?about) = "en")
-  FILTER (lang(?label) = 'en')
-
-} LIMIT 50
+SELECT ?entity ?name ?label ?about ?sameWd  WHERE {
+    ?entity   rdfs:label    ?label ;
+              foaf:name     ?name  ;
+              rdf:type	     ?type ;
+              dbo:abstract  ?about ;
+              owl:sameAs    ?sameWd .
+            
+    ${dbpInstance}  dbo:genre ?entity . 	 
+  
+    FILTER (?type IN (dbo:MusicGenre))
+    FILTER (regex(str(?sameWd), "wikidata.org/entity"))
+    FILTER (lang(?name) = "en")
+    FILTER (lang(?about) = "en")
+    FILTER (lang(?label) = 'en')
+}

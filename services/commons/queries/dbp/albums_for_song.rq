@@ -1,13 +1,13 @@
-SELECT ?album ?name ?label ?sameWd WHERE {
-  ?album    rdf:type    ?type ;
-    	      rdfs:label  ?label ;
-            foaf:name   ?name ;
-            owl:sameAs  ?sameWd .
-  
-  ${dbpInstance} dbo:album ?album .
-  
-  FILTER (?type IN (dbo:Album))
-  FILTER (regex(str(?sameWd), "wikidata.org/entity"))
-  FILTER (lang(?name) = "en") 
-  FILTER (lang(?label) = "en")
+SELECT ?entity ?name ?label ?sameWd WHERE {
+    ?entity   rdf:type    ?type ;
+              rdfs:label  ?label ;
+              foaf:name   ?name ;
+              owl:sameAs  ?sameWd .
+    
+    ${dbpInstance} dbo:album ?entity .
+    
+    FILTER (?type IN (dbo:Album))
+    FILTER (regex(str(?sameWd), "wikidata.org/entity"))
+    FILTER (lang(?name) = "en") 
+    FILTER (lang(?label) = "en")
 } 

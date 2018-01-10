@@ -1,10 +1,10 @@
-SELECT ?relatedGenre ?name ?label ?sameWd WHERE {
-    ?relatedGenre       foaf:name 		?name ;
+SELECT ?entity ?name ?label ?sameWd WHERE {
+    ?entity             foaf:name 		?name ;
                         rdfs:label      ?label ;
                         rdf:type		?type ;
                         owl:sameAs      ?sameWd .
 
-    ${dbpInstance}      dbo:derivative  ?relatedGenre .
+    ${dbpInstance}      dbo:derivative  ?entity .
 
     FILTER (?type IN (dbo:MusicGenre))
     FILTER (regex(str(?sameWd), "wikidata.org/entity"))

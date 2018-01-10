@@ -1,13 +1,14 @@
-SELECT ?label ?name ?about ?sameWd WHERE {
-    ?genre      rdfs:label    ?label ;
+SELECT ?entity ?label ?name ?about ?sameWd WHERE {
+    ?entity     rdfs:label    ?label ;
                 foaf:name     ?name ;
                 rdf:type	    ?type ;
                 dbo:abstract  ?about ;
                 owl:sameAs    ?sameWd .
     
-    FILTER (?genre = ${dbpInstance})
+    FILTER (?entity = ${dbpInstance})
     FILTER (?type IN (dbo:MusicGenre))
     FILTER (regex(str(?sameWd), "wikidata.org/entity"))
     FILTER (lang(?name) = "en")
     FILTER (lang(?about) = "en")
-} LIMIT 50
+    FILTER (lang(?label) = "en")
+}

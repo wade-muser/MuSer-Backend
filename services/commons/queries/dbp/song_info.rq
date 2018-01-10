@@ -1,14 +1,15 @@
-SELECT ?name ?label ?duration ?sameWd WHERE {
-  ${dbpInstance}     rdfs:label             ?label ;
-                     foaf:name              ?name  ;
-                     rdf:type   		    ?type ;
-                    #  dbo:musicalArtist      ?artist ;
-                     dbo:runtime		    ?duration	;
-                     owl:sameAs             ?sameWd .
-  
-  FILTER (?type IN (dbo:MusicalWork))
-  FILTER (?type NOT IN (dbo:Album))
-  FILTER (regex(str(?sameWd), 'wikidata.org/entity'))
-  FILTER (lang(?name) = 'en')
-  FILTER (lang(?label) = 'en')
+SELECT ?entity ?name ?label ?duration ?sameWd WHERE {
+    ?entity           rdfs:label              ?label ;
+                      foaf:name               ?name  ;
+                      rdf:type   		          ?type ;
+                      #  dbo:musicalArtist      ?artist ;
+                      dbo:runtime		          ?duration	;
+                      owl:sameAs              ?sameWd .
+
+    FILTER (?entity = ${dbpInstance})
+    FILTER (?type IN (dbo:MusicalWork))
+    FILTER (?type NOT IN (dbo:Album))
+    FILTER (regex(str(?sameWd), 'wikidata.org/entity'))
+    FILTER (lang(?name) = 'en')
+    FILTER (lang(?label) = 'en')
 }

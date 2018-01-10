@@ -27,30 +27,19 @@ const PREFIXES = require('./mappings').prefixes;
 const DbpediaService = require('./dbpedia_service');
 const GraphdbMuserService = require('./graphdb_muser_service');
 
-function populateMuser() {
+function populateMuser(artist) {
     let dbpediaService = new DbpediaService();
     let graphdbMuserService = new GraphdbMuserService();
-    
-    let queryArtistInfo = dbpediaService.getQueryArtistInfo('<http://dbpedia.org/resource/Cashis>');
-    console.log(queryArtistInfo.originalText);
 
-    queryArtistInfo.execute()
-    .then(res => {
-        let cleanResult = DbpediaService.parseQueryResult(res.results.bindings);
-        let rdfSubject = DbpediaService.getCleanUniqueIdentifier(PREFIXES.muser.muser, cleanResult.label[0]);
+    dbpediaService.getArtistInfoStatements(artist, PREFIXES.muser.muser)
+        .then(statements => {
+            console.log(statements);
+        })
+        .catch(err => {
+            console.error(err);
+        });
 
-        delete cleanResult.artist;
-        delete cleanResult.label;
-        
-        let statements = DbpediaService.buildStatements(rdfSubject, cleanResult);
-        console.log(cleanResult);
-        console.log(statements);
-    })
-    .catch(err => {
-        console.error(err);
-    });
-
-    // get dbp artist info
+    // get dbp artist info (Done)
     // insert muser artist info
     // get dbp songs for artist
     // insert muser song <-> artist
@@ -78,4 +67,5 @@ function populateMuser() {
     // insert muser related genres
 }
 
-populateMuser();
+let artist = '<http://dbpedia.org/resource/Cashis>';
+populateMuser(artist);

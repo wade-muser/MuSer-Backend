@@ -31,7 +31,6 @@ class SparqlService {
             });
         });
         
-
         query = `${prefixesString}${statement}`;
         builtQuery = this.client.query(`${query}`);
         return builtQuery;
@@ -49,12 +48,21 @@ class SparqlService {
         return insertQuery;
     };
 
-    static parseQueryResult(result) {
+    static parseQueryResult(results) {
         let cleanResult = {};
     
-        Object.keys(result).forEach(key => {
-            cleanResult[key] = result[key]['value'];
+        results.forEach(result => {
+            Object.keys(result).forEach(key => {
+                if (cleanResult[key] === undefined) {
+                    cleanResult[key] = [];
+                }
+
+                if (cleanResult[key].indexOf(result[key]['value']) == -1) {
+                    cleanResult[key].push(result[key]['value']);
+                }
+            });
         });
+        
         return cleanResult;
     };
 

@@ -13,8 +13,7 @@ const SparqlQueryFactory = require('./sparql_query_factory');
 class GraphdbMuserService extends SparqlService {
     constructor() {
         super(SPARQL_ENDPOINT, undefined, [
-                COMMON_PREFIXES, DBP_PREFIXES, WD_PREFIXES,
-                MUSER_PREFIXES
+                COMMON_PREFIXES, DBP_PREFIXES, WD_PREFIXES, MUSER_PREFIXES
             ]
         );
         
@@ -23,4 +22,4 @@ class GraphdbMuserService extends SparqlService {
 };
 
 
-module.exports = DbpediaService;
+module.exports = GraphdbMuserService;

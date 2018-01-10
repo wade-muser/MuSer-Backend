@@ -1,9 +1,12 @@
 SELECT  ?artist ?sameWd ?name ?firstName ?lastName ?birthName ?gender ?musicalAgentOrigin ?inceptionDate ?retiringDate WHERE {
           ?artist   rdf:type                 ?type ;
                     rdfs:label               ?name ;
-                    dbo:abstract             ?aboutArtist ;
-                    dbo:birthPlace           ?musicalAgentOrigin .
-                        
+                    dbo:abstract             ?aboutArtist .
+        
+          OPTIONAL { 
+    			?artist ?originPredicate     ?musicalAgentOrigin .
+    			FILTER (?originPredicate IN (dbo:hometown, dbo:birthPlace))
+  		  }
           OPTIONAL { ?artist dbo:activeYearsStartYear ?inceptionDate }
           OPTIONAL { ?artist dbo:activeYearsEndYear   ?retiringDate }
           OPTIONAL { ?artist dbo:birthName            ?birthName }
@@ -17,4 +20,4 @@ SELECT  ?artist ?sameWd ?name ?firstName ?lastName ?birthName ?gender ?musicalAg
           FILTER (regex(?sameWd, "wikidata.org/entity"))
           FILTER (lang(?name) = "en")
           FILTER (lang(?aboutArtist) = "en")
-} LIMIT 10
+}

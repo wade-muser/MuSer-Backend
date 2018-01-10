@@ -1,12 +1,14 @@
-SELECT ?name ?releaseDate ?duration ?releasedBy ?sameWd WHERE {
-  ${dbpInstance}    rdf:type        ?type ;
-                    rdfs:label      ?name ;
-                    # dbo:artist      ?releasedBy ;
-                    dbo:releaseDate ?releaseDate ;
-                    dbo:runtime     ?duration ;
-                    owl:sameAs      ?sameWd .
-  
-  FILTER (?type IN (dbo:Album))
-  FILTER (regex(str(?sameWd), "wikidata.org/entity"))
-  FILTER (lang(?name) = "en") 
+SELECT ?name ?label ?releaseDate ?duration ?releasedBy ?sameWd WHERE {
+    ${dbpInstance}    rdf:type        ?type ;
+                      rdfs:label      ?label ;
+                      foaf:name       ?name ;
+                      # dbo:artist      ?releasedBy ;
+                      dbo:releaseDate ?releaseDate ;
+                      dbo:runtime     ?duration ;
+                      owl:sameAs      ?sameWd .
+    
+    FILTER (?type IN (dbo:Album))
+    FILTER (regex(str(?sameWd), "wikidata.org/entity"))
+    FILTER (lang(?name) = "en") 
+    FILTER (lang(?label) = "en") 
 } 

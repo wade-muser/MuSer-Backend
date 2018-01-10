@@ -1,5 +1,6 @@
-SELECT ?relatedArtist ?name ?sameWd WHERE {
-    ?relatedArtist  rdfs:label                  ?name ;
+SELECT ?relatedArtist ?name ?label ?sameWd WHERE {
+    ?relatedArtist  rdfs:label                  ?label ;
+                    foaf:name                   ?name ;
                     rdf:type                    ?type ;
                     owl:sameAs                  ?sameWd ;
     			    dbo:associatedMusicalArtist ${dbpInstance} .
@@ -7,4 +8,5 @@ SELECT ?relatedArtist ?name ?sameWd WHERE {
     FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
     FILTER (regex(str(?sameWd), "http://www.wikidata.org/entity"))
     FILTER (lang(?name) = "en")
+    FILTER (lang(?label) = "en")
 }

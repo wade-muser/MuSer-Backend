@@ -121,127 +121,127 @@ const MAPS_PROPS = {
 };
 
 const MAPS_SPARQL_VAR_TO_MUSER = {
-    "sameDbp": {
-        "predicate": "owl:sameAs",
+    sameDbp: {
+        predicate: "owl:sameAs",
     },
-    "sameWd": {
-        "predicate": "owl:sameAs",
+    sameWd: {
+        predicate: "owl:sameAs",
     },
-    "idSpotify": {
-        "predicate": "muser:idSpotify",
-        "type": "^^xsd:string",
+    idSpotify: {
+        predicate: "muser:idSpotify",
+        type: "^^xsd:string",
     },
-    "name": {
-        "predicate": "muser:name",
-        "type": "^^xsd:string",
+    name: {
+        predicate: "muser:name",
+        type: "^^xsd:string",
     },
-    "firstName": {
-        "predicate": "muser:firstName",
-        "type": "^^xsd:string",
+    firstName: {
+        predicate: "muser:firstName",
+        type: "^^xsd:string",
     },
-    "lastName": {
-        "predicate": "muser:lastName",
-        "type": "^^xsd:string"
+    lastName: {
+        predicate: "muser:lastName",
+        type: "^^xsd:string"
     },
-    "birthName": {
-        "predicate": "muser:birthName",
-        "type": "^^xsd:string",
+    birthName: {
+        predicate: "muser:birthName",
+        type: "^^xsd:string",
     },
-    "gender": {
-        "predicate": "muser:gender",
-        "type": "^^xsd:string",
+    gender: {
+        predicate: "muser:gender",
+        type: "^^xsd:string",
     },
-    "about": {
-        "predicate": "muser:about",
-        "type": "^^xsd:string"
+    about: {
+        predicate: "muser:about",
+        type: "^^xsd:string"
     },
-    "duration": {
-        "predicate": "muser:duration",
-        "type": "^^xsd:string",
+    duration: {
+        predicate: "muser:duration",
+        type: "^^xsd:string",
     },
-    "musicalAgentOrigin": {
-        "predicate": "muser:musicalAgentOrigin",
+    musicalAgentOrigin: {
+        predicate: "muser:musicalAgentOrigin",
     },
-    "inceptionDate": {
-        "predicate": "muser:inceptionDate",
-        "type": "^^xsd:date",
+    inceptionDate: {
+        predicate: "muser:inceptionDate",
+        type: "^^xsd:date",
     },
-    "retiringDate": {
-        "predicate": "muser:retiringDate",
-        "type": "^^xsd:date",
+    retiringDate: {
+        predicate: "muser:retiringDate",
+        type: "^^xsd:date",
     },
-    "releaseDate": {
-        "predicate": "muser:releaseDate",
-        "type": "^^xsd:date",
+    releaseDate: {
+        predicate: "muser:releaseDate",
+        type: "^^xsd:date",
     },
-    "startDate": {
-        "predicate": "muser:startDate",
-        "type": "^^xsd:date",
+    startDate: {
+        predicate: "muser:startDate",
+        type: "^^xsd:date",
     },
-    "endDate": {
-        "predicate": "muser:endDate",
-        "type": "^^xsd:date",
+    endDate: {
+        predicate: "muser:endDate",
+        type: "^^xsd:date",
     },
-    "dateCreated": {
-        "predicate": "muser:dateCreated",
-        "type": "^^xsd:date",
+    dateCreated: {
+        predicate: "muser:dateCreated",
+        type: "^^xsd:date",
     },
-    "eventCountry": {
-        "predicate": "muser:eventCountry",
-        "type": "^^xsd:string",
+    eventCountry: {
+        predicate: "muser:eventCountry",
+        type: "^^xsd:string",
     },
-    "eventCity": {
-        "predicate": "muser:eventCity ",
-        "type": "^^xsd:string",
+    eventCity: {
+        predicate: "muser:eventCity ",
+        type: "^^xsd:string",
     },
-    "eventPlace": {
-        "predicate": "muser:eventPlace",
-        "type": "^^xsd:string",
+    eventPlace: {
+        predicate: "muser:eventPlace",
+        type: "^^xsd:string",
     },
-    "musicalArtistMember": {
-        "predicate": "muser:musicalArtistMember",
+    musicalArtistMember: {
+        predicate: "muser:musicalArtistMember",
     },
-    "relatedMusicalAgent": {
-        "predicate": "muser:relatedMusicalAgent",
+    relatedMusicalAgent: {
+        predicate: "muser:relatedMusicalAgent",
     },
-    "relatedMusicalGenre": {
-        "predicate": "muser:relatedMusicalGenre",
+    relatedMusicalGenre: {
+        predicate: "muser:relatedMusicalGenre",
     },
-    "hasMusicalGenre": {
-        "predicate": "muser:hasMusicalGenre",
+    hasMusicalGenre: {
+        predicate: "muser:hasMusicalGenre",
     },
-    "embracedBy": {
-        "predicate": "muser:embracedBy",
+    embracedBy: {
+        predicate: "muser:embracedBy",
     },
-    "performs": {
-        "predicate": "muser:performs",
+    performs: {
+        predicate: "muser:performs",
     },
-    "performedBy": {
-        "predicate": "muser:performedBy",
+    performedBy: {
+        predicate: "muser:performedBy",
     },
-    "released": {
-        "predicate": "muser:released",
+    released: {
+        predicate: "muser:released",
     },
-    "releasedBy": {
-        "predicate": "muser:releasedBy",
+    releasedBy: {
+        predicate: "muser:releasedBy",
     },
-    "contains": {
-        "predicate": "muser:contains",
+    contains: {
+        predicate: "muser:contains",
     },
-    "containedBy": {
-        "predicate": "muser:containedBy",
+    containedBy: {
+        predicate: "muser:containedBy",
     },
-    "performAt": {
-        "predicate": "muser:performAt",
+    performAt: {
+        predicate: "muser:performAt",
     },
-    "performers": {
-        "predicate": "muser:performers",
+    performers: {
+        predicate: "muser:performers",
     },
-    "has": {
-        "predicate": "muser:has",
+    has: {
+        predicate: "muser:has",
     },
-    "partOf": {
-        "predicate": "muser:partOf",
+    partOf: {
+        predicate: "muser:partOf",
     },
 };
 

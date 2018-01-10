@@ -53,25 +53,25 @@
 
 const MAPS_PREFIXES = {
     common: {
-        rdf:    '<http://www.w3.org/1999/02/22-rdf-syntax-ns#>',
-        rdfs:   '<http://www.w3.org/2000/01/rdf-schema#>',
-        xsd:    '<http://www.w3.org/2001/XMLSchema#>',
-        owl:    '<http://www.w3.org/2002/07/owl#>',
-        schema: '<http://schema.org/>',
-        foaf:   '<http://xmlns.com/foaf/0.1>',
+        rdf:    'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        rdfs:   'http://www.w3.org/2000/01/rdf-schema#',
+        xsd:    'http://www.w3.org/2001/XMLSchema#',
+        owl:    'http://www.w3.org/2002/07/owl#',
+        schema: 'http://schema.org/',
+        foaf:   'http://xmlns.com/foaf/0.1/',
     },
     wd: {
-        wde: '<http://www.wikidata.org/entity/>',
-        wdp: '<http://www.wikidata.org/prop/>',
-        wdt: '<http://www.wikidata.org/prop/direct/>',
+        wde:    'http://www.wikidata.org/entity/',
+        wdp:    'http://www.wikidata.org/prop/',
+        wdt:    'http://www.wikidata.org/prop/direct/',
     },
     dbp: {
-        dbo: '<http://dbpedia.org/ontology/>',
-        dbr: '<http://dbpedia.org/resource/>',
-        dbp: '<http://dbpedia.org/property/>',
+        dbo:    'http://dbpedia.org/ontology/',
+        dbr:    'http://dbpedia.org/resource/',
+        dbp:    'http://dbpedia.org/property/',
     },
     muser: {
-        muser: '<http://example.com/muser#>',
+        muser:  'http://example.com/muser#',
     },
 };
 

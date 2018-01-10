@@ -11,9 +11,9 @@ class DbpediaService extends SparqlService {
         this.sparqlQueryFactory = new SparqlQueryFactory();
     };
 
-    getQueryArtistInfo(dbpArtist, callback) {
+    getQueryArtistInfo(dbpArtist) {
         let queryArtistInfo = this.getQuery(
-            this.sparqlQueryFactory(SparqlQueryFactory.ARTIST_INFO, dbpArtist)
+            this.sparqlQueryFactory.getQuery(SparqlQueryFactory.ARTIST_INFO, dbpArtist)
         );
 
         return queryArtistInfo;
@@ -21,7 +21,7 @@ class DbpediaService extends SparqlService {
 
     getQuerySongsForArtist(dbpArtist) {
         let querySongsForArtist = this.getQuery(
-            this.sparqlQueryFactory(SparqlQueryFactory.SONGS_FOR_ARTIST, dbpArtist)
+            this.sparqlQueryFactory.getQuery(SparqlQueryFactory.SONGS_FOR_ARTIST, dbpArtist)
         );
 
         return querySongsForArtist;

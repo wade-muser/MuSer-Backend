@@ -23,10 +23,6 @@
 
 // MusicalPlaylist - has                - Song
 
-// foreach k in res
-    //     ob = $map[k].type !== undefined ? `'{$res[k]}'{$map[k].type}` : ob = $res[k]
-    //     st = muser:sub $map[k][predicate]  $ob .
-
 function getArtist(dbpInstance) {
 
     getQuerySelect()
@@ -55,21 +51,67 @@ function getArtist(dbpInstance) {
         });
 }
 
-const 
+const VAR_TO_MUSER = require('./mappings').varToMuser;
 const DbpediaService = require('./dbpedia_service');
 const GraphdbMuserService = require('./graphdb_muser_service');
+const { normalize, normalizeSync } = require('normalize-diacritics');
+
+function buildStatements(rdfSubject, result) {
+    let statements = [];
+    let rdfPredicate, rdfObject;
+
+    Object.keys(result).forEach(key => {
+        // console.log(key);
+        // console.log(VAR_TO_MUSER[key]);
+
+        rdfPredicate = VAR_TO_MUSER[key].predicate;
+
+        result[key].forEach(resRdfObj => {
+            if (VAR_TO_MUSER[key].type !== undefined) {
+                rdfObject = `"${resRdfObj}"${VAR_TO_MUSER[key].type}` ;
+            } else {
+                rdfObject = resRdfObj;
+                if (rdfObject.toLowerCase().startsWith('http://')) {
+                    rdfObject = `<${rdfObject}>`;
+                }
+            }
+
+            statements.push(`${rdfSubject}    ${rdfPredicate}     ${rdfObject}`);
+        });
+    });
+
+    return statements;
+}
 
 function populateMuser() {
-    let dbpediaService = DbpediaService();
-    let graphdbMuserService = GraphdbMuserService();
+    let dbpediaService = new DbpediaService();
+    let graphdbMuserService = new GraphdbMuserService();
     
+    let queryArtistInfo = dbpediaService.getQueryArtistInfo('<http://dbpedia.org/resource/Rage_Against_the_Machine>');
+    console.log(queryArtistInfo.originalText);
+
+    queryArtistInfo.execute()
+    .then(res => {
+        console.log(res);
+        let cleanResult = DbpediaService.parseQueryResult(res.results.bindings);
+        
+        console.log(cleanResult);
+
+        //rdfSubject = 'muser: wsToUnderscore(normalizeSync(label))'
+        let rdfSubject = `muser:${normalizeSync(cleanResult.name[0])}`;
+        delete cleanResult['artist'];
+
+        let statements = buildStatements(rdfSubject, cleanResult);
+        console.log(statements);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+
     // get artist info
     // insert artist info
-
-
     // get songs for artist
     // insert song <-> artist
-    
     // get songs info 
     // insert songs info
     // get albums for songs
@@ -88,7 +130,6 @@ function populateMuser() {
     // insert genres info
     // union artist genres (albums genres + songs genres)
     // insert artist <-> genres
-
     // get related artists for artist
     // insert related artists
     // get related genres for genres

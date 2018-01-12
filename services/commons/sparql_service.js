@@ -6,6 +6,7 @@ const {
     normalize,
     normalizeSync
 } = require('normalize-diacritics');
+const string_escape = require('jsesc');
 const VAR_TO_MUSER = require('./mappings').varToMuser;
 
 class SparqlService {
@@ -54,11 +55,10 @@ class SparqlService {
             entityStatements.forEach(statement => {
                 statementsString += `${statement.s} ${statement.p} ${statement.o} .\n`;
             });
-        });        
-
+        });
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
 
-        // console.log(insertQuery.originalText);
+        console.log(insertQuery.originalText);
 
         return insertQuery;
     }
@@ -76,7 +76,9 @@ class SparqlService {
                 }
 
                 if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
-                    cleanResults[result.entity.value][key].push(result[key].value);
+                    cleanResults[result.entity.value][key].push(string_escape(result[key].value, {
+                        quotes: "double"
+                    }));
                 }
             });
         });
@@ -140,10 +142,10 @@ class SparqlService {
 
         return statements;
     }
-    
+
     getStatements(results, prefix) {
         let statements = [];
-            
+
         Object.keys(results).forEach(key => {
             let result = results[key];
             let rdfSubject = SparqlService.getCleanUniqueIdentifier(prefix, result.label[0]);
@@ -154,7 +156,10 @@ class SparqlService {
             statements.push(statement);
         });
 
-        return statements;
+        return {
+            statements,
+            results
+        };
     }
 
 }

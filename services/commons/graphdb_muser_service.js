@@ -19,8 +19,8 @@ class GraphdbMuserService extends SparqlService {
         );
         
         this.sparqlQueryFactory = new SparqlQueryFactory();
-    };
-};
+    }
+}
 
 
 module.exports = GraphdbMuserService;

@@ -1,7 +1,7 @@
 SELECT ?entity ?name ?label ?about ?sameWd  WHERE {
     ?entity   rdfs:label    ?label ;
               foaf:name     ?name  ;
-              rdf:type	     ?type ;
+              rdf:type	    ?type ;
               dbo:abstract  ?about ;
               owl:sameAs    ?sameWd .
             

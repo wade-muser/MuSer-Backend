@@ -1,9 +1,9 @@
-SELECT ?entity ?name ?label ?duration ?sameWd WHERE {
+SELECT ?entity ?name ?label ?duration ?sameWd ?performedBy WHERE {
     ?entity           rdfs:label              ?label ;
                       foaf:name               ?name  ;
-                      rdf:type   		          ?type ;
-                      #  dbo:musicalArtist      ?artist ;
-                      dbo:runtime		          ?duration	;
+                      rdf:type   		      ?type ;
+                    #   dbo:musicalArtist       ?performedBy ;
+                      dbo:runtime		      ?duration	;
                       owl:sameAs              ?sameWd .
 
     FILTER (?entity = ${dbpInstance})

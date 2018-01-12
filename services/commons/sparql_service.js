@@ -50,32 +50,20 @@ class SparqlService {
         let insertQuery;
         let statementsString = '';
 
-        statements.forEach(st => {
-            statementsString += `${st} .\n`;
-        });
+        statements.forEach(entityStatements => {
+            entityStatements.forEach(statement => {
+                statementsString += `${statement.s} ${statement.p} ${statement.o} .\n`;
+            });
+        });        
 
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
+
+        // console.log(insertQuery.originalText);
+
         return insertQuery;
     }
 
     static parseQueryResult(results) {
-
-        // {
-        //     "3_a.m._(Eminem)" = {
-        //         "song": [...],
-        //         "name": [...]
-        //         "label": [...],
-
-        //     },
-        //     {
-
-        //     },
-        //     {
-
-        //     }
-        // }
-
-
         let cleanResults = {};
 
         results.forEach(result => {
@@ -94,6 +82,25 @@ class SparqlService {
         });
 
         return cleanResults;
+    }
+
+    getQueryResults(query, entity) {
+        let promisifiedFunction = (resolve, reject) => {
+            let sparqlQuery = this.getQuery(query);
+            // console.log(sparqlQuery.originalText);
+
+            sparqlQuery.execute()
+                .then(response => {
+                    let cleanResults = SparqlService.parseQueryResult(response.results.bindings);
+                    // console.log(cleanResults);
+                    resolve(cleanResults);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        };
+
+        return new Promise(promisifiedFunction);
     }
 
     static getCleanUniqueIdentifier(prefix, rawName, needsNormalized = false) {
@@ -123,8 +130,28 @@ class SparqlService {
                     }
                 }
 
-                statements.push(`${rdfSubject}    ${rdfPredicate}     ${rdfObject}`);
+                statements.push({
+                    s: rdfSubject,
+                    p: rdfPredicate,
+                    o: rdfObject,
+                });
             });
+        });
+
+        return statements;
+    }
+    
+    getStatements(results, prefix) {
+        let statements = [];
+            
+        Object.keys(results).forEach(key => {
+            let result = results[key];
+            let rdfSubject = SparqlService.getCleanUniqueIdentifier(prefix, result.label[0]);
+
+            delete result.entity;
+
+            let statement = SparqlService.buildStatements(rdfSubject, result);
+            statements.push(statement);
         });
 
         return statements;

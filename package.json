@@ -9,6 +9,7 @@
   "author": "lila.lazar@info.uaic.ro",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.6.0",
     "aws-sdk": "^2.168.0",
     "dotenv": "^4.0.0",
     "jsonwebtoken": "^8.1.0",

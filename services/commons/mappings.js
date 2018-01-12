@@ -131,6 +131,10 @@ const MAPS_SPARQL_VAR_TO_MUSER = {
         predicate: "muser:idSpotify",
         type: "^^xsd:string",
     },
+    label: {
+        predicate: "muser:label",
+        type: "^^xsd:string",
+    },
     name: {
         predicate: "muser:name",
         type: "^^xsd:string",

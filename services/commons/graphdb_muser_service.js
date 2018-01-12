@@ -12,7 +12,8 @@ const SparqlQueryFactory = require('./sparql_query_factory');
 
 class GraphdbMuserService extends SparqlService {
     constructor() {
-        super(SPARQL_ENDPOINT, undefined, [
+        console.log(SPARQL_ENDPOINT, SPARQL_ENDPOINT_UPDATE);
+        super(SPARQL_ENDPOINT, SPARQL_ENDPOINT_UPDATE, [
                 COMMON_PREFIXES, DBP_PREFIXES, WD_PREFIXES, MUSER_PREFIXES
             ]
         );

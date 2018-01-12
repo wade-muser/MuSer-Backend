@@ -59,6 +59,11 @@ muser:idSpotify         rdf:type                owl:DatatypeProperty, owl:Functi
                         rdfs:domain             muser:MusicalEntity ;
                         rdfs:range              xsd:string .
 
+muser:label             rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
+                        rdfs:comment            "Label of the resource (string)" ;
+                        rdfs:domain             muser:MusicalEntity, muser:MusicalEvent, muser:MusicalPlaylist ;
+                        rdfs:range              xsd:string .
+
 muser:name              rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
                         rdfs:comment            "Name of the resource (string)" ;
                         rdfs:domain             muser:MusicalEntity, muser:MusicalEvent, muser:MusicalPlaylist ;
@@ -281,106 +286,106 @@ muser:MusicalPlaylist  rdfs:type       owl:Class ;
 
 
 # Sample Instances
-muser:HipHop    rdf:type            muser:MusicalGenre ;
-                muser:name          "Hip-Hop" ;
-                muser:uuid          "123-abc-qwe" ;
-                muser:idSpotify     "ABC" ;
-                muser:relatedMusicalGenre muser:TripHop, muser:RnB.
+# muser:HipHop    rdf:type            muser:MusicalGenre ;
+#                 muser:name          "Hip-Hop" ;
+#                 muser:uuid          "123-abc-qwe" ;
+#                 muser:idSpotify     "ABC" ;
+#                 muser:relatedMusicalGenre muser:TripHop, muser:RnB.
 
-muser:TripHop   rdf:type            muser:MusicalGenre ;
-                muser:name          "Trip-Hop" ;
-                muser:uuid          "124-abc-qwe" ;
-                muser:idSpotify     "ABD" ;
-                muser:relatedMusicalGenre muser:HipHop .
+# muser:TripHop   rdf:type            muser:MusicalGenre ;
+#                 muser:name          "Trip-Hop" ;
+#                 muser:uuid          "124-abc-qwe" ;
+#                 muser:idSpotify     "ABD" ;
+#                 muser:relatedMusicalGenre muser:HipHop .
 
-muser:RnB       rdf:type            muser:MusicalGenre ;
-                muser:name          "RnB" ;
-                muser:UUID          "125-abc-qwe" ;
-                muser:idSpotify     "ABE" ;
-                muser:relatedMusicalGenre muser:HipHop .
-
-
-muser:GEazy     rdf:type            muser:MusicalArtist ;
-                owl:sameAs          dbr:G-Eazy ;
-                muser:uuid          "126-abc-qwe" ;
-                muser:idSpotify     "G-eazy" ;
-                muser:name          "G-Eazy" ;
-                muser:firstName     "Gerald Earl" ;
-                muser:lastName      "Gillum" ;
-                muser:gender        "male" ;
-                muser:about         "Hot firah nigga" ;
-                muser:hasMusicalGenre   muser:RnB, muser:HipHop ;
-                muser:musicalAgentOrigin       "USA" ;
-                muser:inceptionDate "2012-01-01"^^xsd:date ;
-                muser:performs       muser:HimAndI, muser:FavoriteGirl, muser:ThePlan ;
-                muser:released       muser:TheBeautifulAndTheDamned ;
-                owl:sameAs           dbr:Q5511893, wde:G-Eazy .
+# muser:RnB       rdf:type            muser:MusicalGenre ;
+#                 muser:name          "RnB" ;
+#                 muser:UUID          "125-abc-qwe" ;
+#                 muser:idSpotify     "ABE" ;
+#                 muser:relatedMusicalGenre muser:HipHop .
 
 
-muser:TheBeautifulAndTheDamned      rdf:type         muser:Album ;
-                                    muser:uuid       "126-abc-qwe" ;
-                                    muser:idSpotify  "TheBeaandTheDmnd" ;
-                                    muser:name       "The Beautiful And The Damned" ;
-                                    muser:releaseDate      "2017-12-25"^^xsd:date ;
-                                    muser:duration   "1200"^^xsd:nonNegativeInteger ;
-                                    muser:hasMusicalGenre muser:HipHop ;
-                                    muser:releasedBy  muser:GEazy ;
-                                    muser:contains    muser:HimAndI, muser:FavoriteGirl, muser:ThePlan .
+# muser:GEazy     rdf:type            muser:MusicalArtist ;
+#                 owl:sameAs          dbr:G-Eazy ;
+#                 muser:uuid          "126-abc-qwe" ;
+#                 muser:idSpotify     "G-eazy" ;
+#                 muser:name          "G-Eazy" ;
+#                 muser:firstName     "Gerald Earl" ;
+#                 muser:lastName      "Gillum" ;
+#                 muser:gender        "male" ;
+#                 muser:about         "Hot firah nigga" ;
+#                 muser:hasMusicalGenre   muser:RnB, muser:HipHop ;
+#                 muser:musicalAgentOrigin       "USA" ;
+#                 muser:inceptionDate "2012-01-01"^^xsd:date ;
+#                 muser:performs       muser:HimAndI, muser:FavoriteGirl, muser:ThePlan ;
+#                 muser:released       muser:TheBeautifulAndTheDamned ;
+#                 owl:sameAs           dbr:Q5511893, wde:G-Eazy .
 
 
-muser:HimAndI       rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe" ;
-                    muser:idSpotify            "HimAndI" ;
-                    muser:name                 "Him & I" ;
-                    muser:duration             "300"^^xsd:nonNegativeInteger ;
-                    muser:performedBy          muser:GEazy ;
-                    muser:containedBy          muser:TheBeautifulAndTheDamned ;
-                    muser:hasMusicalGenre      muser:HipHop .
-
-muser:FavoriteGirl  rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe" ;
-                    muser:idSpotify            "FavoriteGirl" ;
-                    muser:name                 "Favorite Girl" ;
-                    muser:duration             "301"^^xsd:nonNegativeInteger ;
-                    muser:performedBy          muser:GEazy ;
-                    muser:containedBy          muser:TheBeautifulAndTheDamned ;
-                    muser:hasMusicalGenre      muser:HipHop .
-
-muser:ThePlan       rdf:type                   muser:Song ;
-                    muser:uuid                 "126-abc-qwe" ;
-                    muser:idSpotify            "ThePlan" ;
-                    muser:name                 "Favorite Girl" ;
-                    muser:duration             "302"^^xsd:nonNegativeInteger ;
-                    muser:performedBy          muser:GEazy ;
-                    muser:containedBy          muser:TheBeautifulAndTheDamned ;
-                    muser:hasMusicalGenre      muser:HipHop .
-
-muser:HipHop    muser:embracedBy    muser:GEazy .
-muser:HipHop    muser:embracedBy    muser:TheBeautifulAndTheDamned .
-muser:HipHop    muser:embracedBy    muser:HimAndI , 
-                                    muser:ThePlan ,
-                                    muser:FavoriteGirl .
+# muser:TheBeautifulAndTheDamned      rdf:type         muser:Album ;
+#                                     muser:uuid       "126-abc-qwe" ;
+#                                     muser:idSpotify  "TheBeaandTheDmnd" ;
+#                                     muser:name       "The Beautiful And The Damned" ;
+#                                     muser:releaseDate      "2017-12-25"^^xsd:date ;
+#                                     muser:duration   "1200"^^xsd:nonNegativeInteger ;
+#                                     muser:hasMusicalGenre muser:HipHop ;
+#                                     muser:releasedBy  muser:GEazy ;
+#                                     muser:contains    muser:HimAndI, muser:FavoriteGirl, muser:ThePlan .
 
 
-muser:OpenCamp          rdf:type              muser:MusicalEvent ;
-                        muser:name            "Open Camp" ;
-                        muser:startDate       "17-07-03"^^xsd:date ;
-                        muser:endDate         "17-07-06"^^xsd:date ;
-                        muser:eventCountry    "Romania" ;
-                        muser:eventCity       "Vaslui" ;
-                        muser:eventPlace      "Poligon Paiu" ;
-                        muser:about           "A great MusicalEvent" ;
-                        muser:performers      muser:GEazy .
-muser:GEazy             muser:performAt       muser:OpenCamp .
+# muser:HimAndI       rdf:type                   muser:Song ;
+#                     muser:uuid                 "126-abc-qwe" ;
+#                     muser:idSpotify            "HimAndI" ;
+#                     muser:name                 "Him & I" ;
+#                     muser:duration             "300"^^xsd:nonNegativeInteger ;
+#                     muser:performedBy          muser:GEazy ;
+#                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
+#                     muser:hasMusicalGenre      muser:HipHop .
+
+# muser:FavoriteGirl  rdf:type                   muser:Song ;
+#                     muser:uuid                 "126-abc-qwe" ;
+#                     muser:idSpotify            "FavoriteGirl" ;
+#                     muser:name                 "Favorite Girl" ;
+#                     muser:duration             "301"^^xsd:nonNegativeInteger ;
+#                     muser:performedBy          muser:GEazy ;
+#                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
+#                     muser:hasMusicalGenre      muser:HipHop .
+
+# muser:ThePlan       rdf:type                   muser:Song ;
+#                     muser:uuid                 "126-abc-qwe" ;
+#                     muser:idSpotify            "ThePlan" ;
+#                     muser:name                 "Favorite Girl" ;
+#                     muser:duration             "302"^^xsd:nonNegativeInteger ;
+#                     muser:performedBy          muser:GEazy ;
+#                     muser:containedBy          muser:TheBeautifulAndTheDamned ;
+#                     muser:hasMusicalGenre      muser:HipHop .
+
+# muser:HipHop    muser:embracedBy    muser:GEazy .
+# muser:HipHop    muser:embracedBy    muser:TheBeautifulAndTheDamned .
+# muser:HipHop    muser:embracedBy    muser:HimAndI , 
+#                                     muser:ThePlan ,
+#                                     muser:FavoriteGirl .
 
 
-muser:MyPlaylist        rdf:type            muser:MusicalPlaylist ;
-                        muser:uuid          "123-abc-qwer" ;
-                        muser:name          "My Cool Playlist 1" ;
-                        muser:dateCreated   "2018-01-05"^^xsd:date ;
-                        muser:uuidCreator   "qwertyuiop" ;
-                        muser:duration      "8863"^^xsd:nonNegativeInteger ;
-                        muser:has           muser:FavoriteGirl, muser:HimAndI .
-muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .
-muser:HimAndI           muser:partOf        muser:MyPlaylist .
-muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .
+# muser:OpenCamp          rdf:type              muser:MusicalEvent ;
+#                         muser:name            "Open Camp" ;
+#                         muser:startDate       "17-07-03"^^xsd:date ;
+#                         muser:endDate         "17-07-06"^^xsd:date ;
+#                         muser:eventCountry    "Romania" ;
+#                         muser:eventCity       "Vaslui" ;
+#                         muser:eventPlace      "Poligon Paiu" ;
+#                         muser:about           "A great MusicalEvent" ;
+#                         muser:performers      muser:GEazy .
+# muser:GEazy             muser:performAt       muser:OpenCamp .
+
+
+# muser:MyPlaylist        rdf:type            muser:MusicalPlaylist ;
+#                         muser:uuid          "123-abc-qwer" ;
+#                         muser:name          "My Cool Playlist 1" ;
+#                         muser:dateCreated   "2018-01-05"^^xsd:date ;
+#                         muser:uuidCreator   "qwertyuiop" ;
+#                         muser:duration      "8863"^^xsd:nonNegativeInteger ;
+#                         muser:has           muser:FavoriteGirl, muser:HimAndI .
+# muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .
+# muser:HimAndI           muser:partOf        muser:MyPlaylist .
+# muser:FavoriteGirl      muser:partOf        muser:MyPlaylist .

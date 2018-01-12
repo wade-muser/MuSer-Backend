@@ -58,7 +58,7 @@ class SparqlService {
         });
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
 
-        console.log(insertQuery.originalText);
+        // console.log(insertQuery.originalText);
 
         return insertQuery;
     }

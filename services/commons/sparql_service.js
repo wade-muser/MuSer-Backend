@@ -58,7 +58,7 @@ class SparqlService {
         });
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
 
-        // console.log(insertQuery.originalText);
+        console.log(insertQuery.originalText);
 
         return insertQuery;
     }
@@ -76,9 +76,10 @@ class SparqlService {
                 }
 
                 if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
-                    cleanResults[result.entity.value][key].push(string_escape(result[key].value, {
+                    let escapedValue = string_escape(result[key].value, {
                         quotes: "double"
-                    }));
+                    });
+                    cleanResults[result.entity.value][key].push(escapedValue);
                 }
             });
         });
@@ -113,6 +114,13 @@ class SparqlService {
         rawName = rawName.split(/\s/).join('_');
 
         return `<${prefix}${rawName}>`;
+    }
+
+    static escapeSpecialCharacters(value) {
+        if (!value.startsWith("\"")) {
+            return value.replace(/["']/g, "_");
+        }
+        return value;
     }
 
     static buildStatements(rdfSubject, result) {

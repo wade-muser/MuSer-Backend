@@ -19,19 +19,15 @@ class MuserPopulater {
             const query = this.sparqlQueryFactory.getQuery(SparqlQueryFactory.ARTIST_INFO, artist);
 
             this.dbpediaService.getQueryResults(query, artist)
-                .then((results) => {
+                .then((cleanResults) => {
                     const {
                         statements,
-                        cleanResults
-                    } = this.dbpediaService.getStatements(results, MAPS.prefixes.muser.muser);
-
-
-                    let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
-                    let rdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
+                        results
+                    } = this.dbpediaService.getStatements(cleanResults, MAPS.prefixes.muser.muser);
 
                     resolve({
                         statements,
-                        rdfSubject
+                        results,
                     });
                 })
                 .catch(err => {
@@ -259,10 +255,9 @@ class MuserPopulater {
                     this.getArtistInfo(artist)
                         .then(({
                             statements,
-                            rdfSubject
+                            results
                         }) => {
                             console.log("\n   Insert artist info " + artist);
-                            console.log(statements);
                             // console.log(statements);
                             this.graphdbMuserService.getQueryInsert(statements)
                                 .execute()
@@ -274,7 +269,12 @@ class MuserPopulater {
                                     callback(err);
                                 });
 
-                            mainRdfSubject = rdfSubject;
+                            let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
+                            mainRdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
+                            
+                            // console.log(results);
+                            // console.log(mainRdfSubject);
+
                             callback(null);
                         })
                         .catch((err) => {
@@ -321,16 +321,16 @@ class MuserPopulater {
                                         songsStatements.push([{
                                             s: songsStatements[0][0].s,
                                             p: 'rdf:type',
-                                            o: 'muser:Song',
+                                            o: MAPS.varToEntity.song.entity,
                                         }]);
                                         songsStatements.push([{
                                             s: mainRdfSubject,
-                                            p: MAPS.varToMuser.performs.predicate,
+                                            p: MAPS.varToPredicate.performs.predicate,
                                             o: songsStatements[0][0].s,
                                         }]);
                                         songsStatements.push([{
                                             o: mainRdfSubject,
-                                            p: MAPS.varToMuser.performedBy.predicate,
+                                            p: MAPS.varToPredicate.performedBy.predicate,
                                             s: songsStatements[0][0].s,
                                         }]);
 
@@ -392,28 +392,28 @@ class MuserPopulater {
                                     statements.push([{
                                         s: statements[0][0].s,
                                         p: "rdf:type",
-                                        o: "muser:MusicalGenre"
+                                        o: MAPS.varToEntity.genre.entity,
                                     }]);
 
                                     // Add Song <-> Genre Mapping 
                                     statements.push([{
                                         s: muserSongEntity,
-                                        p: 'muser:hasMusicalGenre',
+                                        p: MAPS.varToPredicate.hasMusicalGenre.predicate,
                                         o: statements[0][0].s,
                                     }], [{
                                         s: statements[0][0].s,
-                                        p: 'muser:embracedBy',
+                                        p: MAPS.varToPredicate.embracedBy.predicate,
                                         o: muserSongEntity,
                                     }]);
 
                                     // Add Artist <-> Genre Mapping
                                     statements.push([{
                                         s: mainRdfSubject,
-                                        p: 'muser:hasMusicalGenre',
+                                        p: MAPS.varToPredicate.hasMusicalGenre.predicate,
                                         o: statements[0][0].s,
                                     }], [{
                                         s: statements[0][0].s,
-                                        p: 'muser:embracedBy',
+                                        p: MAPS.varToPredicate.embracedBy.predicate,
                                         o: mainRdfSubject,
                                     }]);
                                 });
@@ -469,8 +469,8 @@ class MuserPopulater {
                     async.each(genres, (genre, eachGenreCallback) => {
                         this.getGenreInfo(genre)
                             .then((genresStatements) => {
-                                // console.log(genresStatements);
                                 console.log("\n     Insert these (genre info)" + genre);
+                                // console.log(genresStatements);
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
@@ -519,17 +519,17 @@ class MuserPopulater {
                                     statements.push([{
                                         s: muserSongEntity,
                                         p: "rdf:type",
-                                        o: "muser:Song",
+                                        o: MAPS.varToEntity.song.entity,
                                     }]);
 
                                     //Add Song <-> Album Mapping
                                     statements.push([{
                                         s: muserSongEntity,
-                                        p: "muser:containedBy",
+                                        p: MAPS.varToPredicate.containedBy.predicate,
                                         o: statements[0][0].s
                                     }], [{
                                         s: statements[0][0].s,
-                                        p: "muser:contains",
+                                        p: MAPS.varToPredicate.contains.predicate,
                                         o: muserSongEntity,
                                     }]);
                                 });
@@ -591,16 +591,16 @@ class MuserPopulater {
                                 albumsStatements.push([{
                                     s: albumsStatements[0][0].s,
                                     p: "rdf:type",
-                                    o: "muser:Album"
+                                    o: MAPS.varToEntity.album.entity
                                 }]);
                                 // Add Artist <-> Album
                                 albumsStatements.push([{
                                     s: mainRdfSubject,
-                                    p: "muser:performs",
+                                    p: MAPS.varToPredicate.performs.predicate,
                                     o: muserAlbumEntity,
                                 }], [{
                                     s: muserAlbumEntity,
-                                    p: "muser:performedBy",
+                                    p: MAPS.varToPredicate.performedBy.predicate,
                                     o: mainRdfSubject,
                                 }]);
 
@@ -657,28 +657,28 @@ class MuserPopulater {
                                     statements.push([{
                                         s: muserGenreEntity,
                                         p: "rdf:type",
-                                        o: "muser:Genre"
+                                        o: MAPS.varToEntity.genre.entity
                                     }]);
 
                                     //Add Album <-> Genre Mapping
                                     statements.push([{
                                         s: muserGenreEntity,
-                                        p: "muser:embracedBy",
+                                        p: MAPS.varToPredicate.embracedBy.predicate,
                                         o: muserAlbumEntity,
                                     }], [{
                                         s: muserAlbumEntity,
-                                        p: "muser:hasMusicalGenre",
+                                        p: MAPS.varToPredicate.hasMusicalGenre.predicate,
                                         o: muserGenreEntity,
                                     }]);
 
                                     //Add Artits <-> Genre Mapping
                                     statements.push([{
                                         s: muserGenreEntity,
-                                        p: "muser:embracedBy",
+                                        p: MAPS.varToPredicate.embracedBy.predicate,
                                         o: mainRdfSubject,
                                     }], [{
                                         s: mainRdfSubject,
-                                        p: "muser:hasMusicalGenre",
+                                        p: MAPS.varToPredicate.hasMusicalGenre.predicate,
                                         o: muserGenreEntity,
                                     }]);
                                 });
@@ -775,17 +775,17 @@ class MuserPopulater {
                                     statements.push([{
                                         s: artistMuserEntity,
                                         p: "rdf:type",
-                                        o: "muser:MusicalArtist",
+                                        o: MAPS.varToEntity.artist.entity,
                                     }]);
 
                                     // Add Artist <-> Album Mapping
                                     statements.push([{
                                         s: muserAlbumEntity,
-                                        p: "muser:releasedBy",
+                                        p: MAPS.varToPredicate.releasedBy.predicate,
                                         o: artistMuserEntity,
                                     }], [{
                                         s: artistMuserEntity,
-                                        p: "muser:released",
+                                        p: MAPS.varToPredicate.released.predicate,
                                         o: muserAlbumEntity,
                                     }]);
                                 });
@@ -837,7 +837,7 @@ class MuserPopulater {
                                 rdfSubject
                             }) => {
                                 console.log("\n     Insert these (artist info) " + artistEntity);
-                                console.log(statements);
+                                // console.log(statements);
 
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
@@ -885,18 +885,18 @@ class MuserPopulater {
                                 statements.push([{
                                     s: relatedArtistMuserEntity,
                                     p: "rdf:type",
-                                    o: "muser:MusicalArtist",
+                                    o: MAPS.varToEntity.artist.entity,
                                 }]);
 
                                 // Add related artists relationship
                                 // Add Artist <- related -> Artist 
                                 statements.push([{
                                     s: mainRdfSubject,
-                                    p: "muser:relatedMusicalAgent",
+                                    p: MAPS.varToPredicate.relatedMusicalAgent.predicate,
                                     o: relatedArtistMuserEntity,
                                 }], [{
                                     s: relatedArtistMuserEntity,
-                                    p: "muser:relatedMusicalAgent",
+                                    p: MAPS.varToPredicate.relatedMusicalAgent.predicate,
                                     o: mainRdfSubject,
                                 }]);
                             });
@@ -941,7 +941,7 @@ class MuserPopulater {
                  * 
                  */
                 (artists, callback) => {
-                    console.log(artists);
+                    // console.log(artists);
 
                     async.each(artists, (relatedArtist, eachArtistCallback) => {
                         this.getArtistInfo(relatedArtist)

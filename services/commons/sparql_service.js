@@ -7,7 +7,7 @@ const {
     normalizeSync
 } = require('normalize-diacritics');
 const string_escape = require('jsesc');
-const VAR_TO_MUSER = require('./mappings').varToMuser;
+const VAR_TO_PREDICATE = require('./mappings').varToPredicate;
 
 class SparqlService {
     constructor(
@@ -128,11 +128,11 @@ class SparqlService {
         let rdfPredicate, rdfObject;
 
         Object.keys(result).forEach(key => {
-            rdfPredicate = VAR_TO_MUSER[key].predicate;
+            rdfPredicate = VAR_TO_PREDICATE[key].predicate;
 
             result[key].forEach(resRdfObj => {
-                if (VAR_TO_MUSER[key].type !== undefined) {
-                    rdfObject = `"${resRdfObj}"${VAR_TO_MUSER[key].type}`;
+                if (VAR_TO_PREDICATE[key].type !== undefined) {
+                    rdfObject = `"${resRdfObj}"${VAR_TO_PREDICATE[key].type}`;
                 } else {
                     rdfObject = resRdfObj;
                     if (rdfObject.toLowerCase().startsWith('http://')) {

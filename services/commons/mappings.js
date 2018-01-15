@@ -120,7 +120,31 @@ const MAPS_PROPS = {
     }
 };
 
-const MAPS_SPARQL_VAR_TO_MUSER = {
+const MAPS_SPARQL_VAR_TO_ENTITY = {
+    artist: {
+        entity: "muser:MusicalArtist",
+    },
+    band: {
+        entity: "muser:MusicalBand",
+    },
+    song: {
+        entity: "muser:Song",
+    },
+    album: {
+        entity: "muser:Album",
+    },
+    genre: {
+        entity: "muser:MusicalGenre",
+    },
+    event: {
+        entity: "muser:MusicalEvent",
+    },
+    playlist: {
+        entity: "muser:MusicalPlaylist",
+    },
+};
+
+const MAPS_SPARQL_VAR_TO_PREDICATE = {
     sameDbp: {
         predicate: "owl:sameAs",
     },
@@ -253,5 +277,6 @@ const MAPS_SPARQL_VAR_TO_MUSER = {
 module.exports = { 
     prefixes: MAPS_PREFIXES,
     props: MAPS_PROPS,
-    varToMuser: MAPS_SPARQL_VAR_TO_MUSER,
+    varToPredicate: MAPS_SPARQL_VAR_TO_PREDICATE,
+    varToEntity: MAPS_SPARQL_VAR_TO_ENTITY,
 };

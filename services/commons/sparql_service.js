@@ -76,9 +76,14 @@ class SparqlService {
                 }
 
                 if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
-                    let escapedValue = string_escape(result[key].value, {
-                        quotes: "double"
-                    });
+                    let escapedValue;
+
+                    escapedValue = normalizeSync(result[key].value);
+
+                    escapedValue = string_escape(escapedValue, { quotes: "double" });
+                    
+                    escapedValue = escapedValue.replace(/\n/g, ' ');
+                    
                     cleanResults[result.entity.value][key].push(escapedValue);
                 }
             });

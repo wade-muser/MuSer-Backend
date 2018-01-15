@@ -20,6 +20,15 @@ class MuserPopulater {
 
             this.dbpediaService.getQueryResults(query, artist)
                 .then((cleanResults) => {
+                    let isBand = false;
+                    cleanResults[artist.replace(/[<>]/g, '')].type.forEach(type => {
+                        if (type.toLowerCase().indexOf('band') !== -1) {
+                            isBand = true;
+                            return;
+                        }
+                    });
+                    delete cleanResults[artist.replace(/[<>]/g, '')].type;
+
                     const {
                         statements,
                         results
@@ -28,6 +37,7 @@ class MuserPopulater {
                     resolve({
                         statements,
                         results,
+                        isBand: isBand
                     });
                 })
                 .catch(err => {
@@ -255,10 +265,24 @@ class MuserPopulater {
                     this.getArtistInfo(artist)
                         .then(({
                             statements,
-                            results
+                            results,
+                            isBand
                         }) => {
                             console.log("\n   Insert artist info " + artist);
+                            
+                            let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
+                            mainRdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
+
+                            statements.push([{
+                                s: mainRdfSubject,
+                                p: 'rdf:type',
+                                o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
+                            }]);
+
+                            // console.log(results);
+                            // console.log(isBand);
                             // console.log(statements);
+                            // throw 'mata de pe stanca';
                             this.graphdbMuserService.getQueryInsert(statements)
                                 .execute()
                                 .then(response => {
@@ -268,9 +292,6 @@ class MuserPopulater {
                                     console.error(err);
                                     callback(err);
                                 });
-
-                            let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
-                            mainRdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
                             
                             // console.log(results);
                             // console.log(mainRdfSubject);
@@ -433,7 +454,12 @@ class MuserPopulater {
                                         console.log("Inserted genres for entity:" + mainRdfSubject);
                                     })
                                     .catch(err => {
-                                        console.log(err);
+                                        console.error(err);
+                                        console.error("\n");
+                                        console.error(statements);
+                                        console.error("\n");
+                                        console.error(this.graphdbMuserService.getQueryInsert(statements).originalText)
+                                        throw "smth";
                                         eachSongCallback(err);
                                     });
 
@@ -447,9 +473,11 @@ class MuserPopulater {
                         let allGenres = new Set();
 
                         allGenresList.forEach(genresList => {
-                            genresList.forEach(genre => {
-                                allGenres.add(genre);
-                            });
+                            if (genresList && genresList.length !== 0) {
+                                genresList.forEach(genre => {
+                                    allGenres.add(genre);
+                                });
+                            }
                         });
 
                         if (err) {
@@ -556,9 +584,11 @@ class MuserPopulater {
                         let allAlbums = new Set();
 
                         allAlbumsList.forEach(albumsList => {
-                            albumsList.forEach(album => {
-                                allAlbums.add(album);
-                            });
+                            if (albumsList && albumsList.length !== 0) {
+                                albumsList.forEach(album => {
+                                    allAlbums.add(album);
+                                });
+                            }
                         });
 
                         if (err) {
@@ -704,9 +734,11 @@ class MuserPopulater {
                         let allGenres = new Set();
 
                         allGenresList.forEach(genresList => {
-                            genresList.forEach(genre => {
-                                allGenres.add(genre);
-                            });
+                            if (genresList && genresList.length !== 0) {
+                                genresList.forEach(genre => {
+                                    allGenres.add(genre);
+                                });
+                            }
                         });
 
                         if (err) {
@@ -815,7 +847,7 @@ class MuserPopulater {
 
                         let allArtists = new Set();
                         allArtistsList.forEach(artistsList => {
-                            if (artistsList.length !== 0) {
+                            if (artistsList && artistsList.length !== 0) {
                                 artistsList.forEach(genre => {
                                     allArtists.add(genre);
                                 });
@@ -834,10 +866,19 @@ class MuserPopulater {
                         this.getArtistInfo(artistEntity)
                             .then(({
                                 statements,
-                                rdfSubject
+                                results,
+                                isBand
                             }) => {
                                 console.log("\n     Insert these (artist info) " + artistEntity);
                                 // console.log(statements);
+
+                                const albumArtist = this.getMuserEntityFromDBPediaEntity(artistEntity);
+
+                                statements.push([{
+                                    s: albumArtist,
+                                    p: 'rdf:type',
+                                    o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
+                                }]);    
 
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
@@ -947,9 +988,17 @@ class MuserPopulater {
                         this.getArtistInfo(relatedArtist)
                             .then(({
                                 statements,
-                                rdfSubject
+                                results,
+                                isBand
                             }) => {
-                                console.log("\n     Insert these related (artist info) " + relatedArtist);
+                                // console.log("\n     Insert these related (artist info) " + relatedArtist);
+
+                                relatedArtist = this.getMuserEntityFromDBPediaEntity(relatedArtist);
+                                statements.push([{
+                                    s: relatedArtist,
+                                    p: 'rdf:type',
+                                    o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
+                                }]);
 
                                 statements.forEach(localStatement => {
                                     localStatement.forEach(statement => {
@@ -997,7 +1046,9 @@ class MuserPopulater {
                 }
             ],
             (err, result) => {
-                console.error(err);
+                if (err) {
+                    console.error(err);
+                }
             });
     }
 }
@@ -1010,4 +1061,4 @@ let artist3 = '<http://dbpedia.org/resource/Queen_(band)>';
 let artist4 = '<http://dbpedia.org/resource/Rage_Against_the_Machine>';
 
 mp = new MuserPopulater();
-mp.populate(artist2);
+mp.populate(artist3);

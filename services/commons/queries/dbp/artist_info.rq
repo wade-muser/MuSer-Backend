@@ -1,4 +1,4 @@
-SELECT  ?entity ?sameWd ?label ?name ?firstName ?lastName ?birthDate ?birthName ?gender ?musicalAgentOrigin ?inceptionDate ?retiringDate WHERE {
+SELECT  ?entity ?sameWd ?type ?label ?name ?firstName ?lastName ?birthDate ?birthName ?gender ?musicalAgentOrigin ?inceptionDate ?retiringDate WHERE {
           ?entity   rdf:type                 ?type ;
                     rdfs:label               ?label ;
                     foaf:name			           ?name ;

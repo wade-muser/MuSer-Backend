@@ -57,7 +57,13 @@ muser:uuidCreator       rdfs:type               owl:DatatypeProperty, owl:Functi
 muser:idSpotify         rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
                         rdfs:comment            "Spotify ID (string)" ;
                         rdfs:domain             muser:MusicalEntity ;
-                        rdfs:range              xsd:string .
+                        rdfs:range              xsd:string.
+
+muser:imageURL          rdf:type                owl:DatatypeProperty;
+                        rdfs:comment            "URL image of the entity"^^xsd:string;
+                        rdfs:domain             muser:MusicalArtist, muser:MusicalBand, muser:Song, muser:Album;
+                        rdfs:range              xsd:string.
+
 
 muser:label             rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
                         rdfs:comment            "Label of the resource (string)" ;

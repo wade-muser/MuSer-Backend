@@ -10,7 +10,6 @@ class SpotifyService {
             clientId: process.env.SPOTIFY_CLIENT_ID,
             clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
         });
-
     }
 
     authorize() {
@@ -59,15 +58,16 @@ class SpotifyService {
         let promisified_function = (resolve, reject) => {
             this.spotify_api.search(artistName, ['artist'])
                 .then(data => {
-
+                    let searchItem;
                     for (let item of data.body.artists.items) {
                         if (item.name.toLowerCase() === artistName) {
-                            resolve(item);
+                            searchItem = item;
+                            resolve(searchItem);
                             return;
                         }
                     }
 
-                    resolve(data);
+                    resolve(searchItem);
                 })
                 .catch(err => {
                     console.error(err);
@@ -82,16 +82,19 @@ class SpotifyService {
         let promisified_function = (resolve, reject) => {
             this.spotify_api.search(albumName, ['album'])
                 .then(data => {
+                    let searchItem;
+
                     for (let item of data.body.albums.items) {
                         for (let artist of item.artists) {
                             if (artist.name.toLowerCase() === artistName &&
                                 item.name.toLowerCase().includes(albumName)) {
-                                resolve(item);
+                                searchItem = item;
+                                resolve(searchItem);
                                 return;
                             }
                         }
                     }
-                    resolve({});
+                    resolve(searchItem);
                 })
                 .catch(err => {
                     reject(err);
@@ -99,6 +102,14 @@ class SpotifyService {
         };
 
         return new Promise(promisified_function);
+    }
+
+    getStatements(entity, result) {
+        let statements = [];
+
+
+
+
     }
 
 }

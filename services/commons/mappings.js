@@ -53,66 +53,66 @@
 
 const MAPS_PREFIXES = {
     common: {
-        rdf:    'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-        rdfs:   'http://www.w3.org/2000/01/rdf-schema#',
-        xsd:    'http://www.w3.org/2001/XMLSchema#',
-        owl:    'http://www.w3.org/2002/07/owl#',
+        rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+        xsd: 'http://www.w3.org/2001/XMLSchema#',
+        owl: 'http://www.w3.org/2002/07/owl#',
         schema: 'http://schema.org/',
-        foaf:   'http://xmlns.com/foaf/0.1/',
+        foaf: 'http://xmlns.com/foaf/0.1/',
     },
     wd: {
-        wde:    'http://www.wikidata.org/entity/',
-        wdp:    'http://www.wikidata.org/prop/',
-        wdt:    'http://www.wikidata.org/prop/direct/',
+        wde: 'http://www.wikidata.org/entity/',
+        wdp: 'http://www.wikidata.org/prop/',
+        wdt: 'http://www.wikidata.org/prop/direct/',
     },
     dbp: {
-        dbo:    'http://dbpedia.org/ontology/',
-        dbr:    'http://dbpedia.org/resource/',
-        dbp:    'http://dbpedia.org/property/',
+        dbo: 'http://dbpedia.org/ontology/',
+        dbr: 'http://dbpedia.org/resource/',
+        dbp: 'http://dbpedia.org/property/',
     },
     muser: {
-        muser:  'http://example.com/muser#',
+        muser: 'http://example.com/muser#',
     },
 };
 
 const MAPS_PROPS = {
     wd: {
-        instance_of:   "P31",
-        occupation:    "P106",
+        instance_of: "P31",
+        occupation: "P106",
         field_of_work: "P101",
-        performer:     "P175",
-        part_of:       "P361",
-        genre:         "P136",
+        performer: "P175",
+        part_of: "P361",
+        genre: "P136",
 
-        band:          "Q215380",
-        musician:      "Q639669",
-        singer:        "Q177220",
+        band: "Q215380",
+        musician: "Q639669",
+        singer: "Q177220",
 
-        musical_work:  "Q2188189",
-        release:       "Q2031291",
-        music_track:   "Q7302866",
-        single:        "Q134556",
-        song:          "Q7366",
+        musical_work: "Q2188189",
+        release: "Q2031291",
+        music_track: "Q7302866",
+        single: "Q134556",
+        song: "Q7366",
         extended_play: "Q169930",
 
-        album:         "Q482994",
+        album: "Q482994",
 
-        art_genre:     "Q1792379",
-        music_genre:   "Q188451",
+        art_genre: "Q1792379",
+        music_genre: "Q188451",
     },
     dbp: {
-        genre:         "dbo:genre",
+        genre: "dbo:genre",
 
         MusicalArtist: "dbo:MusicalArtist",
-        Band:          "dbo:Band",
-        Single:        "dbo:Single",
-        MusicalWork:   "dbo:MusicalWork",
-        Song:          "dbo:Song",
+        Band: "dbo:Band",
+        Single: "dbo:Single",
+        MusicalWork: "dbo:MusicalWork",
+        Song: "dbo:Song",
 
-        Album:         "dbo:Album",
+        Album: "dbo:Album",
 
-        Genre:         "dbo:Genre",
-        MusicalGenre:  "dbo:MusicalGenre",
+        Genre: "dbo:Genre",
+        MusicalGenre: "dbo:MusicalGenre",
     },
 
     spotify: {
@@ -153,6 +153,10 @@ const MAPS_SPARQL_VAR_TO_PREDICATE = {
     },
     idSpotify: {
         predicate: "muser:idSpotify",
+        type: "^^xsd:string",
+    },
+    imageURL: {
+        predicate: "muser:imageURL",
         type: "^^xsd:string",
     },
     label: {
@@ -274,7 +278,7 @@ const MAPS_SPARQL_VAR_TO_PREDICATE = {
 };
 
 
-module.exports = { 
+module.exports = {
     prefixes: MAPS_PREFIXES,
     props: MAPS_PROPS,
     varToPredicate: MAPS_SPARQL_VAR_TO_PREDICATE,

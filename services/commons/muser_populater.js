@@ -269,7 +269,7 @@ class MuserPopulater {
                             isBand
                         }) => {
                             console.log("\n   Insert artist info " + artist);
-                            
+
                             let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
                             mainRdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
 
@@ -292,7 +292,7 @@ class MuserPopulater {
                                     console.error(err);
                                     callback(err);
                                 });
-                            
+
                             // console.log(results);
                             // console.log(mainRdfSubject);
 
@@ -458,7 +458,7 @@ class MuserPopulater {
                                         console.error("\n");
                                         console.error(statements);
                                         console.error("\n");
-                                        console.error(this.graphdbMuserService.getQueryInsert(statements).originalText)
+                                        console.error(this.graphdbMuserService.getQueryInsert(statements).originalText);
                                         throw "smth";
                                         eachSongCallback(err);
                                     });
@@ -878,7 +878,7 @@ class MuserPopulater {
                                     s: albumArtist,
                                     p: 'rdf:type',
                                     o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
-                                }]);    
+                                }]);
 
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
@@ -1061,4 +1061,4 @@ let artist3 = '<http://dbpedia.org/resource/Queen_(band)>';
 let artist4 = '<http://dbpedia.org/resource/Rage_Against_the_Machine>';
 
 mp = new MuserPopulater();
-mp.populate(artist3);
+mp.populate(artist2);

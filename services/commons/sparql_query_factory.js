@@ -8,6 +8,11 @@ const artists_related_for_artist_query = fs.readFileSync("services/commons/queri
 const album_info_query = fs.readFileSync("services/commons/queries/dbp/album_info.rq", "utf-8");
 const albums_for_songs_query = fs.readFileSync("services/commons/queries/dbp/albums_for_song.rq", "utf-8");
 const artists_for_album_query = fs.readFileSync("services/commons/queries/dbp/artists_for_album.rq", "utf-8");
+const all_artists_query = fs.readFileSync("services/commons/queries/muser/all_artists.rq");
+const artists_without_query = fs.readFileSync("services/commons/queries/muser/artists_without_spotify.rq");
+const songs_without_query = fs.readFileSync("services/commons/queries/muser/songs_without_spotify.rq");
+const albums_without_query = fs.readFileSync("services/commons/queries/muser/albums_without_spotify.rq");
+
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -19,9 +24,13 @@ const QUERY = {
     ALBUM_INFO: 6,
     ALBUMS_FOR_SONG: 7,
     ARTISTS_FOR_ALBUM: 8,
+    ALL_ARTISTS: 9,
+    ARTISTS_WITHOUT_SPOTIFY: 10,
+    SONGS_WITHOUT_SPOTIFY: 11,
+    ALBUM_WITHOUT_SPOTIFY: 12,
 };
 
-function stringTemplate(literal, params) {
+function stringTemplate(literal, params = "") {
     return new Function(params, "return `" + literal + "`;");
 }
 
@@ -67,7 +76,23 @@ class QueryFactory {
         return QUERY.ARTISTS_FOR_ALBUM;
     }
 
-    getQuery(queryType, entityValue) {
+    static get ALL_ARTISTS() {
+        return QUERY.ALL_ARTISTS;
+    }
+
+    static get ARTISTS_WITHOUT_SPOTIFY() {
+        return QUERY.ARTISTS_WITHOUT_SPOTIFY;
+    }
+
+    static get SONGS_WITHOUT_SPOTIFY() {
+        return QUERY.SONGS_WITHOUT_SPOTIFY;
+    }
+
+    static get ALBUMS_WITHOUT_SPOTIFY() {
+        return QUERY.ALBUM_WITHOUT_SPOTIFY;
+    }
+
+    getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
                 return this.buildQuery(genre_info_query, entityValue);
@@ -87,10 +112,21 @@ class QueryFactory {
                 return this.buildQuery(albums_for_songs_query, entityValue);
             case QueryFactory.ARTISTS_FOR_ALBUM:
                 return this.buildQuery(artists_for_album_query, entityValue);
+            case QueryFactory.ALL_ARTISTS:
+                return this.buildQuery(all_artists_query, entityValue);
+            case QueryFactory.ARTISTS_WITHOUT_SPOTIFY:
+                return this.buildQuery(artists_without_query, entityValue);
+            case QueryFactory.SONGS_WITHOUT_SPOTIFY:
+                return this.buildQuery(songs_without_query, entityValue);
+            case QueryFactory.ALBUMS_WITHOUT_SPOTIFY:
+                return this.buildQuery(albums_without_query, entityValue);
         }
     }
 
-    buildQuery(query, entityValue) {
+    buildQuery(query, entityValue = undefined) {
+        if (!entityValue) {
+            return query;
+        }
         const interpolationValue = entityValue.startsWith('http://') ? `<${entityValue}>` : `${entityValue}`;
         return stringTemplate(query, "dbpInstance")(interpolationValue);
     }

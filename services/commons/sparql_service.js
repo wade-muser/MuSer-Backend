@@ -58,7 +58,7 @@ class SparqlService {
         });
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
 
-        console.log(insertQuery.originalText);
+        // console.log(insertQuery.originalText);
 
         return insertQuery;
     }
@@ -80,10 +80,12 @@ class SparqlService {
 
                     escapedValue = normalizeSync(result[key].value);
 
-                    escapedValue = string_escape(escapedValue, { quotes: "double" });
-                    
+                    escapedValue = string_escape(escapedValue, {
+                        quotes: "double"
+                    });
+
                     escapedValue = escapedValue.replace(/\n/g, ' ');
-                    
+
                     cleanResults[result.entity.value][key].push(escapedValue);
                 }
             });
@@ -92,7 +94,7 @@ class SparqlService {
         return cleanResults;
     }
 
-    getQueryResults(query, entity) {
+    getQueryResults(query, entity = undefined) {
         let promisifiedFunction = (resolve, reject) => {
             let sparqlQuery = this.getQuery(query);
             // console.log(sparqlQuery.originalText);
@@ -100,7 +102,6 @@ class SparqlService {
             sparqlQuery.execute()
                 .then(response => {
                     let cleanResults = SparqlService.parseQueryResult(response.results.bindings);
-                    // console.log(cleanResults);
                     resolve(cleanResults);
                 })
                 .catch(err => {

@@ -1,0 +1,9 @@
+SELECT ?entity ?name ?artistName  WHERE{
+    ?entity rdf:type muser:Song;
+            muser:name ?name;
+            muser:performedBy ?artist.
+   	?artist muser:name ?artistName
+    FILTER NOT EXISTS{
+        ?entity muser:idSpotify ?idSpotify.
+    }
+}

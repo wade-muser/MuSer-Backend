@@ -1,0 +1,159 @@
+Populater:
+	- Get composition artists if the main entity band
+	- Get related genres for genres
+	- Refactor (if possible)
+	- Run populater
+	- Check if the data is enough
+	- Check for edge-cases entities (Weird symbols, artist vs bands)
+	- Check for malformed queries?
+
+Automated job for population? (nightly runner)
+
+Muser Microservices
+- Write SPARQL Queries for MuSeR (minimum at first, more after)
+- Check SPARQL returned data correctness
+- Implement minimum "related" logic
+	- For each entity's "related" entities
+	- For playlist generation
+
+	- Auth
+	- Artist
+		- Related based on direct ontology relations
+		- Related based on song's features
+	- Song
+		- Related based on 'from same artist'
+		- Related based on 'from same album'
+	- Album
+		- Related based on 'from same artist'
+	- Event
+		- ?
+	- Genre
+		- Related based on direct ontology relations
+	- PlaylistManager
+		- TBD
+
+
+########################## OLD ####################################
+// MusicalArtist   - musicalArtistMember  - MusicalArtist
+// MusicalArtist   - relatedMusicalArtist - MusicalArtist  //DBP    
+// MusicalArtist   - hasMusicalGenre      - MusicalGenre   //DBP (info about a song)
+// MusicalArtist   - released             - Album          //DBP
+// MusicalArtist   - performs             - Song           //DBP
+// MusicalArtist   - performAt            - Event
+
+// MusicalGenre    - relatedMusicalGenre  - MusicalGenre   //DPB
+// MusicalGenre    - embracedBy           - MusicalArtist  
+// MusicalGenre    - embracedBy           - Song
+// MusicalGenre    - embracedBy           - Album
+
+// Song            - hasMusicalGenre      - MusicalGenre    //DBP
+// Song            - performedBy          - MusicalArtist   //DBP WIKI
+// Song            - containedBy          - Album           //DBP WIKI
+// Song            - partOf               - MusicalPlaylist 
+
+// Album           - hasMusicalGenre      - MusicalGenre    //DBP WIKI
+// Album           - releasedBy           - MusicalArtist   //DBP WIKI
+// Album           - contains             - Song            //DBP WIKI
+
+// Event           - performers           - MusicalArtist
+
+// MusicalPlaylist - has                - Song
+        
+        
+        
+        
+        // get dbp artist info(cb).then({
+            // new Promise({
+                // insert muser artist info
+            // }).catch(err => {
+                // console.error(err);
+            // })
+            //callback(artist)
+        // })
+        // get dbp songs for artist 
+            // we don't give a fuck when this promise happens
+            // new Promise({
+                    // insert muser song <-> artist
+                // get dbp songs info 
+                // insert muser songs info
+        // }).catch(err => {
+            // console.error(err);
+        // })
+        // we GIVE a fuck when this happens because WE NEED ALL THE GENRES BELOW
+        // genres1Promise = new Promise({
+                 // get dbp genres for songs
+                // insert muser genres <-> songs, artist
+                // get dbp genres info
+                // insert muser genres info
+        // }).catch(err => {
+            // console.error(err);
+        // })
+        //callback(songs, genres1Promise)
+        // get dbp albums for songs
+        //  // new Promise({
+                // insert muser albums <-> songs
+                // get dbp albums info
+                // insert muser albums info
+        // }).catch(err => {
+            // console.error(err);
+        // })
+        // genres2Promise = new Promise({
+                // get dbp genres for albums
+                // insert muser genres <-> albums, artist
+                // get dbp genres info
+                // insert  muser genres info
+        // }).catch(err => {
+            // console.error(err);
+        // })
+        //callback(albums, genres1Promise, genres2Promise)
+        //// get dbp related artists for artist
+        //
+        //
+        //
+
+        
+    // get dbp artist info (Done)
+        // insert muser artist info (done)
+
+    // if type(artist) == band:
+        // get artists for band
+        // insert artists for band
+        // get artist info for band artists
+        // insert artists info for band artists
+
+    // get dbp songs for artist  (done)
+        // insert muser song <-> artist (done)
+        // get dbp songs info (done)
+        // insert muser songs info (done)
+
+        *// get dbp genres for songs (done)
+        // insert muser genres <-> songs, artist (done)
+        // get dbp genres info (done)
+        // insert muser genres info (done)
+
+    // get dbp albums for songs  <done>
+        // insert muser albums <-> songs <done>
+        // get dbp albums info <done> 
+        // insert muser albums info <done>
+
+        *// get dbp genres for albums <done> 
+        // insert muser genres <-> albums, artist <done> 
+        // get dbp genres info <done> 
+        // insert  muser genres info <done> 
+
+    // get dbp artists for albums <done>
+        // insert muser artists <-> albums <done>
+        // get dbp artists info <done> 
+
+    // get dbp related artists for artist <done>
+        // insert muser related artists <done>
+        // get dbp artists info <done>
+    
+    // get dbp related genres for genres
+        // insert muser related genres
+        // get dbp related genres info
+
+
+        //get the fuck out, async-each-songs from getSongsForArtist.then (216)
+
+        //band members

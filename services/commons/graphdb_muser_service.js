@@ -109,6 +109,9 @@ class GraphdbMuserService extends SparqlService {
     }
 
     formatEntityValue(entity) {
+        if (entity.startsWith("<http")) {
+            return entity;
+        }
         return entity.startsWith("http://") ? `<${entity}>` : `muser:${entity}`;
     }
 

@@ -151,6 +151,10 @@ const MAPS_SPARQL_VAR_TO_PREDICATE = {
     sameWd: {
         predicate: "owl:sameAs",
     },
+    uuid: {
+        predicate: "muser:uuid",
+        type: "^^xsd:string",
+    },
     idSpotify: {
         predicate: "muser:idSpotify",
         type: "^^xsd:string",
@@ -227,7 +231,7 @@ const MAPS_SPARQL_VAR_TO_PREDICATE = {
         type: "^^xsd:string",
     },
     eventCity: {
-        predicate: "muser:eventCity ",
+        predicate: "muser:eventCity",
         type: "^^xsd:string",
     },
     eventPlace: {

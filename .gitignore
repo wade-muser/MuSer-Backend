@@ -57,9 +57,13 @@ typings/
 # dotenv environment variables file
 **/*.env
 
-#Serverless Module
+# Serverless Module
 .serverless/
 
-#Config Folder
+# Config Folder
 config/
 .vscode/
+
+# Test Files
+**/test/*
+

@@ -59,6 +59,11 @@ muser:idSpotify         rdf:type                owl:DatatypeProperty, owl:Functi
                         rdfs:domain             muser:MusicalEntity ;
                         rdfs:range              xsd:string.
 
+muser:idSongKick         rdf:type                owl:DatatypeProperty, owl:FunctionalProperty ;
+                        rdfs:comment            "Spotify ID (string)" ;
+                        rdfs:domain             muser:MusicalEntity ;
+                        rdfs:range              xsd:string.                        
+
 muser:imageURL          rdf:type                owl:DatatypeProperty;
                         rdfs:comment            "URL image of the entity"^^xsd:string;
                         rdfs:domain             muser:MusicalArtist, muser:MusicalBand, muser:Song, muser:Album;

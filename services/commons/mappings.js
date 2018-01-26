@@ -155,6 +155,10 @@ const MAPS_SPARQL_VAR_TO_PREDICATE = {
         predicate: "muser:idSpotify",
         type: "^^xsd:string",
     },
+    idSongkick: {
+        predicate: "muser:idSongkick",
+        type: "^^xsd:string",
+    },
     imageURL: {
         predicate: "muser:imageURL",
         type: "^^xsd:string",

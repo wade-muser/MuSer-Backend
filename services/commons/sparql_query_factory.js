@@ -12,7 +12,7 @@ const all_artists_query = fs.readFileSync("services/commons/queries/muser/all_ar
 const artists_without_query = fs.readFileSync("services/commons/queries/muser/artists_without_spotify.rq");
 const songs_without_query = fs.readFileSync("services/commons/queries/muser/songs_without_spotify.rq");
 const albums_without_query = fs.readFileSync("services/commons/queries/muser/albums_without_spotify.rq");
-
+const artists_without_songkick = fs.readFileSync("services/commons/queries/muser/artists_without_songkick.rq");
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -28,6 +28,7 @@ const QUERY = {
     ARTISTS_WITHOUT_SPOTIFY: 10,
     SONGS_WITHOUT_SPOTIFY: 11,
     ALBUM_WITHOUT_SPOTIFY: 12,
+    ARTISTS_WITHOUT_SONGKICK: 13,
 };
 
 function stringTemplate(literal, params = "") {
@@ -92,6 +93,10 @@ class QueryFactory {
         return QUERY.ALBUM_WITHOUT_SPOTIFY;
     }
 
+    static get ARTISTS_WITHOUT_SONGKICK() {
+        return QUERY.ARTISTS_WITHOUT_SONGKICK;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -120,6 +125,8 @@ class QueryFactory {
                 return this.buildQuery(songs_without_query, entityValue);
             case QueryFactory.ALBUMS_WITHOUT_SPOTIFY:
                 return this.buildQuery(albums_without_query, entityValue);
+            case QueryFactory.ARTISTS_WITHOUT_SONGKICK:
+                return this.buildQuery(artists_without_songkick, entityValue);
         }
     }
 

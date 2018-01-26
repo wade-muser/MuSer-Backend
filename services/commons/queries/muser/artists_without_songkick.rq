@@ -1,0 +1,7 @@
+SELECT ?entity ?name WHERE{
+    ?entity rdf:type muser:MusicalArtist;
+            muser:name ?name.
+    FILTER NOT EXISTS{
+        ?entity muser:idSongkick ?idSongkick.
+    }
+}

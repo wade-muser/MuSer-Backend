@@ -73,6 +73,21 @@ class GraphdbMuserService extends SparqlService {
         return new Promise(promisified_function);
     }
 
+    findArtistsWithoutSongkick() {
+        let promisified_function = (resolve, reject) => {
+            const query = this.sparqlQueryFactory.getQuery(SparqlQueryFactory.ARTISTS_WITHOUT_SONGKICK);
+            this.getQueryResults(query)
+                .then(cleanResults => {
+                    resolve(cleanResults);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        };
+
+        return new Promise(promisified_function);
+    }
+
     buildStatementFromAPIResponse(results) {
         let statements = [];
         Object.keys(results).forEach(result => {
@@ -95,7 +110,6 @@ class GraphdbMuserService extends SparqlService {
 
     formatEntityValue(entity) {
         return entity.startsWith("http://") ? `<${entity}>` : `muser:${entity}`;
-
     }
 
 }

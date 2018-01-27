@@ -27,6 +27,7 @@ provider:
 functions:
   authorizer:
     handler : services/auth/authorizer.handler
+    resultTtlInSeconds: 0
   login:
     handler: services/auth/login.handler
     events:
@@ -42,6 +43,73 @@ functions:
           method: post
           cors: true
 
+  getArtists:
+    handler: services/artists/artists.getArtists
+    events:
+      - http:
+          path: artists
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getArtistById:
+    handler: services/artists/artists.getArtist
+    events:
+      - http:
+          path: artists/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getFeaturesArtists:
+    handler: services/artists/artists.getArtistFeatures
+    events:
+      - http:
+          path: artists/{id}/features
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getRecommendedArtitst:
+    handler: services/artists/artists.getRecommendedArtistsForArtist
+    events:
+      - http:
+          path: artists/{id}/recommendations
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  
+  getAlbums:
+    handler: services/albums/albums.getAlbums
+    events:
+      - http:
+          path: albums
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getAlbumById:
+    handler: services/albums/albums.getAlbum
+    events:
+      - http:
+          path: albums/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getRecommendedAlbums:
+    handler: services/albums/albums.getRecommendedAlbums
+    events:
+      - http:
+          path: albums/{id}/recommendations
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  
+
+
 
   getGenres:
     handler: services/genres/genres.getGenres
@@ -51,6 +119,7 @@ functions:
           method: get
           cors: true
           authorizer: authorizer
+
   getGenreById:
     handler: services/genres/genres.getGenreById
     events:
@@ -59,6 +128,7 @@ functions:
           method: get
           cors: true
           authorizer: authorizer
+
   getGenresRelatedById:
     handler: services/genres/genres.getGenresRelatedById
     events:
@@ -67,6 +137,7 @@ functions:
           method: get
           cors: true
           authorizer: authorizer
+
   getTimelineForGenre:
     handler: services/genres/genres.getTimelineForGenre
     events:
@@ -111,7 +182,8 @@ resources:
     Messages:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: cron_job_artists
+        # QueueName: ${file(env/config.json):SQS_CRON_JOB_QUEUE_NAME}
+        QueueName: cron_job_queue
         MessageRetentionPeriod: 1209600 # 2 weeks (second)
         VisibilityTimeout: 60
 

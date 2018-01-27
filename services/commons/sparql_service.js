@@ -2,12 +2,10 @@ const {
     SparqlClient,
     SPARQL
 } = require('sparql-client-2');
-const {
-    normalize,
-    normalizeSync
-} = require('normalize-diacritics');
-const string_escape = require('jsesc');
+
+const normalize = require('escape-diacritics');
 const VAR_TO_PREDICATE = require('./mappings').varToPredicate;
+const string_escaper = require('jsesc');
 
 class SparqlService {
     constructor(
@@ -64,6 +62,7 @@ class SparqlService {
     }
 
     static parseQueryResult(results) {
+
         let cleanResults = {};
 
         results.forEach(result => {
@@ -78,9 +77,9 @@ class SparqlService {
                 if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
                     let escapedValue;
 
-                    escapedValue = normalizeSync(result[key].value);
+                    escapedValue = normalize(result[key].value);
 
-                    escapedValue = string_escape(escapedValue, {
+                    escapedValue = string_escaper(escapedValue, {
                         quotes: "double"
                     });
 
@@ -97,7 +96,7 @@ class SparqlService {
     getQueryResults(query, entity = undefined) {
         let promisifiedFunction = (resolve, reject) => {
             let sparqlQuery = this.getQuery(query);
-            // console.log(sparqlQuery.originalText);
+            console.log(sparqlQuery.originalText);
 
             sparqlQuery.execute()
                 .then(response => {
@@ -114,9 +113,8 @@ class SparqlService {
 
     static getCleanUniqueIdentifier(prefix, rawName, needsNormalized = false) {
         if (needsNormalized) {
-            rawName = normalizeSync(rawName);
+            rawName = normalize(rawName);
         }
-
         rawName = rawName.split(/\s/).join('_');
 
         return `<${prefix}${rawName}>`;

@@ -1,0 +1,8 @@
+SELECT ?entity ?name ?imageURL WHERE{
+    ?entity rdf:type ?type;
+            muser:name ?name;
+            muser:imageURL ?imageURL.
+
+    FILTER(?type=muser:Album)
+    FILTER(REGEX(?name,"^{{=it.name}}","i"))
+}

@@ -11,10 +11,11 @@
   "dependencies": {
     "async": "^2.6.0",
     "aws-sdk": "^2.168.0",
+    "dot": "^1.1.2",
     "dotenv": "^4.0.0",
+    "escape-diacritics": "^1.1.1",
     "jsesc": "^2.5.1",
     "jsonwebtoken": "^8.1.0",
-    "normalize-diacritics": "^0.4.4",
     "songkick-api-node": "^1.0.2",
     "sparql-client-2": "^0.6.2",
     "spotify-web-api-node": "^2.5.0",

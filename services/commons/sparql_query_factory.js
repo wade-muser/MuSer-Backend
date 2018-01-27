@@ -1,4 +1,7 @@
 const fs = require('fs');
+const dot = require("dot");
+dot.templateSettings.strip = false;
+
 const genre_info_query = fs.readFileSync("services/commons/queries/dbp/genre_info.rq", "utf-8");
 const genres_for_entity_query = fs.readFileSync("services/commons/queries/dbp/genres_for_entity.rq", "utf-8");
 const song_info_query = fs.readFileSync("services/commons/queries/dbp/song_info.rq", "utf-8");
@@ -8,11 +11,14 @@ const artists_related_for_artist_query = fs.readFileSync("services/commons/queri
 const album_info_query = fs.readFileSync("services/commons/queries/dbp/album_info.rq", "utf-8");
 const albums_for_songs_query = fs.readFileSync("services/commons/queries/dbp/albums_for_song.rq", "utf-8");
 const artists_for_album_query = fs.readFileSync("services/commons/queries/dbp/artists_for_album.rq", "utf-8");
-const all_artists_query = fs.readFileSync("services/commons/queries/muser/all_artists.rq");
-const artists_without_query = fs.readFileSync("services/commons/queries/muser/artists_without_spotify.rq");
-const songs_without_query = fs.readFileSync("services/commons/queries/muser/songs_without_spotify.rq");
-const albums_without_query = fs.readFileSync("services/commons/queries/muser/albums_without_spotify.rq");
-const artists_without_songkick = fs.readFileSync("services/commons/queries/muser/artists_without_songkick.rq");
+const all_artists_query = fs.readFileSync("services/commons/queries/muser/all_artists.rq", "utf-8");
+const artists_without_query = fs.readFileSync("services/commons/queries/muser/artists_without_spotify.rq", "utf-8");
+const songs_without_query = fs.readFileSync("services/commons/queries/muser/songs_without_spotify.rq", "utf-8");
+const albums_without_query = fs.readFileSync("services/commons/queries/muser/albums_without_spotify.rq", "utf-8");
+const artists_without_songkick = fs.readFileSync("services/commons/queries/muser/artists_without_songkick.rq", "utf-8");
+const find_artists = fs.readFileSync("services/commons/queries/muser/find_artists.rq", "utf-8");
+const find_albums = fs.readFileSync("services/commons/queries/muser/find_albums.rq", "utf-8");
+
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -29,6 +35,8 @@ const QUERY = {
     SONGS_WITHOUT_SPOTIFY: 11,
     ALBUM_WITHOUT_SPOTIFY: 12,
     ARTISTS_WITHOUT_SONGKICK: 13,
+    FIND_ARTISTS: 14,
+    FIND_ALBUMS: 15,
 };
 
 function stringTemplate(literal, params = "") {
@@ -97,6 +105,14 @@ class QueryFactory {
         return QUERY.ARTISTS_WITHOUT_SONGKICK;
     }
 
+    static get FIND_ARTISTS() {
+        return QUERY.FIND_ARTISTS;
+    }
+
+    static get FIND_ALBUMS() {
+        return QUERY.FIND_ALBUMS;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -127,6 +143,10 @@ class QueryFactory {
                 return this.buildQuery(albums_without_query, entityValue);
             case QueryFactory.ARTISTS_WITHOUT_SONGKICK:
                 return this.buildQuery(artists_without_songkick, entityValue);
+            case QueryFactory.FIND_ARTISTS:
+                return this.buildQuery2(find_artists, entityValue);
+            case QueryFactory.FIND_ALBUMS:
+                return this.buildQuery2(find_albums, entityValue);
         }
     }
 
@@ -136,6 +156,10 @@ class QueryFactory {
         }
         const interpolationValue = entityValue.startsWith('http://') ? `<${entityValue}>` : `${entityValue}`;
         return stringTemplate(query, "dbpInstance")(interpolationValue);
+    }
+
+    buildQuery2(query, values) {
+        return dot.template(query)(values);
     }
 
 }

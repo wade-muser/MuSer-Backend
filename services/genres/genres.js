@@ -1,5 +1,3 @@
-'use strict';
-
 const GenresServices = require('./genres_service');
 
 module.exports.getGenres = (event, context, callback) => {
@@ -37,7 +35,7 @@ module.exports.getGenresRelatedById = (event, context, callback) => {
     };
 
     callback(null, response);
-}
+};
 
 module.exports.getTimelineForGenre = (event, context, callback) => {
     const genreId = event.pathParameters.id;
@@ -50,4 +48,4 @@ module.exports.getTimelineForGenre = (event, context, callback) => {
     };
 
     callback(null, response);
-}
+};

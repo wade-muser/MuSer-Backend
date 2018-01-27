@@ -17,6 +17,7 @@
     "normalize-diacritics": "^0.4.4",
     "songkick-api-node": "^1.0.2",
     "sparql-client-2": "^0.6.2",
-    "spotify-web-api-node": "^2.5.0"
+    "spotify-web-api-node": "^2.5.0",
+    "sqs-consumer": "^3.8.0"
   }
 }

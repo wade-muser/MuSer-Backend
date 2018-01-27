@@ -76,7 +76,12 @@ functions:
           cors: true
           authorizer: authorizer
 
-  
+  cronjob:
+    handler: functions/cron/job.handler
+    events:
+      - schedule:
+            rate: cron(45 10 * * ? *)
+            enabled: true
 
   test:
     handler: functions/test/test.handler
@@ -102,6 +107,13 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    
+    Messages:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: cron_job_artists
+        MessageRetentionPeriod: 1209600 # 2 weeks (second)
+        VisibilityTimeout: 60
 
   # test:
   #   handler: functions/test/test.handler
@@ -194,4 +206,4 @@ resources:
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
-#       Value: "Some output value"
+#       Value

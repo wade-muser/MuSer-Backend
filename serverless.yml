@@ -107,6 +107,34 @@ functions:
           cors: true
           # authorizer: authorizer
 
+#Song Entity
+getSongs:
+    handler: services/songs/songs.getSongs
+    events:
+      - http:
+          path: songs
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getSongById:
+    handler: services/Songs/songs.getSong
+    events:
+      - http:
+          path: songs/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getRecommendedSongs:
+    handler: services/songs/songs.getRecommendedSongs
+    events:
+      - http:
+          path: songs/{id}/recommendations
+          method: get
+          cors: true
+          # authorizer: authorizer
+
   
 
 

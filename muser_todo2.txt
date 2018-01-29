@@ -1,29 +1,29 @@
-Populater:                                                           cag@
+Populater:                                                            cag@
     - Get band's compositions' info ONLY about artists
     - Run Populater on base data list (checking done on run - malformed queries, weird symbols etc.)
 
 Muser microservices:
-    - Auth                                                           cag@
+    - Auth                                                            cag@
         - to be fixed
     - Artists       
-        - /artists (?name=)
-        - /artists/{id} (the name of the entity without prefix)      cds@
+        - /artists (?name=)                                           llc@ (V)
+        - /artists/{id} (the name of the entity without prefix)       cds@ (V)
         - /artists/{id}/features (directly from RDF repository relationships)
         - /artists/{id}/recommendations (?songs, ?albums, ?genres)
     - Songs
-        - /songs (?name=)
-        - /songs/{id} (the name of the entity without prefix)        cds@
+        - /songs (?name=)                                             llc@ (V)
+        - /songs/{id} (the name of the entity without prefix)         cds@ (V)
         - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists)
     - Albums
-        - /albums (?name=)
-        - /albums/{id} (the name of the entity without prefix)       cds@
+        - /albums (?name=)                                            llc@ (V)
+        - /albums/{id} (the name of the entity without prefix)        cds@ (V)
         - /albums/{id}/recommendations (?artist, ?year + genre, ?genre, ?relatedArtists)
-    - Event -                                                        llc@
-        - /events (?start_date, ?end_date, ?artist, ?country, ?city, ?place)
-        - /events/{id}
+    - Event -                                                        
+        - /events (?name, ?artist, ?country, ?city, ?place)           llc@ (V)
+        - /events/{id}                                                llc@ (V)
     - Genre
-        - /genres
-        - /genres/{id}                                                cds@
+        - /genres                                                     llc@ (V)
+        - /genres/{id}                                                cds@ 
         - /genres/{id}/related
         - /genres/{id}/timeline
 

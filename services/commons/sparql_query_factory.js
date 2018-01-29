@@ -22,6 +22,8 @@ const find_albums = fs.readFileSync("services/commons/queries/muser/find_albums.
 const find_songs = fs.readFileSync("services/commons/queries/muser/find_songs.rq", "utf-8");
 const find_event = fs.readFileSync("services/commons/queries/muser/find_event.rq", "utf-8");
 const find_events = fs.readFileSync("services/commons/queries/muser/find_events.rq", "utf-8");
+const find_genres = fs.readFileSync("services/commons/queries/muser/find_genres.rq", "utf-8");
+
 
 
 
@@ -46,6 +48,7 @@ const QUERY = {
     GENRES_RELATED_FOR_GENRE: 17,
     FIND_EVENT: 18,
     FIND_EVENTS: 75,
+    FIND_GENRES: 49,
 };
 
 function stringTemplate(literal, params = "") {
@@ -138,6 +141,10 @@ class QueryFactory {
         return QUERY.FIND_EVENTS;
     }
 
+    static get FIND_GENRES() {
+        return QUERY.FIND_GENRES;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -180,6 +187,8 @@ class QueryFactory {
                 return this.buildQuery2(find_event, entityValue);
             case QueryFactory.FIND_EVENTS:
                 return this.buildQuery2(find_events, entityValue);
+            case QueryFactory.FIND_GENRES:
+                return this.buildQuery2(find_genres, entityValue);
         }
     }
 

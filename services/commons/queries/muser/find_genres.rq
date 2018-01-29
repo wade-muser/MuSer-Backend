@@ -1,0 +1,8 @@
+select ?entity ?genreLabel ?genreName ?genreAbout where {
+    ?entity rdf:type muser:MusicalGenre;
+            muser:label ?genreLabel;
+            muser:name ?genreName.
+    OPTIONAL{
+        ?entity muser:about ?genreAbout
+    }
+} limit 100

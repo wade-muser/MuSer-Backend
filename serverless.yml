@@ -28,6 +28,7 @@ functions:
   authorizer:
     handler : services/auth/authorizer.handler
     resultTtlInSeconds: 0
+
   login:
     handler: services/auth/login.handler
     events:
@@ -107,8 +108,8 @@ functions:
           cors: true
           # authorizer: authorizer
 
-#Song Entity
-getSongs:
+  #Song Entity
+  getSongs:
     handler: services/songs/songs.getSongs
     events:
       - http:

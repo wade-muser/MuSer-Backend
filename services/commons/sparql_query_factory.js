@@ -4,6 +4,7 @@ dot.templateSettings.strip = false;
 
 const genre_info_query = fs.readFileSync("services/commons/queries/dbp/genre_info.rq", "utf-8");
 const genres_for_entity_query = fs.readFileSync("services/commons/queries/dbp/genres_for_entity.rq", "utf-8");
+const genres_related_for_genre_query = fs.readFileSync("services/commons/queries/dbp/genres_related_for_genre.rq", "utf-8");
 const song_info_query = fs.readFileSync("services/commons/queries/dbp/song_info.rq", "utf-8");
 const songs_for_artist_query = fs.readFileSync("services/commons/queries/dbp/songs_for_artist.rq", "utf-8");
 const artist_info_query = fs.readFileSync("services/commons/queries/dbp/artist_info.rq", "utf-8");
@@ -40,6 +41,7 @@ const QUERY = {
     FIND_ARTISTS: 14,
     FIND_ALBUMS: 15,
     FIND_SONGS: 16,
+    GENRES_RELATED_FOR_GENRE: 17,
 };
 
 function stringTemplate(literal, params = "") {
@@ -58,6 +60,10 @@ class QueryFactory {
 
     static get GENRES_FOR_ENTITY() {
         return QUERY.GENRES_FOR_ENTITY;
+    }
+
+    static get GENRES_RELATED_FOR_GENRE() {
+        return QUERY.GENRES_RELATED_FOR_GENRE;
     }
 
     static get SONG_INFO() {
@@ -125,6 +131,8 @@ class QueryFactory {
                 return this.buildQuery(genre_info_query, entityValue);
             case QueryFactory.GENRES_FOR_ENTITY:
                 return this.buildQuery(genres_for_entity_query, entityValue);
+            case QueryFactory.GENRES_RELATED_FOR_GENRE:
+                return this.buildQuery(genres_related_for_genre_query, entityValue);
             case QueryFactory.SONG_INFO:
                 return this.buildQuery(song_info_query, entityValue);
             case QueryFactory.SONGS_FOR_ARTIST:

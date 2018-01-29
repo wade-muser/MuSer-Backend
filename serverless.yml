@@ -29,6 +29,7 @@ functions:
     handler : services/auth/authorizer.handler
     resultTtlInSeconds: 0
 
+  ### Authorizer ###
   login:
     handler: services/auth/login.handler
     events:
@@ -44,6 +45,8 @@ functions:
           method: post
           cors: true
 
+
+  ### Artist ###
   getArtists:
     handler: services/artists/artists.getArtists
     events:
@@ -62,7 +65,7 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  getFeaturesArtists:
+  getArtistFeatures:
     handler: services/artists/artists.getArtistFeatures
     events:
       - http:
@@ -71,8 +74,8 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  getRecommendedArtitst:
-    handler: services/artists/artists.getRecommendedArtistsForArtist
+  getArtistRecommendations:
+    handler: services/artists/artists.getArtistRecommendations
     events:
       - http:
           path: artists/{id}/recommendations
@@ -80,35 +83,8 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  
-  getAlbums:
-    handler: services/albums/albums.getAlbums
-    events:
-      - http:
-          path: albums
-          method: get
-          cors: true
-          # authorizer: authorizer
 
-  getAlbumById:
-    handler: services/albums/albums.getAlbum
-    events:
-      - http:
-          path: albums/{id}
-          method: get
-          cors: true
-          # authorizer: authorizer
-
-  getRecommendedAlbums:
-    handler: services/albums/albums.getRecommendedAlbums
-    events:
-      - http:
-          path: albums/{id}/recommendations
-          method: get
-          cors: true
-          # authorizer: authorizer
-
-  #Song Entity
+  ### Song ###
   getSongs:
     handler: services/songs/songs.getSongs
     events:
@@ -127,8 +103,8 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  getRecommendedSongs:
-    handler: services/songs/songs.getRecommendedSongs
+  getSongRecommendations:
+    handler: services/songs/songs.getSongRecommendations
     events:
       - http:
           path: songs/{id}/recommendations
@@ -136,10 +112,36 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  
 
+  ### Album ###
+  getAlbums:
+    handler: services/albums/albums.getAlbums
+    events:
+      - http:
+          path: albums
+          method: get
+          cors: true
+          # authorizer: authorizer
 
+  getAlbumById:
+    handler: services/albums/albums.getAlbum
+    events:
+      - http:
+          path: albums/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
 
+  getAlbumRecommendations:
+    handler: services/albums/albums.getAlbumRecommendations
+    events:
+      - http:
+          path: albums/{id}/recommendations
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  ### Genre ###
   getGenres:
     handler: services/genres/genres.getGenres
     events:
@@ -147,34 +149,56 @@ functions:
           path: genres
           method: get
           cors: true
-          authorizer: authorizer
+          # authorizer: authorizer
 
   getGenreById:
-    handler: services/genres/genres.getGenreById
+    handler: services/genres/genres.getGenre
     events:
       - http:
           path: genres/{id}
           method: get
           cors: true
-          authorizer: authorizer
+          # authorizer: authorizer
 
-  getGenresRelatedById:
-    handler: services/genres/genres.getGenresRelatedById
+  getGenreRelated:
+    handler: services/genres/genres.getGenreRelated
     events:
       - http:
           path: genres/{id}/related
           method: get
           cors: true
-          authorizer: authorizer
+          # authorizer: authorizer
 
-  getTimelineForGenre:
-    handler: services/genres/genres.getTimelineForGenre
+  getGenre:
+    handler: services/genres/genres.getGenreTimeline
     events:
       - http:
           path: genres/{id}/timeline
           method: get
           cors: true
-          authorizer: authorizer
+          # authorizer: authorizer
+
+
+  ### Event ###
+  getEvents:
+    handler: services/events/events.getEvents
+    events:
+      - http:
+          path: events
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  getEvent:
+    handler: services/events/events.getEvent
+    events:
+      - http:
+          path: events/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+
 
   cronjob:
     handler: functions/cron/job.handler

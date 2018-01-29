@@ -1,0 +1,13 @@
+select * where {
+     ?entity rdf:type ?type;
+             muser:name ?name;
+             muser:releaseDate ?releseDate;
+             muser:duration ?duration;
+             muser:hasMusicalGenre ?genre;
+             muser:releasedBy ?releasedBy;
+             muser:imageURL ?imageURL.
+
+    FILTER(?type=muser:Album)            
+    FILTER(?entity = {{=it.id}} )
+
+} limit 100

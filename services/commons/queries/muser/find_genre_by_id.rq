@@ -1,0 +1,8 @@
+select * where {
+     ?entity rdf:type ?type;
+            muser:name ?name.
+            
+    FILTER(?type=muser:Genre)            
+    FILTER(?entity = {{=it.id}} )
+
+} limit 100

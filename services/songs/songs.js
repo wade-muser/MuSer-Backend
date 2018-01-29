@@ -52,14 +52,36 @@ module.exports.getSongs = (event, context, callback) => {
 };
 
 module.exports.getSong = (event, context, callback) => {
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/songs/{id}/ response',
-        }),
-    };
 
-    callback(null, response);
+    const songId = event.pathParameters.id;
+
+    songsService.getSong(songId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };
 
 module.exports.getRecommendedSongs = (event, context, callback) => {

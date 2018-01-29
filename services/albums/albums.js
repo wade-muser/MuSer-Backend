@@ -53,15 +53,37 @@ module.exports.getAlbums = (event, context, callback) => {
 
 module.exports.getAlbum = (event, context, callback) => {
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/albums/{id}/ response',
-        }),
-    };
+    const albumId = event.pathParameters.id;
 
-    callback(null, response);
+    albumsService.getAlbum(albumId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };
+
 
 module.exports.getRecommendedAlbums = (event, context, callback) => {
 

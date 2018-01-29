@@ -61,6 +61,61 @@ class AlbumsService {
 
         return new Promise(promisified_function);
     }
+
+    getAlbum(id) {
+
+        const promisified_function = (resolve, reject) => {
+            if (id.length === 0) {
+                reject(new CustomError("Album name wasn't provided", HTTP_STATUS_CODES.BAD_REQUEST));
+                return;
+            }
+
+            async.waterfall([
+
+                /**
+                 * Function that retrieves the query that is need it
+                 */
+                (callback) => {
+                    const values = {
+                        id: this.getMuserEntity(id),
+                    };
+                    const query = this.queryFactory.getQuery(SparqlQueryFactory.FIND_ALBUM_BY_ID, values);
+                    callback(null, query);
+                },
+
+                /**
+                 * Function that executes the SPARQL query and returns the results
+                 */
+                (query, callback) => {
+                    this.graphdbMuserService.getQueryResults(query)
+                        .then(results => {
+                            console.log("Got results");
+                            callback(null, results);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            callback(err);
+                        });
+                },
+
+            ], (err, results) => {
+                console.log(results);
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                    return;
+                }
+                resolve(results);
+            });
+        };
+
+        return new Promise(promisified_function);
+    }
+
+    getMuserEntity(id) {
+        return `<http://example.com/muser#${id}>`;
+    }
+
 }
 
 module.exports = AlbumsService;

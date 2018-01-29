@@ -26,6 +26,10 @@ const find_genres = fs.readFileSync("services/commons/queries/muser/find_genres.
 
 
 
+const find_artist_by_id = fs.readFileSync("services/commons/queries/muser/find_artist_by_id.rq", "utf-8");
+const find_song_by_id = fs.readFileSync("services/commons/queries/muser/find_song_by_id.rq", "utf-8");
+const find_album_by_id = fs.readFileSync("services/commons/queries/muser/find_album_by_id.rq", "utf-8");
+const find_genre_by_id = fs.readFileSync("services/commons/queries/muser/find_genre_by_id.rq", "utf-8");
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -49,6 +53,10 @@ const QUERY = {
     FIND_EVENT: 18,
     FIND_EVENTS: 75,
     FIND_GENRES: 49,
+    FIND_ARTIST_BY_ID: 19,
+    FIND_SONG_BY_ID: 20,
+    FIND_ALBUM_BY_ID: 21,
+    FIND_GENRE_BY_ID: 22,
 };
 
 function stringTemplate(literal, params = "") {
@@ -144,6 +152,21 @@ class QueryFactory {
     static get FIND_GENRES() {
         return QUERY.FIND_GENRES;
     }
+    static get FIND_ARTIST_BY_ID() {
+        return QUERY.FIND_ARTIST_BY_ID;
+    }
+
+    static get FIND_SONG_BY_ID() {
+        return QUERY.FIND_SONG_BY_ID;
+    }
+
+    static get FIND_ALBUM_BY_ID() {
+        return QUERY.FIND_ALBUM_BY_ID;
+    }
+
+    static get FIND_GENRE_BY_ID() {
+        return QUERY.FIND_GENRE_BY_ID;
+    }
 
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
@@ -189,6 +212,14 @@ class QueryFactory {
                 return this.buildQuery2(find_events, entityValue);
             case QueryFactory.FIND_GENRES:
                 return this.buildQuery2(find_genres, entityValue);
+            case QueryFactory.FIND_ARTIST_BY_ID:
+                return this.buildQuery2(find_artist_by_id, entityValue);
+            case QueryFactory.FIND_SONG_BY_ID:
+                return this.buildQuery2(find_song_by_id, entityValue);
+            case QueryFactory.FIND_ALBUM_BY_ID:
+                return this.buildQuery2(find_album_by_id, entityValue);
+            case QueryFactory.FIND_ALBUM_BY_ID:
+                return this.buildQuery2(find_genre_by_id, entityValue);   
         }
     }
 

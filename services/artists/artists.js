@@ -51,16 +51,36 @@ module.exports.getArtists = (event, context, callback) => {
 };
 
 module.exports.getArtist = (event, context, callback) => {
+    
     const artistId = event.pathParameters.id;
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `/artists/{id} response: id = ${artistId}`,
-        }),
-    };
+    artistsService.getArtist(artistId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
 
-    callback(null, response);
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };
 
 module.exports.getArtistFeatures = (event, context, callback) => {

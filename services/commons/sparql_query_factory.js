@@ -20,7 +20,7 @@ const artists_without_songkick = fs.readFileSync("services/commons/queries/muser
 const find_artists = fs.readFileSync("services/commons/queries/muser/find_artists.rq", "utf-8");
 const find_albums = fs.readFileSync("services/commons/queries/muser/find_albums.rq", "utf-8");
 const find_songs = fs.readFileSync("services/commons/queries/muser/find_songs.rq", "utf-8");
-
+const find_event = fs.readFileSync("services/commons/queries/muser/find_event.rq", "utf-8");
 
 
 const QUERY = {
@@ -42,6 +42,7 @@ const QUERY = {
     FIND_ALBUMS: 15,
     FIND_SONGS: 16,
     GENRES_RELATED_FOR_GENRE: 17,
+    FIND_EVENT: 18,
 };
 
 function stringTemplate(literal, params = "") {
@@ -125,6 +126,11 @@ class QueryFactory {
     static get FIND_SONGS() {
         return QUERY.FIND_SONGS;
     }
+
+    static get FIND_EVENT() {
+        return QUERY.FIND_EVENT;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -163,6 +169,8 @@ class QueryFactory {
                 return this.buildQuery2(find_albums, entityValue);
             case QueryFactory.FIND_SONGS:
                 return this.buildQuery2(find_songs, entityValue);
+            case QueryFactory.FIND_EVENT:
+                return this.buildQuery2(find_event, entityValue);
         }
     }
 

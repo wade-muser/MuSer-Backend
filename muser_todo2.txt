@@ -1,0 +1,40 @@
+Populater:                                                           cag@
+    - Get band's compositions' info ONLY about artists
+    - Run Populater on base data list (checking done on run - malformed queries, weird symbols etc.)
+
+Muser microservices:
+    - Auth                                                           cag@
+        - to be fixed
+    - Artists       
+        - /artists (?name=)
+        - /artists/{id} (the name of the entity without prefix)      cds@
+        - /artists/{id}/features (directly from RDF repository relationships)
+        - /artists/{id}/recommendations (?songs, ?albums, ?genres)
+    - Songs
+        - /songs (?name=)
+        - /songs/{id} (the name of the entity without prefix)        cds@
+        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists)
+    - Albums
+        - /albums (?name=)
+        - /albums/{id} (the name of the entity without prefix)       cds@
+        - /albums/{id}/recommendations (?artist, ?year + genre, ?genre, ?relatedArtists)
+    - Event -                                                        llc@
+        - /events (?start_date, ?end_date, ?artist, ?country, ?city, ?place)
+        - /events/{id}
+    - Genre
+        - /genres
+        - /genres/{id}                                                cds@
+        - /genres/{id}/related
+        - /genres/{id}/timeline
+
+    - PlaylistManager
+        - /playlists/{id}?/      * CRUD
+        - /playlists/{id}/songs
+        * SMART generation: 'keyword artists', already created playlists
+
+    
+
+- Refactor populater
+- Automated scheduled job for progressive population (nightly)
+- Paginations for main resources paths of the API 
+- Smart generation mechanism: access history

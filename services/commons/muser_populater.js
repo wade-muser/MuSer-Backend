@@ -10,7 +10,11 @@ const DBP_SPARQL_ENDPOINT = 'http://dbpedia.org/sparql';
 class MuserPopulater {
     constructor() {
         this.sparqlQueryFactory = new SparqlQueryFactory();
-        this.dbpediaService = new SparqlService(DBP_SPARQL_ENDPOINT, undefined, [MAPS.prefixes.common, MAPS.prefixes.dbp, MAPS.prefixes.muser]);
+        this.dbpediaService = new SparqlService(
+            DBP_SPARQL_ENDPOINT,
+            undefined,
+            [MAPS.prefixes.common, MAPS.prefixes.dbp, MAPS.prefixes.muser]
+        );
         this.graphdbMuserService = new GraphdbMuserService();
     }
 
@@ -37,7 +41,7 @@ class MuserPopulater {
                     resolve({
                         statements,
                         results,
-                        isBand: isBand
+                        isBand
                     });
                 })
                 .catch(err => {
@@ -172,9 +176,32 @@ class MuserPopulater {
                     } = this.dbpediaService.getStatements(results, MAPS.prefixes.muser.muser);
                     const genres = Object.keys(results);
 
-                    // console.log("For entity :::" + entity);
-                    // console.log(statements);
-                    // console.log(genres);
+                    resolve({
+                        statements,
+                        genres
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+        };
+
+        return new Promise(promisifiedFunction);
+    }
+
+    getGenresRelatedForGenre(genre) {
+        let promisifiedFunction = (resolve, reject) => {
+            const query = this.sparqlQueryFactory.getQuery(SparqlQueryFactory.GENRES_RELATED_FOR_GENRE, genre);
+
+            this.dbpediaService.getQueryResults(query, genre)
+                .then((results) => {
+                    const {
+                        statements,
+                        cleanResults
+                    } = this.dbpediaService.getStatements(results, MAPS.prefixes.muser.muser);
+                    const genres = Object.keys(results);
+
                     resolve({
                         statements,
                         genres
@@ -201,9 +228,6 @@ class MuserPopulater {
                     } = this.dbpediaService.getStatements(results, MAPS.prefixes.muser.muser);
                     const artists = Object.keys(results);
 
-                    // console.log("For entity :::" + entity);
-                    // console.log(statements);
-                    // console.log(genres);
                     resolve({
                         statements,
                         artists
@@ -229,9 +253,6 @@ class MuserPopulater {
                     } = this.dbpediaService.getStatements(results, MAPS.prefixes.muser.muser);
                     const relatedArtists = Object.keys(results);
 
-                    // console.log("For entity :::" + entity);
-                    // console.log(statements);
-                    // console.log(genres);
                     resolve({
                         statements,
                         relatedArtists
@@ -268,8 +289,6 @@ class MuserPopulater {
                             results,
                             isBand
                         }) => {
-                            console.log("\n   Insert artist info " + artist);
-
                             let artistLabel = results[artist.replace(/[<>]/g, '')].label[0];
                             mainRdfSubject = SparqlService.getCleanUniqueIdentifier(MAPS.prefixes.muser.muser, artistLabel);
 
@@ -279,22 +298,15 @@ class MuserPopulater {
                                 o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
                             }]);
 
-                            // console.log(results);
-                            // console.log(isBand);
-                            // console.log(statements);
-                            // throw 'mata de pe stanca';
                             this.graphdbMuserService.getQueryInsert(statements)
                                 .execute()
                                 .then(response => {
-                                    console.log("Inserted artist info = " + artist);
+                                    console.log("Inserted artist info for " + artist);
                                 })
                                 .catch(err => {
                                     console.error(err);
                                     callback(err);
                                 });
-
-                            // console.log(results);
-                            // console.log(mainRdfSubject);
 
                             callback(null);
                         })
@@ -317,28 +329,22 @@ class MuserPopulater {
                             statements,
                             songs
                         }) => {
-                            console.log("\n   Get songs for = " + artist);
-                            // console.log(statements);
-
                             this.graphdbMuserService.getQueryInsert(statements)
                                 .execute()
                                 .then(response => {
-                                    console.log("Inserted songs for = " + artist);
+                                    console.log("Inserted songs of " + artist);
                                 })
                                 .catch(err => {
                                     console.error(err);
                                     callback(err);
                                 });
 
-                            console.log("Songs inserted for entity:" + artist + songs);
                             return songs;
                         })
                         .then((songs) => {
                             async.each(songs, (song, eachSongCallback) => {
                                 this.getSongInfo(song)
                                     .then((songsStatements) => {
-                                        // console.log("\n     Insert these (songs info) = " + song);
-
                                         songsStatements.push([{
                                             s: songsStatements[0][0].s,
                                             p: 'rdf:type',
@@ -355,11 +361,10 @@ class MuserPopulater {
                                             s: songsStatements[0][0].s,
                                         }]);
 
-                                        // console.log(songsStatements);
                                         this.graphdbMuserService.getQueryInsert(songsStatements)
                                             .execute()
                                             .then(response => {
-                                                // console.log("Inserted song info = " + song);
+                                                console.log("Inserted song info for " + song);
                                             })
                                             .catch(err => {
                                                 console.error(err);
@@ -393,7 +398,6 @@ class MuserPopulater {
                     Function returns all songs of an artist and an union of all genres of each song 
                 */
                 (songs, callback) => {
-                    console.log(songs);
                     async.map(songs, (song, eachSongCallback) => {
                         this.getGenresForEntity(song)
                             .then(({
@@ -401,7 +405,6 @@ class MuserPopulater {
                                 genres
                             }) => {
                                 const muserSongEntity = this.getMuserEntityFromDBPediaEntity(song);
-                                console.log("[GENRES OF A SONG] " + genres);
 
                                 if (statements.length === 0) {
                                     eachSongCallback(null, genres);
@@ -439,27 +442,13 @@ class MuserPopulater {
                                     }]);
                                 });
 
-                                // console.log("\n   Insert these (song Genres)");  
-                                // console.log("\n   Insert these (artist Genres)");
-
-
-                                // console.log(statements);
-                                // console.log(genres);
-
-
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genres for entity:" + song);
-                                        console.log("Inserted genres for entity:" + mainRdfSubject);
+                                        console.log("Inserted genres for " + song);
                                     })
                                     .catch(err => {
                                         console.error(err);
-                                        console.error("\n");
-                                        console.error(statements);
-                                        console.error("\n");
-                                        console.error(this.graphdbMuserService.getQueryInsert(statements).originalText);
-                                        throw "smth";
                                         eachSongCallback(err);
                                     });
 
@@ -493,16 +482,115 @@ class MuserPopulater {
                     Function returns all the songs that have been performed by an artist
                 */
                 (songs, genres, callback) => {
-                    // console.log(genres);
                     async.each(genres, (genre, eachGenreCallback) => {
                         this.getGenreInfo(genre)
                             .then((genresStatements) => {
-                                console.log("\n     Insert these (genre info)" + genre);
-                                // console.log(genresStatements);
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genre info for:" + genre);
+                                        console.log("Inserted genre info for " + genre);
+                                    })
+                                    .catch(err => {
+                                        console.error(err);
+                                        eachGenreCallback(err);
+                                    });
+                                eachGenreCallback(null);
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                eachGenreCallback(err);
+                            });
+                    }, (err) => {
+                        if (err) {
+                            console.error(err);
+                            callback(err);
+                        }
+                    });
+                    callback(null, songs, genres);
+                },
+                /*
+                    Function retrieves the related genres of each song's genres
+                */
+                (songs, genres, callback) => {
+                    async.map(genres, (genre, eachGenreCallback) => {
+                        this.getGenresRelatedForGenre(genre)
+                            .then(({
+                                statements,
+                                genres
+                            }) => {
+                                const muserGenreEntity = this.getMuserEntityFromDBPediaEntity(genre);
+
+                                if (statements.length === 0) {
+                                    eachGenreCallback(null, songs);
+                                    return;
+                                }
+
+                                genres.forEach(genre => {
+                                    // Add Into Statement that genre is type muser:Genre
+                                    statements.push([{
+                                        s: statements[0][0].s,
+                                        p: "rdf:type",
+                                        o: MAPS.varToEntity.genre.entity,
+                                    }]);
+
+                                    // Add Main Genre <-> related Genre Mapping 
+                                    statements.push([{
+                                        s: muserGenreEntity,
+                                        p: MAPS.varToPredicate.relatedMusicalGenre.predicate,
+                                        o: statements[0][0].s,
+                                    }], [{
+                                        s: statements[0][0].s,
+                                        p: MAPS.varToPredicate.relatedMusicalGenre.predicate,
+                                        o: muserGenreEntity,
+                                    }]);
+                                });
+
+                                this.graphdbMuserService.getQueryInsert(statements)
+                                    .execute()
+                                    .then(response => {
+                                        console.log("Inserted related genres for (from songs) " + genre);
+                                    })
+                                    .catch(err => {
+                                        console.error(err);
+                                        eachSongCallback(err);
+                                    });
+
+                                eachGenreCallback(null, genres);
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                eachGenreCallback(err);
+                            });
+                    }, (err, allGenresList) => {
+                        let allGenres = new Set();
+
+                        allGenresList.forEach(genresList => {
+                            if (genresList && genresList.length !== 0) {
+                                genresList.forEach(genre => {
+                                    allGenres.add(genre);
+                                });
+                            }
+                        });
+
+                        if (err) {
+                            console.error(err);
+                            callback(err);
+                            return;
+                        }
+                        callback(null, songs, Array.from(allGenres));
+                    });
+                },
+                /*
+                    Function retrieves info for the related genres of each song's genres
+                */
+                (songs, genres, callback) => {
+                    async.each(genres, (genre, eachGenreCallback) => {
+                        this.getGenreInfo(genre)
+                            .then((genresStatements) => {
+                                this.graphdbMuserService.getQueryInsert(genresStatements)
+                                    .execute()
+                                    .then(response => {
+                                        console.log("Inserted related (from songs) genre info for " + genre);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -522,13 +610,13 @@ class MuserPopulater {
                     });
                     callback(null, songs);
                 },
+
                 /*
-                    Function retrieves all the albums of each song that have been performed by an artsit
+                    Function retrieves all the albums of each song that have been performed by an artist
                     Function inserts the albums and the relation between Song <-> Album
                     Function returns an union of all albums from songs
                 */
                 (songs, callback) => {
-                    // console.log(songs);
                     async.map(songs, (song, eachSongCallback) => {
                         this.getAlbumsForSong(song)
                             .then(({
@@ -536,12 +624,11 @@ class MuserPopulater {
                                 albums
                             }) => {
                                 const muserSongEntity = this.getMuserEntityFromDBPediaEntity(song);
-                                console.log(muserSongEntity);
-                                console.log("\n   Insert these (song Albums)");
                                 if (statements.length === 0) {
                                     eachSongCallback(null, albums);
                                     return;
                                 }
+
                                 albums.forEach(album => {
                                     //Add that each song is type muser:Song
                                     statements.push([{
@@ -565,15 +652,12 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Insert SONG <-> Album mapping:" + song);
+                                        console.log("Inserted album <-> song for " + song);
                                     })
                                     .catch(err => {
                                         console.error(err);
                                         eachSongCallback(err);
                                     });
-
-                                // console.log(albums);
-                                // console.log(statements);
                                 eachSongCallback(null, albums);
                             })
                             .catch((err) => {
@@ -600,17 +684,14 @@ class MuserPopulater {
                     });
                 },
                 /*
-                    Function retrieves and inserst into ontoloft info about all albums
-                    Function inserts the relataion between Artist <-> Album
+                    Function retrieves and insert into GraphDB info about all albums
+                    Function inserts the relation between Artist <-> Album
                     Function returns all the albums
                 */
                 (albums, callback) => {
                     async.each(albums, (album, eachAlbumCallback) => {
                         this.getAlbumInfo(album)
                             .then((albumsStatements) => {
-                                console.log("\n     Insert these (album info)" + album);
-                                console.log("\n     Insert Artist <-> Album mapping:" + album);
-
                                 if (albumsStatements.length === 0) {
                                     eachAlbumCallback(null);
                                     return;
@@ -634,11 +715,10 @@ class MuserPopulater {
                                     o: mainRdfSubject,
                                 }]);
 
-                                // console.log(albumsStatements);
                                 this.graphdbMuserService.getQueryInsert(albumsStatements)
                                     .execute()
                                     .then(result => {
-                                        console.log("Inserted album info for:" + album);
+                                        console.log("Inserted album info for " + album);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -670,11 +750,6 @@ class MuserPopulater {
                                 statements,
                                 genres
                             }) => {
-                                console.log("\n   Insert these (album Genres)", album);
-                                console.log("\n   Insert these (artist Genres)", mainRdfSubject);
-                                // console.log(genres);
-                                // console.log(statements);
-
                                 if (statements.length === 0) {
                                     eachAlbumCallback(genres);
                                     return;
@@ -716,14 +791,13 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted Genres for albums");
+                                        console.log("Inserted genres <-> albums of " + mainRdfSubject);
                                     })
                                     .catch(err => {
                                         console.error(err);
                                         eachAlbumCallback(err);
                                     });
 
-                                // console.log(statements);
                                 eachAlbumCallback(null, genres);
                             })
                             .catch((err) => {
@@ -757,12 +831,10 @@ class MuserPopulater {
                     async.each(genres, (genre, eachGenreCallback) => {
                         this.getGenreInfo(genre)
                             .then((genresStatements) => {
-                                console.log("\n     Insert these (genre info)");
-                                // console.log(genresStatements);
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genre info about:", genre);
+                                        console.log("Inserted genre info for " + genre);
                                     })
                                     .catch(err => {
                                         console.log(err);
@@ -781,7 +853,6 @@ class MuserPopulater {
                     });
                     callback(null, albums);
                 },
-                //wat2
                 /*
                     Function retrieves all the artists that appear on each album
                     Function inserts the relation between each albums and its performers
@@ -794,7 +865,6 @@ class MuserPopulater {
                                 statements,
                                 artists
                             }) => {
-                                console.log("\n   Insert these (album Artists)" + album);
                                 if (statements.length == 0) {
                                     eachAlbumCallback(null, artists);
                                     return;
@@ -825,7 +895,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted these (album Artists)" + album);
+                                        console.log("Inserted artists for album " + album);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -861,7 +931,6 @@ class MuserPopulater {
                  * Function retrieves all the info about the artists
                  */
                 (artists, callback) => {
-                    // console.log(artists);
                     async.each(artists, (artistEntity, eachArtistCallback) => {
                         this.getArtistInfo(artistEntity)
                             .then(({
@@ -869,9 +938,6 @@ class MuserPopulater {
                                 results,
                                 isBand
                             }) => {
-                                console.log("\n     Insert these (artist info) " + artistEntity);
-                                // console.log(statements);
-
                                 const albumArtist = this.getMuserEntityFromDBPediaEntity(artistEntity);
 
                                 statements.push([{
@@ -883,7 +949,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted these (artist info) " + artistEntity);
+                                        console.log("Inserted artist info for " + artistEntity);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -913,7 +979,6 @@ class MuserPopulater {
                             statements,
                             relatedArtists
                         }) => {
-                            console.log("\n   Insert these (artists Artist) " + relatedArtists);
                             if (statements.length == 0) {
                                 callback(null, relatedArtists);
                                 return;
@@ -954,19 +1019,17 @@ class MuserPopulater {
                                 });
                             });
 
-                            // console.log(statements);
 
                             this.graphdbMuserService.getQueryInsert(statements)
                                 .execute()
                                 .then(response => {
-                                    console.log(" Inserted these (artists Artist) " + relatedArtists);
+                                    console.log("Inserted related artists for " + mainRdfSubject);
                                 })
                                 .catch(err => {
                                     console.error(err);
                                     callback(err);
                                 });
 
-                            // console.log(statements);
                             callback(null, relatedArtists);
                         })
                         .catch((err) => {
@@ -982,8 +1045,6 @@ class MuserPopulater {
                  * 
                  */
                 (artists, callback) => {
-                    // console.log(artists);
-
                     async.each(artists, (relatedArtist, eachArtistCallback) => {
                         this.getArtistInfo(relatedArtist)
                             .then(({
@@ -991,12 +1052,10 @@ class MuserPopulater {
                                 results,
                                 isBand
                             }) => {
-                                // console.log("\n     Insert these related (artist info) " + relatedArtist);
-
                                 relatedArtist = this.getMuserEntityFromDBPediaEntity(relatedArtist);
                                 statements.push([{
                                     s: relatedArtist,
-                                    p: 'rdf:type',
+                                    p: "rdf:type",
                                     o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
                                 }]);
 
@@ -1015,14 +1074,13 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("\n     Inserted these related (artist info) " + relatedArtist);
+                                        console.log("Inserted related artist info for " + relatedArtist);
                                     })
                                     .catch(err => {
                                         console.error(err);
                                         eachArtistCallback(err);
                                     });
 
-                                console.log(statements);
                                 eachArtistCallback(null);
                             })
                             .catch((err) => {
@@ -1042,7 +1100,7 @@ class MuserPopulater {
                 //#region code
                 //#endregion
                 (callback) => {
-                    // console.log(genres);
+                    console.log(genres);
                 }
             ],
             (err, result) => {
@@ -1059,6 +1117,6 @@ let artist1 = '<http://dbpedia.org/resource/Cashis>';
 let artist2 = '<http://dbpedia.org/resource/Eminem>';
 let artist3 = '<http://dbpedia.org/resource/Queen_(band)>';
 let artist4 = '<http://dbpedia.org/resource/Rage_Against_the_Machine>';
-
+let artist5 = '<http://dbpedia.org/resource/Phil_Collins>'
 mp = new MuserPopulater();
-mp.populate(artist2);
+mp.populate(artist5);

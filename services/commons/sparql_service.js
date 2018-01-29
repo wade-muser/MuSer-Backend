@@ -56,8 +56,6 @@ class SparqlService {
         });
         insertQuery = this.getQuery(`INSERT DATA { ${statementsString} }`);
 
-        // console.log(insertQuery.originalText);
-
         return insertQuery;
     }
 
@@ -96,7 +94,6 @@ class SparqlService {
     getQueryResults(query, entity = undefined) {
         let promisifiedFunction = (resolve, reject) => {
             let sparqlQuery = this.getQuery(query);
-            console.log(sparqlQuery.originalText);
 
             sparqlQuery.execute()
                 .then(response => {

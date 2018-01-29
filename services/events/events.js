@@ -5,12 +5,52 @@ const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 const eventsService = new EventsService();
 
 module.exports.getEvents = (event, context, callback) => {
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/events/ response',
-        }),
-    };
+    console.log(event);
+    const validQueryString = event.queryStringParameters && event.queryStringParameters.keyword && event.queryStringParameters.type;
+    if (!validQueryString) {
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Parameters weren't provided"
+            })
+            .build()
+            .getLambdaResponse();
+
+        console.log("[EVENTS] Response:", AWSLambdaResponse);
+        callback(null, AWSLambdaResponse);
+        return;
+    }
+
+    const keyword = event.queryStringParameters.keyword;
+    const type = event.queryStringParameters.type;
+
+    eventsService.getEvents(keyword, type)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };
 
 

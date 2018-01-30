@@ -118,7 +118,7 @@ module.exports.getArtistFeatures = (event, context, callback) => {
 
 };
 
-module.exports.getRecommendedArtistsForArtist = (event, context, callback) => {
+module.exports.getArtistRecommendations = (event, context, callback) => {
 
     console.log(event);
     const queryStringIsInvalid = !event.queryStringParameters || !event.queryStringParameters.type;

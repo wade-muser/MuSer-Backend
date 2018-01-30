@@ -85,7 +85,7 @@ module.exports.getAlbum = (event, context, callback) => {
 };
 
 
-module.exports.getRecommendedAlbums = (event, context, callback) => {
+module.exports.getAlbumRecommendations = (event, context, callback) => {
 
     const response = {
         statusCode: 200,

@@ -84,7 +84,7 @@ module.exports.getSong = (event, context, callback) => {
         });
 };
 
-module.exports.getRecommendedSongs = (event, context, callback) => {
+module.exports.getSongRecommendations = (event, context, callback) => {
     const response = {
         statusCode: 200,
         body: JSON.stringify({

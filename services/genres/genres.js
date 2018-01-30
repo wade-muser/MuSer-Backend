@@ -35,7 +35,7 @@ module.exports.getGenres = (event, context, callback) => {
         });
 };
 
-module.exports.getGenreById = (event, context, callback) => {
+module.exports.getGenre = (event, context, callback) => {
     
     const genreId = event.pathParameters.id;
 
@@ -69,7 +69,7 @@ module.exports.getGenreById = (event, context, callback) => {
 
 };
 
-module.exports.getGenresRelatedById = (event, context, callback) => {
+module.exports.getGenreRelated = (event, context, callback) => {
     const genreId = event.pathParameters.id;
 
     const response = {
@@ -82,7 +82,7 @@ module.exports.getGenresRelatedById = (event, context, callback) => {
     callback(null, response);
 };
 
-module.exports.getTimelineForGenre = (event, context, callback) => {
+module.exports.getGenreTimeline = (event, context, callback) => {
     const genreId = event.pathParameters.id;
 
     const response = {

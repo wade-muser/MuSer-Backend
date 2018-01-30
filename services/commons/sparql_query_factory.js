@@ -31,18 +31,15 @@ const find_artist_features = fs.readFileSync("services/commons/queries/muser/fin
 const find_artist_recommendation_type_song = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_song.rq", "utf-8");
 const find_artist_recommendation_type_album = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_album.rq", "utf-8");
 const find_artist_recommendation_type_genre = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_genre.rq", "utf-8");
-<<<<<<< 50be38600dfd616100219f1956544ca6cc567f47
 const find_songs_recommendations_type_artist = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_artist.rq", "utf-8");
 const find_songs_recommendations_type_genre = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_genre.rq", "utf-8");
 const find_songs_recommendations_type_related_artist = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_related_artist.rq", "utf-8");
 const find_songs_recommendations_type_album = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_album.rq", "utf-8");
 
-=======
 const find_albums_recommendation_type_sameartist = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_sameartist.rq", "utf-8");
 const find_albums_recommendation_type_sameyearandgenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_sameyearandgenre.rq", "utf-8");
 const find_albums_recommendation_type_samegenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_samegenre.rq", "utf-8");
 const find_albums_recommendation_type_relatedartist = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_relatedartist.rq", "utf-8");
->>>>>>> album service recommendations
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -74,18 +71,15 @@ const QUERY = {
     FIND_ARTIST_RECOMMENDATION_TYPE_SONG: 35,
     FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM: 36,
     FIND_ARTIST_RECOMMENDATION_TYPE_GENRE: 37,
-<<<<<<< 50be38600dfd616100219f1956544ca6cc567f47
     FIND_SONGS_RECOMMENDATION_TYPE_ARTIST: 40,
     FIND_SONGS_RECOMMENDATION_TYPE_GENRE: 41,
     FIND_SONGS_RECOMMENDATION_TYPE_RELATED_ARTIST: 42,
     FIND_SONGS_RECOMMENDATION_TYPE_ALBUM: 43,
 
-=======
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEARTIST: 24,
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEYEARANDGENRE: 25,
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEGENRE: 26,
     FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST: 27,
->>>>>>> album service recommendations
 };
 
 function stringTemplate(literal, params = "") {
@@ -213,7 +207,6 @@ class QueryFactory {
         return QUERY.FIND_ARTIST_RECOMMENDATION_TYPE_GENRE;
     }
 
-<<<<<<< 50be38600dfd616100219f1956544ca6cc567f47
     static get FIND_SONGS_RECOMMENDATION_TYPE_ARTIST() {
         return QUERY.FIND_SONGS_RECOMMENDATION_TYPE_ARTIST;
     }
@@ -228,7 +221,8 @@ class QueryFactory {
 
     static get FIND_SONGS_RECOMMENDATION_TYPE_ALBUM() {
         return QUERY.FIND_SONGS_RECOMMENDATION_TYPE_ALBUM;
-=======
+    }
+    
     static get FIND_ALBUM_RECOMMENDATION_TYPE_SAMEARTIST() {
         return QUERY.FIND_ALBUM_RECOMMENDATION_TYPE_SAMEARTIST;
     }
@@ -243,7 +237,6 @@ class QueryFactory {
 
     static get FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST() {
         return QUERY.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST;
->>>>>>> album service recommendations
     }
 
     getQuery(queryType, entityValue = undefined) {
@@ -306,7 +299,6 @@ class QueryFactory {
                 return this.buildQuery2(find_artist_recommendation_type_album, entityValue);
             case QueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_GENRE:
                 return this.buildQuery2(find_artist_recommendation_type_genre, entityValue);
-<<<<<<< 50be38600dfd616100219f1956544ca6cc567f47
             case QueryFactory.FIND_SONGS_RECOMMENDATION_TYPE_ARTIST:
                 return this.buildQuery2(find_songs_recommendations_type_artist, entityValue);
             case QueryFactory.FIND_SONGS_RECOMMENDATION_TYPE_GENRE:
@@ -315,7 +307,6 @@ class QueryFactory {
                 return this.buildQuery2(find_songs_recommendations_type_related_artist, entityValue);
             case QueryFactory.FIND_SONGS_RECOMMENDATION_TYPE_ALBUM:
                 return this.buildQuery2(find_songs_recommendations_type_album, entityValue);
-=======
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_SAMEARTIST:
                 return this.buildQuery2(find_albums_recommendation_type_sameartist, entityValue);
             case QueryFactory.FIND_ALUBM_RECOMMENATION_TYPE_SAMEYEARANDGENRE:
@@ -324,7 +315,6 @@ class QueryFactory {
                 return this.buildQuery2(find_albums_recommendation_type_samegenre, entityValue);
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST:
                 return this.buildQuery2(find_albums_recommendation_type_relatedartist, entityValue);    
->>>>>>> album service recommendations
         }
     }
 

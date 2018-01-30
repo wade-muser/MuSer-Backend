@@ -200,7 +200,7 @@ class ArtistsService {
                  */
                 (callback) => {
                     const values = {
-                        artist: id,
+                        artist: this.getMuserEntity(id),
                     };
 
                     const query = this.queryFactory.getQuery(recommendationTypesToSparqlQuery[type], values);

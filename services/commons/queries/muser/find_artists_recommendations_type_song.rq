@@ -4,6 +4,6 @@ SELECT DISTINCT ?entity ?name ?imageURL WHERE{
     ?entity muser:name ?name;
                    muser:imageURL ?imageURL.
 
-    FILTER(?entity = muser:{{=it.artist}})
-    FIlTER(?entity != muser:{{=it.artist}})
+    FILTER(?entity = {{=it.artist}})
+    FIlTER(?entity !={{=it.artist}})
 }

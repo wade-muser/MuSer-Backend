@@ -1,0 +1,9 @@
+SELECT DISTINCT ?entity ?name ?imageURL WHERE{
+    ?entity muser:performs ?song.
+    ?song muser:performedBy ?entity.
+    ?entity muser:name ?name;
+                   muser:imageURL ?imageURL.
+
+    FILTER(?entity = muser:{{=it.artist}})
+    FIlTER(?entity != muser:{{=it.artist}})
+}

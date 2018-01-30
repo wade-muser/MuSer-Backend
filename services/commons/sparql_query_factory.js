@@ -23,14 +23,15 @@ const find_songs = fs.readFileSync("services/commons/queries/muser/find_songs.rq
 const find_event = fs.readFileSync("services/commons/queries/muser/find_event.rq", "utf-8");
 const find_events = fs.readFileSync("services/commons/queries/muser/find_events.rq", "utf-8");
 const find_genres = fs.readFileSync("services/commons/queries/muser/find_genres.rq", "utf-8");
-
-
-
 const find_artist_by_id = fs.readFileSync("services/commons/queries/muser/find_artist_by_id.rq", "utf-8");
 const find_song_by_id = fs.readFileSync("services/commons/queries/muser/find_song_by_id.rq", "utf-8");
 const find_album_by_id = fs.readFileSync("services/commons/queries/muser/find_album_by_id.rq", "utf-8");
 const find_genre_by_id = fs.readFileSync("services/commons/queries/muser/find_genre_by_id.rq", "utf-8");
 const find_artist_features = fs.readFileSync("services/commons/queries/muser/find_artist_features.rq", "utf-8");
+const find_artist_recommendation_type_song = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_song.rq", "utf-8");
+const find_artist_recommendation_type_album = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_album.rq", "utf-8");
+const find_artist_recommendation_type_genre = fs.readFileSync("services/commons/queries/muser/find_artists_recommendations_type_genre.rq", "utf-8");
+
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -59,6 +60,9 @@ const QUERY = {
     FIND_ALBUM_BY_ID: 21,
     FIND_GENRE_BY_ID: 22,
     FIND_ARTIST_FEATURES: 23,
+    FIND_ARTIST_RECOMMENDATION_TYPE_SONG: 35,
+    FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM: 36,
+    FIND_ARTIST_RECOMMENDATION_TYPE_GENRE: 37
 };
 
 function stringTemplate(literal, params = "") {
@@ -174,6 +178,18 @@ class QueryFactory {
         return QUERY.FIND_ARTIST_FEATURES;
     }
 
+    static get FIND_ARTIST_RECOMMENDATION_TYPE_SONG() {
+        return QUERY.FIND_ARTIST_RECOMMENDATION_TYPE_SONG;
+    }
+
+    static get FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM() {
+        return QUERY.FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM;
+    }
+
+    static get FIND_ARTIST_RECOMMENDATION_TYPE_GENRE() {
+        return QUERY.FIND_ARTIST_RECOMMENDATION_TYPE_GENRE;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -227,7 +243,13 @@ class QueryFactory {
             case QueryFactory.FIND_GENRE_BY_ID:
                 return this.buildQuery2(find_genre_by_id, entityValue);
             case QueryFactory.FIND_ARTIST_FEATURES:
-                return this.buildQuery2(find_artist_features, entityValue);   
+                return this.buildQuery2(find_artist_features, entityValue);
+            case QueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_SONG:
+                return this.buildQuery2(find_artist_recommendation_type_song, entityValue);
+            case QueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM:
+                return this.buildQuery2(find_artist_recommendation_type_album, entityValue);
+            case QueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_GENRE:
+                return this.buildQuery2(find_artist_recommendation_type_genre, entityValue);
         }
     }
 

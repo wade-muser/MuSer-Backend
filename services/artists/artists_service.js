@@ -8,12 +8,18 @@ const artistTypeMappings = {
     "artist": "muser:MusicalArtist",
     "band": "muser:MusicalBand",
 };
+const recommendationTypesToSparqlQuery = {
+    "song": SparqlQueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_SONG,
+    "album": SparqlQueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_ALBUM,
+    "genre": SparqlQueryFactory.FIND_ARTIST_RECOMMENDATION_TYPE_GENRE,
+};
 
 class ArtistsService {
 
     constructor() {
         this.queryFactory = new SparqlQueryFactory();
         this.graphdbMuserService = new GraphDBMuserService();
+
     }
 
     getArtists(name, type) {
@@ -124,45 +130,45 @@ class ArtistsService {
         return new Promise(promisified_function);
     }
 
-    getArtistFeatures(id){
+    getArtistFeatures(id) {
 
         const promisified_function = (resolve, reject) => {
 
-        if(id.length === 0) {
-            reject(new CustomError("Event id wasn't provided", HTTP_STATUS_CODES.BAD_REQUEST));
-            return;
-        }
+            if (id.length === 0) {
+                reject(new CustomError("Event id wasn't provided", HTTP_STATUS_CODES.BAD_REQUEST));
+                return;
+            }
 
-        async.waterfall([
+            async.waterfall([
 
-            /**
-             * Function that retrieves the query that is need it
-             */
-            (callback) => {
+                /**
+                 * Function that retrieves the query that is need it
+                 */
+                (callback) => {
 
-                const values = {
-                    id: this.getMuserEntity(id),
-                };
-                const query = this.queryFactory.getQuery(SparqlQueryFactory.FIND_ARTIST_FEATURES, values);
-                callback(null, query);
-            },
+                    const values = {
+                        id: this.getMuserEntity(id),
+                    };
+                    const query = this.queryFactory.getQuery(SparqlQueryFactory.FIND_ARTIST_FEATURES, values);
+                    callback(null, query);
+                },
 
-            /**
-             * Function that executes the query and returns the results
-             */
-            (query, callback) => {
-                console.log(query);
-                this.graphdbMuserService.getQueryResults(query)
-                    .then(results => {
-                        console.log("Got results");
-                        callback(null, results);
-                    })
-                    .catch(err => {
-                        console.log("Error on get query results");
-                        console.log(err);
-                        callback(err);
-                    });
-            },
+                /**
+                 * Function that executes the query and returns the results
+                 */
+                (query, callback) => {
+                    console.log(query);
+                    this.graphdbMuserService.getQueryResults(query)
+                        .then(results => {
+                            console.log("Got results");
+                            callback(null, results);
+                        })
+                        .catch(err => {
+                            console.log("Error on get query results");
+                            console.log(err);
+                            callback(err);
+                        });
+                },
 
             ], (err, results) => {
                 console.log(results);
@@ -176,8 +182,62 @@ class ArtistsService {
         };
 
 
-    return new Promise(promisified_function);
+        return new Promise(promisified_function);
+    }
 
+    getArtistRecommendation(id, type) {
+
+        const promisified_function = (resolve, reject) => {
+            if (!recommendationTypesToSparqlQuery[type]) {
+                reject(new CustomError("Type isn't supported", HTTP_STATUS_CODES.BAD_REQUEST));
+                return;
+            }
+
+            async.waterfall([
+
+                /**
+                 * Function that retrieves the query that is need it
+                 */
+                (callback) => {
+                    const values = {
+                        artist: id,
+                    };
+
+                    const query = this.queryFactory.getQuery(recommendationTypesToSparqlQuery[type], values);
+                    callback(null, query);
+                },
+
+                /**
+                 * Function that executes the query and returns the results
+                 */
+                (query, callback) => {
+                    console.log(query);
+                    this.graphdbMuserService.getQueryResults(query)
+                        .then(results => {
+                            console.log("Got results");
+                            callback(null, results);
+                        })
+                        .catch(err => {
+                            console.log("Error on get query results");
+                            console.log(err);
+                            callback(err);
+                        });
+                }
+
+
+            ], (err, results) => {
+                console.log(results);
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                    return;
+                }
+                resolve(results);
+            });
+
+        };
+
+        return new Promise(promisified_function);
     }
 
     getMuserEntity(id) {

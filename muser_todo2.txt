@@ -8,8 +8,10 @@ Muser microservices:
     - Artists       
         - /artists (?name=)                                           llc@ (V)
         - /artists/{id} (the name of the entity without prefix)       cds@ (V)
-        - /artists/{id}/features (directly from RDF repository relationships) cds@ 
-        - /artists/{id}/recommendations (?songs, ?albums, ?genres)    llc@ 
+        - /artists/{id}/features (directly from RDF repository relationships) cds@ (V)
+        - /artists/{id}/recommendations (?songs, ?albums, ?genres)    llc@ (V)
+                - for a song of an artist, we do not have the other performers
+
     - Songs
         - /songs (?name=)                                             llc@ (V)
         - /songs/{id} (the name of the entity without prefix)         cds@ (V)

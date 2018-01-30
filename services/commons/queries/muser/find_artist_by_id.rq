@@ -2,8 +2,8 @@ select * where {
      ?entity rdf:type ?type;
              muser:name                     ?name ;
              muser:gender                   ?gender ;
-             muser:hasMusicalGenre          ?genre .
 
+    OPTIONAL { ?entity muser:hasMusicalGenre ?genre       }
     OPTIONAL { ?entity muser:firstName ?firstName         }
     OPTIONAL { ?entity muser:lastName ?lastName           }
     OPTIONAL { ?entity muser:about    ?about              }

@@ -8,22 +8,22 @@ Muser microservices:
     - Artists       
         - /artists (?name=)                                           llc@ (V)
         - /artists/{id} (the name of the entity without prefix)       cds@ (V)
-        - /artists/{id}/features (directly from RDF repository relationships)
-        - /artists/{id}/recommendations (?songs, ?albums, ?genres)
+        - /artists/{id}/features (directly from RDF repository relationships) cds@ 
+        - /artists/{id}/recommendations (?songs, ?albums, ?genres)    llc@ 
     - Songs
         - /songs (?name=)                                             llc@ (V)
         - /songs/{id} (the name of the entity without prefix)         cds@ (V)
-        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists)
+        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists) llc@
     - Albums
         - /albums (?name=)                                            llc@ (V)
         - /albums/{id} (the name of the entity without prefix)        cds@ (V)
-        - /albums/{id}/recommendations (?artist, ?year + genre, ?genre, ?relatedArtists)
+        - /albums/{id}/recommendations (?artist, ?year + genre, ?genre, ?relatedArtists) cds@
     - Event -                                                        
         - /events (?name, ?artist, ?country, ?city, ?place)           llc@ (V)
         - /events/{id}                                                llc@ (V)
     - Genre
         - /genres                                                     llc@ (V)
-        - /genres/{id}                                                cds@ 
+        - /genres/{id}                                                cds@ (V)
         - /genres/{id}/related
         - /genres/{id}/timeline
 

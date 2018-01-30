@@ -85,12 +85,50 @@ module.exports.getSong = (event, context, callback) => {
 };
 
 module.exports.getSongRecommendations = (event, context, callback) => {
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/songs/{id}/ reccomendation',
-        }),
-    };
 
-    callback(null, response);
+    const isInvalidQueryString = !event.queryStringParameters || !event.queryStringParameters.type;
+    if (isInvalidQueryString) {
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Parameters weren't provided"
+            })
+            .build()
+            .getLambdaResponse();
+
+        console.log("[SONGS] Response:", AWSLambdaResponse);
+        callback(null, AWSLambdaResponse);
+        return;
+    }
+
+    const id = event.pathParameters.id;
+    const type = event.queryStringParameters.type;
+
+    songsService.getSongRecommendations(id, type)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };

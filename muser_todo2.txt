@@ -15,7 +15,7 @@ Muser microservices:
     - Songs
         - /songs (?name=)                                             llc@ (V)
         - /songs/{id} (the name of the entity without prefix)         cds@ (V)
-        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists) llc@
+        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists) llc@ (V)
     - Albums
         - /albums (?name=)                                            llc@ (V)
         - /albums/{id} (the name of the entity without prefix)        cds@ (V)

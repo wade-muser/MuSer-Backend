@@ -23,7 +23,7 @@ module.exports.getGenres = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred",
                 })
@@ -56,7 +56,7 @@ module.exports.getGenreById = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred",
                 })

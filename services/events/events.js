@@ -6,8 +6,8 @@ const eventsService = new EventsService();
 
 module.exports.getEvents = (event, context, callback) => {
     console.log(event);
-    const validQueryString = event.queryStringParameters && event.queryStringParameters.keyword && event.queryStringParameters.type;
-    if (!validQueryString) {
+    const queryStringIsInvalid = !event.queryStringParameters || event.queryStringParameters.keyword || event.queryStringParameters.type;
+    if (queryStringIsInvalid) {
         const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
             .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
             .body({
@@ -41,7 +41,7 @@ module.exports.getEvents = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred",
                 })
@@ -74,7 +74,7 @@ module.exports.getEvent = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred",
                 })

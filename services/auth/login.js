@@ -30,7 +30,7 @@ module.exports.handler = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.UNAUTHORIZED)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.UNAUTHORIZED)
                 .body({
                     message: "Wrong Credentials"
                 })

@@ -1,0 +1,8 @@
+SELECT ?song ?entity ?name ?imageURL WHERE{
+    ?song muser:containedBy ?songAlbum.
+    ?songAlbum muser:contains ?entity.
+    ?entity muser:name ?name;
+            muser:imageURL ?imageURL.
+    FILTER(?song = {{=it.song}} )
+    FILTER(?song != ?entity)
+}

@@ -1,0 +1,19 @@
+select * where {
+     ?entity rdf:type ?type;
+             muser:name                     ?name ;
+             muser:gender                   ?gender ;
+
+    OPTIONAL { ?entity muser:hasMusicalGenre ?genre       }
+    OPTIONAL { ?entity muser:firstName ?firstName         }
+    OPTIONAL { ?entity muser:lastName ?lastName           }
+    OPTIONAL { ?entity muser:about    ?about              }
+    OPTIONAL { ?entity muser:musicalAgentOrigin ?origin   }
+    OPTIONAL { ?entity muser:inceptionDate ?inceptionDate }
+    OPTIONAL { ?entity muser:imageURL ?imageURL           } 
+    OPTIONAL { ?entity muser:performs        ?songs       }
+    OPTIONAL { ?entity muser:released        ?albums      }
+    
+    FILTER(?entity = {{=it.id}} )
+    FILTER(?type in (muser:MusicalArtist))
+
+} limit 100

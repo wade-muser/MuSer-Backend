@@ -1,0 +1,9 @@
+select DISTINCT ?entity ?name ?imageURL where {
+    ?song muser:performedBy ?songPerformer.
+    ?songPerfomer muser:relatedMusicalAgent ?entity.
+    ?entity muser:name ?name;
+            muser:imageURL ?imageURL
+            
+    FILTER(?song= {{=it.song}})
+    FILTER(?songPerformer != ?entity)
+} limit 100

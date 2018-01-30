@@ -18,6 +18,7 @@ module.exports.getArtists = (event, context, callback) => {
         callback(null, AWSLambdaResponse);
         return;
     }
+
     const name = event.queryStringParameters.name;
     const type = event.queryStringParameters.type;
 
@@ -38,7 +39,7 @@ module.exports.getArtists = (event, context, callback) => {
         .catch(err => {
             console.log(err);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
                 .body({
                     message: "Some error occurred",
                 })
@@ -51,40 +52,117 @@ module.exports.getArtists = (event, context, callback) => {
 };
 
 module.exports.getArtist = (event, context, callback) => {
+
     const artistId = event.pathParameters.id;
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `/artists/{id} response: id = ${artistId}`,
-        }),
-    };
+    artistsService.getArtist(artistId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
 
-    callback(null, response);
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };
 
 module.exports.getArtistFeatures = (event, context, callback) => {
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/artists/{id}/features response',
-        }),
-    };
+    const artistId = event.pathParameters.id;
 
-    callback(null, response);
+    artistsService.getArtistFeatures(artistId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 
 };
 
-module.exports.getRecommendedArtistsForArtist = (event, context, callback) => {
+module.exports.getArtistRecommendations = (event, context, callback) => {
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: '/artists/{id}/recommendation response',
-        }),
-    };
+    console.log(event);
+    const queryStringIsInvalid = !event.queryStringParameters || !event.queryStringParameters.type;
+    if (queryStringIsInvalid) {
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Parameters weren't provided"
+            })
+            .build()
+            .getLambdaResponse();
 
-    callback(null, response);
+        console.log("[ARTISTS] Response:", AWSLambdaResponse);
+        callback(null, AWSLambdaResponse);
+        return;
+    }
 
+    const id = event.pathParameters.id;
+    const type = event.queryStringParameters.type;
+    artistsService.getArtistRecommendation(id, type)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.httpStatusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
 };

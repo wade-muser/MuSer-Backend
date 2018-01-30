@@ -1,0 +1,21 @@
+SELECT * WHERE{
+    ?entity rdf:type muser:MusicalEvent;
+            muser:label ?eventLabel;
+            muser:name ?eventName;
+            muser:eventPlace ?eventPlace;
+            muser:eventCity ?eventCity;
+            muser:eventCountry ?eventCountry;
+            muser:performers ?eventPerformers;
+            muser:startDate ?eventStartDate.
+    ?eventPerformers muser:name ?performerName.
+    OPTIONAL {
+        ?entity muser:endDate ?eventEndDate
+    }
+    FILTER (
+            regex(?eventName,"{{=it.name}}","i") || 
+            regex(?eventCity,"{{=it.city}}","i") || 
+            regex(?eventPlace,"{{=it.place}}","i") ||
+            regex(?eventCountry,"{{=it.country}}","i") ||
+            regex(?performerName,"{{=it.performer}}","i") 
+    )  
+}

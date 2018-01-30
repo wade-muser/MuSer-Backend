@@ -1,0 +1,18 @@
+select DISTINCT ?entity ?name ?releasedBy ?imageURL ?date where {
+    ?album rdf:type ?type;
+           muser:hasMusicalGenre ?genreOfAlbum;
+           muser:releaseDate     ?dateOfAlbum .
+    
+    ?entity rdf:type ?type;
+            muser:name ?name;
+            muser:hasMusicalGenre ?genre;
+            muser:releaseDate ?date;
+            muser:releasedBy ?releasedBy;
+            muser:imageURL ?imageURL.
+            
+    FILTER(?type=muser:Album)            
+    FILTER(?album = {{=it.id}} )
+    FILTER(?entity != ?album)
+    FILTER((STR(YEAR(?dateOfAlbum))=(STR(YEAR(?date)))))
+    FILTER(?genreOfAlbum=?genre)
+} limit 100

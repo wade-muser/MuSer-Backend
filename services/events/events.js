@@ -1,12 +1,30 @@
-const GenresServices = require('./genres_service');
+const EventsService = require("./events_service");
 const HttpResponse = require("../../commons/utils/http_response");
 const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
-const genresService = new GenresServices();
+const eventsService = new EventsService();
 
-module.exports.getGenres = (event, context, callback) => {
+module.exports.getEvents = (event, context, callback) => {
+    console.log(event);
+    const queryStringIsInvalid = !event.queryStringParameters || event.queryStringParameters.keyword || event.queryStringParameters.type;
+    if (queryStringIsInvalid) {
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Parameters weren't provided"
+            })
+            .build()
+            .getLambdaResponse();
 
-    genresService.getGenres()
+        console.log("[EVENTS] Response:", AWSLambdaResponse);
+        callback(null, AWSLambdaResponse);
+        return;
+    }
+
+    const keyword = event.queryStringParameters.keyword;
+    const type = event.queryStringParameters.type;
+
+    eventsService.getEvents(keyword, type)
         .then(results => {
             console.log(results);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
@@ -17,7 +35,7 @@ module.exports.getGenres = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[GENRES] Response:", AWSLambdaResponse);
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         })
         .catch(err => {
@@ -30,16 +48,16 @@ module.exports.getGenres = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[GENRES] Response:", AWSLambdaResponse);
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         });
 };
 
-module.exports.getGenre = (event, context, callback) => {
-    
-    const genreId = event.pathParameters.id;
 
-    genresService.getGenre(genreId)
+module.exports.getEvent = (event, context, callback) => {
+
+    const eventId = event.pathParameters.id;
+    eventsService.getEvent(eventId)
         .then(results => {
             console.log(results);
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
@@ -50,7 +68,7 @@ module.exports.getGenre = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[Genre] Response:", AWSLambdaResponse);
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         })
         .catch(err => {
@@ -63,34 +81,7 @@ module.exports.getGenre = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[Genre] Response:", AWSLambdaResponse);
+            console.log("[EVENTS] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         });
-
-};
-
-module.exports.getGenreRelated = (event, context, callback) => {
-    const genreId = event.pathParameters.id;
-
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `/genres/{id}/related response: id = ${genreId}`,
-        }),
-    };
-
-    callback(null, response);
-};
-
-module.exports.getGenreTimeline = (event, context, callback) => {
-    const genreId = event.pathParameters.id;
-
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `/genres/{id}/timeline response: id = ${genreId}`,
-        }),
-    };
-
-    callback(null, response);
 };

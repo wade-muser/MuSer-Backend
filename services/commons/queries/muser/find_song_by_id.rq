@@ -1,0 +1,15 @@
+select * where {
+     ?entity rdf:type ?type;
+            muser:name ?name .
+
+     OPTIONAL  { ?entity    muser:idSpotify ?idSpotify     }
+     OPTIONAL  { ?entity    muser:duration  ?duration      }
+     OPTIONAL  { ?entity    muser:performedBy ?performedBy }
+     OPTIONAL  { ?entity    muser:containedBy ?containedBy }
+     OPTIONAL  { ?entity    muser:hasMusicalGenre ?genre   }
+     OPTIONAL  { ?enity     muser:imageURL ?imageURL       }
+
+    FILTER(?type=muser:Song)            
+    FILTER(?entity = {{=it.id}} )
+
+} limit 100

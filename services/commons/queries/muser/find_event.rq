@@ -1,0 +1,13 @@
+select ?entity ?label ?name ?eventPlace ?eventCity ?eventCountry ?performers ?startDate where {
+    ?entity rdf:type muser:MusicalEvent;
+            muser:label ?label;
+            muser:name ?name;
+            muser:eventPlace ?eventPlace;
+            muser:eventCity ?eventCity;
+            muser:eventCountry ?eventCountry;
+            muser:performers ?performers;
+            muser:startDate ?startDate.
+
+    OPTIONAL {?entity muser:endDate ?endDate}
+    FILTER(?entity = <http://example.com/muser#Coachella_2018> )
+}

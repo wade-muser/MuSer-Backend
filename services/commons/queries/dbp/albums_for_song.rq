@@ -4,7 +4,8 @@ SELECT ?entity ?name ?label ?sameWd WHERE {
               foaf:name   ?name ;
               owl:sameAs  ?sameWd .
     
-    ${dbpInstance} dbo:album ?entity .
+    {{=it.song}} dbo:album  ?entity .
+    ?entity      dbo:artist {{=it.artist}} .
     
     FILTER (?type IN (dbo:Album))
     FILTER (regex(str(?sameWd), "wikidata.org/entity"))

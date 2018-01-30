@@ -75,12 +75,28 @@ class SparqlService {
                 if (cleanResults[result.entity.value][key].indexOf(result[key].value) == -1) {
                     let escapedValue;
 
+                    // if(result[key].value.startsWith("Royce"))
+                    //     console.log(result[key].value)
+
                     escapedValue = normalize(result[key].value);
+                    // if(result[key].value.startsWith("Royce"))
+                    //     console.log(escapedValue)
 
                     escapedValue = string_escaper(escapedValue, {
-                        quotes: "double"
+                        quotes: "double",
                     });
+                    // if(result[key].value.startsWith("Royce"))
+                    //     console.log(escapedValue)
 
+                    // escapedValue = string_escaper(escapedValue, {
+                    //         quotes: "single",
+                    // });
+                    // if(result[key].value.startsWith("Royce")) {
+                    //         console.log(escapedValue)
+                    //         console.log("\n");
+                    // }
+
+                    
                     escapedValue = escapedValue.replace(/\n/g, ' ');
 
                     cleanResults[result.entity.value][key].push(escapedValue);
@@ -101,7 +117,10 @@ class SparqlService {
                     resolve(cleanResults);
                 })
                 .catch(err => {
-                    reject(err);
+                    console.error(err);
+                    console.error(sparqlQuery.originalText);
+                    return;
+                    // reject(err);
                 });
         };
 

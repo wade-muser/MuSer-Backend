@@ -12,6 +12,8 @@ const artists_related_for_artist_query = fs.readFileSync("services/commons/queri
 const album_info_query = fs.readFileSync("services/commons/queries/dbp/album_info.rq", "utf-8");
 const albums_for_songs_query = fs.readFileSync("services/commons/queries/dbp/albums_for_song.rq", "utf-8");
 const artists_for_album_query = fs.readFileSync("services/commons/queries/dbp/artists_for_album.rq", "utf-8");
+const artists_for_band_query = fs.readFileSync("services/commons/queries/dbp/artists_for_band.rq", "utf-8");
+
 const all_artists_query = fs.readFileSync("services/commons/queries/muser/all_artists.rq", "utf-8");
 const artists_without_query = fs.readFileSync("services/commons/queries/muser/artists_without_spotify.rq", "utf-8");
 const songs_without_query = fs.readFileSync("services/commons/queries/muser/songs_without_spotify.rq", "utf-8");
@@ -42,6 +44,7 @@ const QUERY = {
     FIND_ALBUMS: 15,
     FIND_SONGS: 16,
     GENRES_RELATED_FOR_GENRE: 17,
+    ARTISTS_FOR_BAND: 18,
 };
 
 function stringTemplate(literal, params = "") {
@@ -94,6 +97,10 @@ class QueryFactory {
         return QUERY.ARTISTS_FOR_ALBUM;
     }
 
+    static get ARTISTS_FOR_BAND() {
+        return QUERY.ARTISTS_FOR_BAND;
+    }
+
     static get ALL_ARTISTS() {
         return QUERY.ALL_ARTISTS;
     }
@@ -144,9 +151,11 @@ class QueryFactory {
             case QueryFactory.ALBUM_INFO:
                 return this.buildQuery(album_info_query, entityValue);
             case QueryFactory.ALBUMS_FOR_SONG:
-                return this.buildQuery(albums_for_songs_query, entityValue);
+                return this.buildQuery2(albums_for_songs_query, entityValue);
             case QueryFactory.ARTISTS_FOR_ALBUM:
                 return this.buildQuery(artists_for_album_query, entityValue);
+            case QueryFactory.ARTISTS_FOR_BAND:
+                return this.buildQuery(artists_for_band_query, entityValue);
             case QueryFactory.ALL_ARTISTS:
                 return this.buildQuery(all_artists_query, entityValue);
             case QueryFactory.ARTISTS_WITHOUT_SPOTIFY:
@@ -175,6 +184,9 @@ class QueryFactory {
     }
 
     buildQuery2(query, values) {
+        Object.keys(values).forEach(key => {
+            values[key] = values[key].startsWith('http://') ? `<${values[key]}>` : `${values[key]}`;
+        });
         return dot.template(query)(values);
     }
 

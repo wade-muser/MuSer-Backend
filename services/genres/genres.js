@@ -36,16 +36,37 @@ module.exports.getGenres = (event, context, callback) => {
 };
 
 module.exports.getGenreById = (event, context, callback) => {
+    
     const genreId = event.pathParameters.id;
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: `/genres/{id} response: id = ${genreId}`,
-        }),
-    };
+    genresService.getGenre(genreId)
+        .then(results => {
+            console.log(results);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(HTTP_STATUS_CODES.OK)
+                .body({
+                    results: results
+                })
+                .build()
+                .getLambdaResponse();
 
-    callback(null, response);
+            console.log("[Genre] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        })
+        .catch(err => {
+            console.log(err);
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+                .statusCode(err.statusCode || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+                .body({
+                    message: "Some error occurred",
+                })
+                .build()
+                .getLambdaResponse();
+
+            console.log("[Genre] Response:", AWSLambdaResponse);
+            callback(null, AWSLambdaResponse);
+        });
+
 };
 
 module.exports.getGenresRelatedById = (event, context, callback) => {

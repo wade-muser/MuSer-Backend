@@ -218,7 +218,7 @@ class QueryFactory {
                 return this.buildQuery2(find_song_by_id, entityValue);
             case QueryFactory.FIND_ALBUM_BY_ID:
                 return this.buildQuery2(find_album_by_id, entityValue);
-            case QueryFactory.FIND_ALBUM_BY_ID:
+            case QueryFactory.FIND_GENRE_BY_ID:
                 return this.buildQuery2(find_genre_by_id, entityValue);   
         }
     }

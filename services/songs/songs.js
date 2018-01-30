@@ -66,7 +66,7 @@ module.exports.getSong = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            console.log("[SONG] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         })
         .catch(err => {
@@ -79,7 +79,7 @@ module.exports.getSong = (event, context, callback) => {
                 .build()
                 .getLambdaResponse();
 
-            console.log("[ARTISTS] Response:", AWSLambdaResponse);
+            console.log("[SONG] Response:", AWSLambdaResponse);
             callback(null, AWSLambdaResponse);
         });
 };

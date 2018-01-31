@@ -1,22 +1,10 @@
-select * where {
-     ?entity rdf:type ?type;
-             muser:relatedMusicalAgent ?related .
-     ?related rdf:type ?type;
+select ?entity ?name ?imageURL where {
+    ?artist rdf:type                        ?type;
+            muser:relatedMusicalAgent       ?entity .
+    ?entity rdf:type ?type;
              muser:name                     ?name ;
-             muser:gender                   ?gender ;
-
-    OPTIONAL { ?related muser:hasMusicalGenre ?genre       }
-    OPTIONAL { ?related muser:firstName ?firstName         }
-    OPTIONAL { ?related muser:lastName ?lastName           }
-    OPTIONAL { ?related muser:about    ?about              }
-    OPTIONAL { ?related muser:musicalAgentOrigin ?origin   }
-    OPTIONAL { ?related muser:inceptionDate ?inceptionDate }
-    OPTIONAL { ?related muser:imageURL ?imageURL           } 
-    OPTIONAL { ?related muser:performs        ?songs       }
-    OPTIONAL { ?related muser:released        ?albums      }
+             muser:imageURL                 ?imageURL
     
-    
-    FILTER(?entity = {{=it.id}} )
+    FILTER(?artist = {{=it.id}} )
     FILTER(?type in (muser:MusicalArtist))
-
-} limit 100
+} limit 20

@@ -1,8 +1,11 @@
-SELECT ?entity ?name ?imageURL WHERE{
+SELECT ?entity ?name ?imageURL ?performer ?performerName ?performerImageURL WHERE{
     ?entity rdf:type ?type;
             muser:name ?name;
-            muser:imageURL ?imageURL.
-
+            muser:imageURL ?imageURL;
+			muser:performedBy ?performer.
+    ?performer muser:name ?performerName;
+               muser:imageURL ?performerImageURL.
+    
     FILTER(?type=muser:Album)
     FILTER(REGEX(?name,"^{{=it.name}}","i"))
 }

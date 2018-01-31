@@ -74,6 +74,24 @@ functions:
           cors: true
           # authorizer: authorizer
 
+  getArtistSongs:
+    handler: services/artists/artists.getArtistSongs
+    events:
+      - http:
+          path: artists/{id}/songs
+          method: get
+          cors: true
+          # authorizer: authorizer  
+  
+  getArtistAlbums:
+    handler: services/artists/artists.getArtistAlbums
+    events:
+      - http:
+          path: artists/{id}/albums
+          method: get
+          cors: true
+          # authorizer: authorizer
+
   getArtistRecommendations:
     handler: services/artists/artists.getArtistRecommendations
     events:
@@ -95,7 +113,7 @@ functions:
           # authorizer: authorizer
 
   getSongById:
-    handler: services/Songs/songs.getSong
+    handler: services/songs/songs.getSong
     events:
       - http:
           path: songs/{id}

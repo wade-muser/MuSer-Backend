@@ -1,4 +1,5 @@
 const async = require('async');
+const shuffel = require("shuffle-array");
 
 const SparqlQueryFactory = require("../commons/sparql_query_factory");
 const GraphDBMuserService = require("../commons/graphdb_muser_service");
@@ -135,7 +136,7 @@ class ArtistsService {
         const promisified_function = (resolve, reject) => {
 
             if (id.length === 0) {
-                reject(new CustomError("Event id wasn't provided", HTTP_STATUS_CODES.BAD_REQUEST));
+                reject(new CustomError("Artist id wasn't provided", HTTP_STATUS_CODES.BAD_REQUEST));
                 return;
             }
 
@@ -181,6 +182,102 @@ class ArtistsService {
             });
         };
 
+        return new Promise(promisified_function);
+    }
+
+    getArtistSongs(id) {
+        const promisified_function = (resolve, reject) => {
+
+            async.waterfall([
+
+                /**
+                 * Function that retrieves the query that is need it
+                 */
+                (callback) => {
+                    const values = {
+                        artist: this.getMuserEntity(id),
+                    };
+                    const query = this.queryFactory.getQuery(SparqlQueryFactory.FIND_ARTIST_SONGS, values);
+                    callback(null, query);
+                },
+
+                /**
+                 * Function that executes the query and returns the results
+                 */
+                (query, callback) => {
+                    console.log(query);
+                    this.graphdbMuserService.getQueryResults(query)
+                        .then(results => {
+                            console.log("Got results");
+                            const songs = shuffel(Object.keys(results));
+                            const randomResults = {};
+                            for (let i = 0; i < 10 && i < songs.length; i++) {
+                                randomResults[songs[i]] = results[songs[i]];
+                            }
+                            console.log(Object.keys(randomResults).length);
+                            callback(null, randomResults);
+                        })
+                        .catch(err => {
+                            console.log("Error on get query results");
+                            console.log(err);
+                            callback(err);
+                        });
+                }
+
+            ], (err, results) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                    return;
+                }
+                resolve(results);
+            });
+        };
+
+        return new Promise(promisified_function);
+    }
+
+    getAlbums(id) {
+
+        const promisified_function = (resolve, reject) => {
+
+            async.waterfall([
+
+                /**
+                 * Function that retrieves the query that is need it
+                 */
+                (callback) => {
+                    const values = {
+                        artist: this.getMuserEntity(id),
+                    };
+                    const query = this.queryFactory.getQuery(SparqlQueryFactory.FIND_ALBUMS_FOR_ARTIST, values);
+                    callback(null, query);
+                },
+
+                (query, callback) => {
+                    console.log(query);
+                    this.graphdbMuserService.getQueryResults(query)
+                        .then(results => {
+                            console.log("Got results");
+                            callback(null, results);
+                        })
+                        .catch(err => {
+                            console.log("Error on get query results");
+                            console.log(err);
+                            callback(err);
+                        });
+                },
+
+            ], (err, results) => {
+                console.log(results);
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                    return;
+                }
+                resolve(results);
+            });
+        };
 
         return new Promise(promisified_function);
     }

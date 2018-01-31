@@ -37,6 +37,8 @@ const find_songs_recommendations_type_artist = fs.readFileSync("services/commons
 const find_songs_recommendations_type_genre = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_genre.rq", "utf-8");
 const find_songs_recommendations_type_related_artist = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_related_artist.rq", "utf-8");
 const find_songs_recommendations_type_album = fs.readFileSync("services/commons/queries/muser/find_songs_recommendations_type_album.rq", "utf-8");
+const find_albums_for_artist = fs.readFileSync("services/commons/queries/muser/find_albums_for_artist.rq", "utf-8");
+const find_artist_songs = fs.readFileSync("services/commons/queries/muser/find_artist_songs.rq", "utf-8");
 
 const find_albums_recommendation_type_sameartist = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_sameartist.rq", "utf-8");
 const find_albums_recommendation_type_sameyearandgenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_sameyearandgenre.rq", "utf-8");
@@ -83,6 +85,8 @@ const QUERY = {
     FIND_SONGS_RECOMMENDATION_TYPE_GENRE: 41,
     FIND_SONGS_RECOMMENDATION_TYPE_RELATED_ARTIST: 42,
     FIND_SONGS_RECOMMENDATION_TYPE_ALBUM: 43,
+    FIND_ALBUMS_FOR_ARTIST: 88,
+    FIND_ARTIST_SONGS: 89,
 
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEARTIST: 24,
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEYEARANDGENRE: 25,
@@ -256,6 +260,14 @@ class QueryFactory {
         return QUERY.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST;
     }
 
+    static get FIND_ALBUMS_FOR_ARTIST() {
+        return QUERY.FIND_ALBUMS_FOR_ARTIST;
+    }
+
+    static get FIND_ARTIST_SONGS() {
+        return QUERY.FIND_ARTIST_SONGS;
+    }
+
     static get INSERT_PLAYLIST() {
         return QUERY.INSERT_PLAYLIST;
     }
@@ -271,6 +283,7 @@ class QueryFactory {
     static get DELETE_PLAYLIST() {
         return QUERY.DELETE_PLAYLIST;
     }
+
 
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
@@ -350,6 +363,7 @@ class QueryFactory {
                 return this.buildQuery2(find_albums_recommendation_type_samegenre, entityValue);
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST:
                 return this.buildQuery2(find_albums_recommendation_type_relatedartist, entityValue);
+
             case QueryFactory.INSERT_PLAYLIST:
                 return this.buildQuery2(insert_playlist, entityValue);
             case QueryFactory.GET_PLAYLISTS:
@@ -358,6 +372,10 @@ class QueryFactory {
                 return this.buildQuery2(get_playlist, entityValue);
             case QueryFactory.DELETE_PLAYLIST:
                 return this.buildQuery2(delete_playlist, entityValue);
+            case QueryFactory.FIND_ALBUMS_FOR_ARTIST:
+                return this.buildQuery2(find_albums_for_artist, entityValue);
+            case QueryFactory.FIND_ARTIST_SONGS:
+                return this.buildQuery2(find_artist_songs, entityValue);
         }
     }
 

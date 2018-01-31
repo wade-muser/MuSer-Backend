@@ -9,5 +9,5 @@ select ?entity ?label ?name ?eventPlace ?eventCity ?eventCountry ?performers ?st
             muser:startDate ?startDate.
 
     OPTIONAL {?entity muser:endDate ?endDate}
-    FILTER(?entity = <http://example.com/muser#Coachella_2018> )
+    FILTER   (?entity = {{=it.event}} )
 }

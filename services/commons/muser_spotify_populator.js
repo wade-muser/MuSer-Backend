@@ -3,8 +3,6 @@ const SpotifyService = require("./spotify_service");
 const GraphDBMuserService = require("./graphdb_muser_service");
 
 
-
-
 class MuserSpotifyPopulator {
 
     constructor() {
@@ -42,7 +40,8 @@ class MuserSpotifyPopulator {
                     console.log("Retrieved artists:" + Object.keys(artists).length);
                     const results = {};
 
-                    async.each(Object.keys(artists),
+
+                    async.eachLimit(Object.keys(artists), 2,
                         (artist, eachArtistCallback) => {
                             const artistName = artists[artist].name[0].toLowerCase();
                             console.log(`Retrieve spotify info about:${artistName}`);
@@ -58,11 +57,13 @@ class MuserSpotifyPopulator {
                                         }
                                         results[artist] = result;
                                     }
-                                    eachArtistCallback(null);
+                                    setTimeout(() => eachArtistCallback(null), 100);
+                                    // eachArtistCallback(null);
                                 })
                                 .catch(err => {
                                     console.error(err);
-                                    eachArtistCallback(err);
+                                    setTimeout(() => eachArtistCallback(err), 100);
+                                    // eachArtistCallback(err);
                                 });
                         }, (err) => {
                             if (err) {
@@ -145,11 +146,13 @@ class MuserSpotifyPopulator {
                     console.log("Retrieved  songs:" + Object.keys(songs).length);
                     const results = {};
 
-                    async.each(Object.keys(songs),
+                    async.eachLimit(Object.keys(songs), 2,
                         (song, eachSongCallback) => {
                             const songName = songs[song].name[0].toLowerCase();
                             const artistName = songs[song].artistName[0].toLowerCase();
 
+
+                            console.log(songName + " " + artistName);
                             this.spotifyService.searchTrack(songName, artistName)
                                 .then(data => {
                                     if (data) {
@@ -167,6 +170,7 @@ class MuserSpotifyPopulator {
                                     console.error(err);
                                     eachSongCallback(err);
                                 });
+
 
                         }, (err) => {
                             if (err) {
@@ -214,7 +218,7 @@ class MuserSpotifyPopulator {
                 console.log("Song Info Chain had finished");
                 resolve();
             });
-        }
+        };
 
         return new Promise(promisified_function);
     }
@@ -250,7 +254,7 @@ class MuserSpotifyPopulator {
                     console.log("Retrieved Albums:" + Object.keys(albums).length);
                     const results = {};
 
-                    async.each(Object.keys(albums),
+                    async.eachLimit(Object.keys(albums), 2,
                         (album, eachAlbumCallback) => {
                             const albumName = albums[album].name[0].toLowerCase();
                             const artistName = albums[album].artistName[0].toLowerCase();
@@ -267,11 +271,13 @@ class MuserSpotifyPopulator {
                                         }
                                         results[album] = result;
                                     }
-                                    eachAlbumCallback(null);
+                                    setTimeout(() => eachAlbumCallback(null), 100);
+                                    // eachAlbumCallback(null);
                                 })
                                 .catch(err => {
                                     console.error(err);
-                                    eachAlbumCallback(err);
+                                    setTimeout(() => eachAlbumCallback(err), 100);
+                                    // eachAlbumCallback(err);
                                 });
                         }, (err) => {
                             if (err) {
@@ -281,8 +287,7 @@ class MuserSpotifyPopulator {
                             }
                             console.log("Retrieved info about all albums");
                             callback(null, results);
-                        }
-                    );
+                        });
                 },
 
                 (albumsInfo, callback) => {
@@ -319,7 +324,7 @@ class MuserSpotifyPopulator {
                 console.log("Albums Info Chain had finished");
                 resolve();
             });
-        }
+        };
 
         return new Promise(promisified_function);
     }

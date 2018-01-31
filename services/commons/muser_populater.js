@@ -25,6 +25,12 @@ class MuserPopulater {
             this.dbpediaService.getQueryResults(query, artist)
                 .then((cleanResults) => {
                     let isBand = false;
+
+                    if (cleanResults[artist.replace(/[<>]/g, '')] === undefined) {
+                        reject("ERROR_ARTIST_404: " + artist);
+                        return;
+                    }
+
                     cleanResults[artist.replace(/[<>]/g, '')].type.forEach(type => {
                         if (type.toLowerCase().indexOf('band') !== -1) {
                             isBand = true;
@@ -300,11 +306,6 @@ class MuserPopulater {
         return muserEntity;
     }
 
-    // otherArtists = []
-    // main artist
-        // otherArtists += 'artists from mainArtist associatedActs'
-    // REITERATE OVER otherArtists
-
     cleanStatements(statements) {
         let cleanStatements = [...statements];
 
@@ -433,62 +434,6 @@ class MuserPopulater {
 
                 },
 
-                /*
-                    Function retrieves info about all the band members of a band
-                */
-                // (bandArtists, callback) => {
-                //     if (bandArtists === undefined) {
-                //         callback(null);
-                //         return;
-                //     }
-                //     async.each(bandArtists, (bandArtist, eachBandArtistCallback) => {
-                //         this.getArtistInfo(bandArtist)
-                //             .then(({
-                //                 statements,
-                //                 results,
-                //                 isBand
-                //             }) => {
-                //                 bandArtist = this.getMuserEntityFromDBPediaEntity(bandArtist);
-
-                //                 statements.forEach(localStatement => {
-                //                     localStatement.forEach(statement => {
-                //                         Object.keys(statement).forEach(key => {
-                //                             let value = statement[key];
-                //                             if (!value.startsWith("\"") && !value.startsWith("\'")) {
-                //                                 value = value.replace(/["'\\]/g, "_");
-                //                             }
-                //                             statement[key] = value;
-                //                         });
-                //                     });
-                //                 });
-
-                //                 this.graphdbMuserService.getQueryInsert(statements)
-                //                     .execute()
-                //                     .then(response => {
-                //                         console.log("Inserted band artist info for " + bandArtist);
-                //                     })
-                //                     .catch(err => {
-                //                         console.error(err);
-                //                         eachArtistCallback(err);
-                //                     });
-
-                //                 eachBandArtistCallback(null);
-                //             })
-                //             .catch((err) => {
-                //                 console.error(err);
-                //                 eachBandArtistCallback(err);
-                //             });
-                //     }, (err) => {
-                //         if (err) {
-                //             console.error(err);
-                //             callback(err);
-                //             return;
-                //         }
-                //     });
-
-                //     callback(null);
-                // },
-
                 /* 
                     Function retrieves the songs that have been performed by an artist
                     Function inserts the song into the ontology
@@ -547,7 +492,7 @@ class MuserPopulater {
                                         this.graphdbMuserService.getQueryInsert(songsStatements)
                                             .execute()
                                             .then(response => {
-                                                console.log("Inserted song info for " + song);
+                                                // console.log("Inserted song info for " + song);
                                             })
                                             .catch(err => {
                                                 console.error(err);
@@ -568,6 +513,7 @@ class MuserPopulater {
                                 }
                             });
 
+                            console.log("Inserted songs info for artist" + mainRdfSubject);
                             callback(null, songs);
                         })
                         .catch((err) => {
@@ -631,7 +577,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genres for " + song);
+                                        // console.log("Inserted genres for " + song);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -660,6 +606,8 @@ class MuserPopulater {
                             callback(err);
                             return;
                         }
+
+                        console.log("Inserted genres for songs of " + mainRdfSubject);
                         callback(null, songs, Array.from(allGenres));
                     });
                 },
@@ -676,7 +624,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genre info for " + genre);
+                                        // console.log("Inserted genre info for " + genre);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -694,6 +642,8 @@ class MuserPopulater {
                             callback(err);
                         }
                     });
+
+                    console.log("Inserted genre infos for songs of " + mainRdfSubject);
                     callback(null, songs, genres);
                 },
                 /*
@@ -738,7 +688,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted related genres for (from songs) " + genre);
+                                        // console.log("Inserted related genres for (from songs) " + genre);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -767,6 +717,7 @@ class MuserPopulater {
                             callback(err);
                             return;
                         }
+                        console.log("Inserted related genres for genres of songs of " + mainRdfSubject);
                         callback(null, songs, Array.from(allGenres));
                     });
                 },
@@ -782,7 +733,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted related (from songs) genre info for " + genre);
+                                        // console.log("Inserted related (from songs) genre info for " + genre);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -800,6 +751,7 @@ class MuserPopulater {
                             callback(err);
                         }
                     });
+                    console.log("Inserted related genres info for genres of songs of " + mainRdfSubject);
                     callback(null, songs);
                 },
 
@@ -843,10 +795,11 @@ class MuserPopulater {
 
                                 statements = this.cleanStatements(statements);
 
-                                this.graphdbMuserService.getQueryInsert(statements)
-                                    .execute()
+                                let q = this.graphdbMuserService.getQueryInsert(statements);
+                                    
+                                q.execute()
                                     .then(response => {
-                                        console.log("Inserted album <-> song for " + statements[0][0].s + " <-> " + song);
+                                        // console.log("Inserted album <-> song for " + statements[0][0].s + " <-> " + song);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -874,6 +827,7 @@ class MuserPopulater {
                             callback(err);
                             return;
                         }
+                        console.log("Inserted albums for songs of " + mainRdfSubject);
                         callback(null, Array.from(allAlbums));
                     });
                 },
@@ -914,10 +868,11 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(albumsStatements)
                                     .execute()
                                     .then(result => {
-                                        console.log("Inserted album info for " + album);
+                                        // console.log("Inserted album info for " + album);
                                     })
                                     .catch(err => {
                                         console.error(err);
+                                        console.log(albumsStatements);
                                         eachAlbumCallback(err);
                                     });
 
@@ -932,6 +887,8 @@ class MuserPopulater {
                             callback(err);
                         }
                     });
+
+                    console.log("Inserted albums info for songs of " + mainRdfSubject);
                     callback(null, albums);
                 },
                 /*
@@ -947,7 +904,7 @@ class MuserPopulater {
                                 genres
                             }) => {
                                 if (statements.length === 0) {
-                                    eachAlbumCallback(genres);
+                                    eachAlbumCallback(null);
                                     return;
                                 }
 
@@ -989,7 +946,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genres <-> albums of " + mainRdfSubject);
+                                        // console.log("Inserted genres <-> albums of " + mainRdfSubject);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -999,7 +956,7 @@ class MuserPopulater {
                                 eachAlbumCallback(null, genres);
                             })
                             .catch((err) => {
-                                console.error(err);
+                                console.log(asd)
                                 eachAlbumCallback(err);
                             });
                     }, (err, allGenresList) => {
@@ -1012,12 +969,13 @@ class MuserPopulater {
                                 });
                             }
                         });
-
                         if (err) {
                             console.error(err);
                             callback(err);
                             return;
                         }
+
+                        console.log("Inserted genres of albums of songs of " + mainRdfSubject);
                         callback(null, albums, Array.from(allGenres));
                     });
                 },
@@ -1034,7 +992,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(genresStatements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted genre info for " + genre);
+                                        // console.log("Inserted genre info for " + genre);
                                     })
                                     .catch(err => {
                                         console.log(err);
@@ -1051,6 +1009,7 @@ class MuserPopulater {
                             callback(err);
                         }
                     });
+                    console.log("Inserted genres info of albums of songs of "+mainRdfSubject);
                     callback(null, albums);
                 },
                 /*
@@ -1096,7 +1055,7 @@ class MuserPopulater {
                                 this.graphdbMuserService.getQueryInsert(statements)
                                     .execute()
                                     .then(response => {
-                                        console.log("Inserted artists for album " + album);
+                                        // console.log("Inserted artists for album " + album);
                                     })
                                     .catch(err => {
                                         console.error(err);
@@ -1124,52 +1083,12 @@ class MuserPopulater {
                                     });
                                 }
                             });
-
+                        
+                        console.log("Inserted artists of albums of songs of " + mainRdfSubject);
                         callback(null);
                     });
                 },
-                /**
-                 * Function retrieves all the info about the artists
-                 */
-                // (artists, callback) => {
-                //     async.each(artists, (artistEntity, eachArtistCallback) => {
-                //         this.getArtistInfo(artistEntity)
-                //             .then(({
-                //                 statements,
-                //                 results,
-                //                 isBand
-                //             }) => {
-                //                 const albumArtist = this.getMuserEntityFromDBPediaEntity(artistEntity);
-
-                //                 statements.push([{
-                //                     s: albumArtist,
-                //                     p: 'rdf:type',
-                //                     o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
-                //                 }]);
-
-                //                 this.graphdbMuserService.getQueryInsert(statements)
-                //                     .execute()
-                //                     .then(response => {
-                //                         console.log("Inserted artist info for " + artistEntity);
-                //                     })
-                //                     .catch(err => {
-                //                         console.error(err);
-                //                         eachArtistCallback(err);
-                //                     });
-
-                //                 eachArtistCallback(null);
-                //             })
-                //             .catch((err) => {
-                //                 eachArtistCallback(err);
-                //             });
-                //     }, (err) => {
-                //         if (err) {
-                //             console.error(err);
-                //             callback(err);
-                //         }
-                //     });
-                //     callback(null);
-                // },
+        
                 /**
                  * Function retrieves all the related artist of the main RDF Subject ("The Artist")
                  * Function returns all the artists that are related with the main RDF Subject ("The Artist")
@@ -1179,7 +1098,7 @@ class MuserPopulater {
                         .then(({
                             statements,
                             associatedArtists
-                        }) => {
+                        }) => {                
                             if (statements.length == 0) {
                                 callback(null);
                                 return;
@@ -1235,63 +1154,7 @@ class MuserPopulater {
                             }
                         });
                 },
-                /**
-                 * Function retrieves info about each related artist of the main RDF Subject ("The Artist")
-                 * 
-                 */
-                // (artists, callback) => {
-                //     async.each(artists, (relatedArtist, eachArtistCallback) => {
-                //         this.getArtistInfo(relatedArtist)
-                //             .then(({
-                //                 statements,
-                //                 results,
-                //                 isBand
-                //             }) => {
-                //                 relatedArtist = this.getMuserEntityFromDBPediaEntity(relatedArtist);
-                //                 statements.push([{
-                //                     s: relatedArtist,
-                //                     p: "rdf:type",
-                //                     o: isBand ? MAPS.varToEntity.band.entity : MAPS.varToEntity.artist.entity,
-                //                 }]);
 
-                //                 statements.forEach(localStatement => {
-                //                     localStatement.forEach(statement => {
-                //                         Object.keys(statement).forEach(key => {
-                //                             let value = statement[key];
-                //                             if (!value.startsWith("\"") && !value.startsWith("\'")) {
-                //                                 value = value.replace(/["'\\]/g, "_");
-                //                             }
-                //                             statement[key] = value;
-                //                         });
-                //                     });
-                //                 });
-
-                //                 this.graphdbMuserService.getQueryInsert(statements)
-                //                     .execute()
-                //                     .then(response => {
-                //                         console.log("Inserted related artist info for " + relatedArtist);
-                //                     })
-                //                     .catch(err => {
-                //                         console.error(err);
-                //                         eachArtistCallback(err);
-                //                     });
-
-                //                 eachArtistCallback(null);
-                //             })
-                //             .catch((err) => {
-                //                 console.error(err);
-                //                 eachArtistCallback(err);
-                //             });
-                //     }, (err) => {
-                //         if (err) {
-                //             console.error(err);
-                //             callback(err);
-                //             return;
-                //         }
-                //     });
-
-                //     // callback(null);
-                // },
                 // # end region
                 (callback) => {
                     resolve(relatedArtists);
@@ -1329,16 +1192,9 @@ function populateRelatedArtists(relatedArtists) {
     });
 }
 
-
-let artist1 = '<http://dbpedia.org/resource/Cashis>';
-let artist2 = '<http://dbpedia.org/resource/Eminem>';
-let artist3 = '<http://dbpedia.org/resource/Queen_(band)>';
-let artist4 = '<http://dbpedia.org/resource/Rage_Against_the_Machine>';
-let artist5 = '<http://dbpedia.org/resource/Phil_Collins>'
-
 mp = new MuserPopulater();
 
-mp.populate(artist2)
+mp.populate(`<${process.argv[2]}>`)
     .then(relatedArtists => {
         populateRelatedArtists(relatedArtists);
     })

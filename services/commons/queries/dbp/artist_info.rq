@@ -17,7 +17,7 @@ SELECT  ?entity ?sameWd ?type ?label ?name ?firstName ?lastName ?birthDate ?birt
           OPTIONAL { ?entity owl:sameAs               ?sameWd }
           
   		    FILTER (?entity = ${dbpInstance})
-          FILTER (?type IN (dbo:MusicalArtist, dbo:Band))
+          FILTER (?type IN (dbo:MusicalArtist, dbo:Band, umbel-rc:MusicalPerformer))
           FILTER (regex(?sameWd, "wikidata.org/entity"))
           FILTER (lang(?label) = "en")
   		    FILTER (lang(?name) = "en")

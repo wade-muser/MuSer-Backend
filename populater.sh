@@ -8,7 +8,7 @@ do
 		  xargs node ./services/commons/muser_populater.js
 	echo "Sleeping 10s ..."
 	sleep 10
-	echo "Finished ##################" "$line" "\n"
+	echo "Finished ################## " "$line"
 done < "$1"
 
 

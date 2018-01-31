@@ -1,0 +1,9 @@
+SELECT ?entity ?name ?imageURL WHERE{
+    ?artist muser:performs ?entity.
+    ?entity rdf:type ?type;
+            muser:name ?name;
+            muser:imageURL ?imageURL.
+        
+    FILTER(?artist = {{=it.artist}})
+    FILTER(?type = muser:Song)
+}

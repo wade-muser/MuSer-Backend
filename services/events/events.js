@@ -6,14 +6,15 @@ const eventsService = new EventsService();
 
 module.exports.getEvents = (event, context, callback) => {
     console.log(event);
-    const queryStringIsInvalid = !event.queryStringParameters || event.queryStringParameters.keyword || event.queryStringParameters.type;
+    const queryStringIsInvalid = !event.queryStringParameters || !event.queryStringParameters.keyword || !event.queryStringParameters.type;
     if (queryStringIsInvalid) {
+        console.log("Invalid request");
         const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
             .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
             .body({
                 message: "Parameters weren't provided"
             })
-            .build()
+            .build()    
             .getLambdaResponse();
 
         console.log("[EVENTS] Response:", AWSLambdaResponse);

@@ -6,4 +6,4 @@ SELECT ?entity ?name ?artistName WHERE{
     FILTER NOT EXISTS{
         ?entity muser:idSpotify ?idSpotify.
     }
-}
+} LIMIT 200

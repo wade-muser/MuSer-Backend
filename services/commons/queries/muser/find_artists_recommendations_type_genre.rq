@@ -1,11 +1,9 @@
-SELECT DISTINCT ?entity ?name ?imageURL where { 
-	?entity muser:hasMusicalGenre ?artistGenre.
-    ?artistGenre muser:embracedBy ?relatedArtist.
-    ?entity rdf:type muser:MusicalArtist.
+SELECT DISTINCT ?entity ?name ?imageURL  WHERE{
+    ?artist muser:hasMusicalGenre ?genre.
+    ?genre muser:embracedBy ?entity.
     ?entity muser:name ?name;
-            muser:imageURL ?imageURL.
-    
-    
-    FILTER (?entity = {{=it.artist}})
-    FILTER (?entity !={{=it.artist}})
-} limit 100 
+            rdf:type muser:MusicalAgent;
+            muser:imageURL ?imageURL
+    FILTER(?artist = {{=it.artist}} )
+    FILTER(?entity != {{=it.artist}} )
+} ORDER BY RAND() LIMIT 20

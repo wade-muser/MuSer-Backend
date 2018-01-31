@@ -1,17 +1,19 @@
-select DISTINCT ?entity ?name ?releasedBy ?imageURL where {
-     ?album rdf:type ?type;
-             muser:releasedBy ?releasedBy.
-    ?releasedBy muser:released ?entity .
-    
+select DISTINCT ?entity ?name ?imageURL ?performer ?performerName where {
+    ?album rdf:type ?type;
+           muser:releasedBy ?performer.
+    ?performer muser:released ?entity .
     ?entity rdf:type ?type;
-             muser:name ?name;
-             muser:releasedBy ?releasedBy.
-             
-  OPTIONAL {?entity muser:imageURL ?imageURL}
+            muser:name ?name;
+            muser:releasedBy ?performer.
+    ?performer muser:name ?performerName.
+    OPTIONAL {
+        ?perfomer muser:imageURL ?performerImageURL
+    }
+    OPTIONAL {
+        ?entity muser:imageURL ?imageURL
+    }
 
     FILTER(?type=muser:Album)            
     FILTER(?album = {{=it.id}} )
     FILTER(?entity != ?album)
-
-
 } limit 100

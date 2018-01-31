@@ -1,38 +1,48 @@
 Populater:                                                            cag@
-    - Get band's compositions' info ONLY about artists
-    - Run Populater on base data list (checking done on run - malformed queries, weird symbols etc.)
+    - Get band's compositions' info ONLY about artists //DONE
+    - Run Populater on base data list (checking done on run - malformed queries, weird symbols etc.) //DONE
 
 Muser microservices:
     - Auth                                                            cag@
         - to be fixed
     - Artists       
-        - /artists (?name=)                                           llc@ (V)
-        - /artists/{id} (the name of the entity without prefix)       cds@ (V)
-        - /artists/{id}/features (directly from RDF repository relationships) cds@ (V)
-        - /artists/{id}/recommendations (?songs, ?albums, ?genres)    llc@ (V)
+        - /artists (?name=)                                           llc@ //DONE
+        - /artists/{id} (the name of the entity without prefix)       cds@ //DONE
+        - /artists/{id}/features (directly from RDF repository relationships) cds@ //DONE
+        - /artists/{id}/recommendations (?songs, ?albums, ?genres)    llc@ //DONE
                 - for a song of an artist, we do not have the other performers
 
     - Songs
-        - /songs (?name=)                                             llc@ (V)
-        - /songs/{id} (the name of the entity without prefix)         cds@ (V)
-        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists) llc@ (V)
+        - /songs (?name=)                                             llc@ //DONE
+        - /songs/{id} (the name of the entity without prefix)         cds@ //DONE
+        - /songs/{id}/recommendations (?artist, ?album, ?genre, ?relatedArtists) llc@ //DONE
     - Albums
-        - /albums (?name=)                                            llc@ (V)
-        - /albums/{id} (the name of the entity without prefix)        cds@ (V)
+        - /albums (?name=)                                            llc@ //DONE
+        - /albums/{id} (the name of the entity without prefix)        cds@ //DONE
         - /albums/{id}/recommendations (?artist, ?year + genre, ?genre, ?relatedArtists) cds@
     - Event -                                                        
-        - /events (?name, ?artist, ?country, ?city, ?place)           llc@ (V)
-        - /events/{id}                                                llc@ (V)
+        - /events (?name, ?artist, ?country, ?city, ?place)           llc@ //DONE
+        - /events/{id}                                                llc@ //DONE
     - Genre
-        - /genres                                                     llc@ (V)
-        - /genres/{id}                                                cds@ (V)
+        - /genres                                                     llc@ //DONE
+        - /genres/{id}                                                cds@ //DONE
         - /genres/{id}/related
         - /genres/{id}/timeline
 
     - PlaylistManager
-        - /playlists/{id}?/      * CRUD
-        - /playlists/{id}/songs
-        * SMART generation: 'keyword artists', already created playlists
+        - CRUD         cag@
+            - POST     playlists
+            - GET      playlists
+            - GET      playlists/{id}
+            - PATCH    playlists/{id}
+            - DELETE   playlists/{id}
+
+            - POST     playlists/{id}/songs
+            - GET      playlists/{id}/songs
+            - PUT      playlists/{id}/songs
+            - DELETE   playlists/{id}/songs/{id}
+
+        - SMART generation: 'keyword artists', already created playlists, history?
 
     
 

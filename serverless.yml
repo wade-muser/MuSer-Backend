@@ -198,7 +198,88 @@ functions:
           cors: true
           # authorizer: authorizer
 
+  ### PlayList ###
+  createPlaylist:
+    handler: services/playlists/playlists.createPlaylist
+    events:
+      - http:
+          path: playlists
+          method: post
+          cors: true
+          # authorizer: authorizer
+  
+  getPlaylists:
+    handler: services/playlists/playlists.getPlaylists
+    events:
+      - http:
+          path: playlists
+          method: get
+          cors: true
+          # authorizer: authorizer
 
+  getPlaylist:
+    handler: services/playlists/playlists.getPlaylist
+    events:
+      - http:
+          path: playlists/{id}
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  updatePlaylist:
+    handler: services/playlists/playlists.updatePlaylist
+    events:
+      - http:
+          path: playlists/{id}
+          method: patch
+          cors: true
+          # authorizer: authorizer
+
+  deletePlaylist:
+    handler: services/playlists/playlists.deletePlaylist
+    events:
+      - http:
+          path: playlists/{id}
+          method: delete
+          cors: true
+          # authorizer: authorizer
+
+  # PlaylistSongs #
+  insertPlaylistSong:
+    handler: services/playlists/playlists.insertPlaylistSong
+    events:
+      - http:
+          path: playlists/{id}/songs
+          method: post
+          cors: true
+          # authorizer: authorizer
+
+  getPlaylistSongs:
+    handler: services/playlists/playlists.getPlaylistSongs
+    events:
+      - http:
+          path: playlists/{id}/songs
+          method: get
+          cors: true
+          # authorizer: authorizer
+
+  updatePlaylistSongs:
+    handler: services/playlists/playlists.updatePlaylistSongs
+    events:
+      - http:
+          path: playlists/{id}/songs
+          method: put
+          cors: true
+          # authorizer: authorizer
+
+  deletePlaylistSong:
+    handler: services/playlists/playlists.deletePlaylistSong
+    events:
+      - http:
+          path: playlists/{id}/songs/{id}
+          method: delete
+          cors: true
+          # authorizer: authorizer
 
   cronjob:
     handler: functions/cron/job.handler

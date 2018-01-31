@@ -7,8 +7,9 @@ select DISTINCT ?entity ?name ?releasedBy ?imageURL ?date where {
             muser:name ?name;
             muser:hasMusicalGenre ?genre;
             muser:releaseDate ?date;
-            muser:releasedBy ?releasedBy;
-            muser:imageURL ?imageURL.
+            muser:releasedBy ?releasedBy.
+
+    OPTIONAL {?entity muser:imageURL ?imageURL}
             
     FILTER(?type=muser:Album)            
     FILTER(?album = {{=it.id}} )

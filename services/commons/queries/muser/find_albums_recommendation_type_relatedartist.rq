@@ -4,8 +4,8 @@ select DISTINCT ?entity ?name  ?relatedArtist ?imageURL where {
     ?artist muser:relatedMusicalAgent ?relatedArtist.
     ?entity rdf:type ?type;
             muser:name ?name;
-            muser:releasedBy ?relatedArtist;
-            muser:imageURL ?imageURL.
+            muser:releasedBy ?relatedArtist.
+    OPTIONAL {?entity muser:imageURL ?imageURL}
     FILTER(?type=muser:Album)            
     FILTER(?album = {{=it.id}} )
     FILTER(?entity != ?album)

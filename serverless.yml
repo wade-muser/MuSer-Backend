@@ -226,15 +226,6 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  updatePlaylist:
-    handler: services/playlists/playlists.updatePlaylist
-    events:
-      - http:
-          path: playlists/{id}
-          method: patch
-          cors: true
-          # authorizer: authorizer
-
   deletePlaylist:
     handler: services/playlists/playlists.deletePlaylist
     events:

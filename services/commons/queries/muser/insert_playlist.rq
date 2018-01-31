@@ -1,0 +1,7 @@
+INSERT DATA {
+    muser:{{=it.entity}}    rdf:type          muser:MusicalPlaylist ;
+                            muser:uuid        "{{=it.uuid}}"^^xsd:string ;
+                            muser:name        "{{=it.name}}"^^xsd:string ;
+                            muser:dateCreated "{{=it.dateCreated}}"^^xsd:date ;
+                            muser:uuidCreator "{{=it.uuidCreator}}"^^xsd:string .
+}

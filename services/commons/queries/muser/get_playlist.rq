@@ -1,0 +1,12 @@
+SELECT ?entity ?uuid ?uuidCreator ?name ?dateCreated ?duration WHERE {
+    ?entity         rdf:type           ?type ;
+                    muser:uuid         ?uuid ;
+                    muser:name         ?name ;
+                    muser:uuidCreator  ?uuidCreator ;
+                    muser:dateCreated  ?dateCreated .
+    
+    OPTIONAL { ?entity muser:duration ?duration }
+
+    FILTER (?type = muser:MusicalPlaylist)
+    FILTER (?entity = {{=it.id}})
+}

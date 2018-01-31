@@ -11,6 +11,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "aws-sdk": "^2.168.0",
+    "dateformat": "^3.0.2",
     "dot": "^1.1.2",
     "dotenv": "^4.0.0",
     "escape-diacritics": "^1.1.1",
@@ -19,6 +20,7 @@
     "songkick-api-node": "^1.0.2",
     "sparql-client-2": "^0.6.2",
     "spotify-web-api-node": "^2.5.0",
-    "sqs-consumer": "^3.8.0"
+    "sqs-consumer": "^3.8.0",
+    "uuid": "^3.2.1"
   }
 }

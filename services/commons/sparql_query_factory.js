@@ -43,6 +43,11 @@ const find_albums_recommendation_type_sameyearandgenre = fs.readFileSync("servic
 const find_albums_recommendation_type_samegenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_samegenre.rq", "utf-8");
 const find_albums_recommendation_type_relatedartist = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_relatedartist.rq", "utf-8");
 
+const insert_playlist = fs.readFileSync("services/commons/queries/muser/insert_playlist.rq", "utf-8");
+const get_playlists = fs.readFileSync("services/commons/queries/muser/get_playlists.rq", "utf-8");
+const get_playlist = fs.readFileSync("services/commons/queries/muser/get_playlist.rq", "utf-8");
+const delete_playlist = fs.readFileSync("services/commons/queries/muser/delete_playlist.rq", "utf-8");
+
 const QUERY = {
     GENRE_INFO: 0,
     GENRES_FOR_ENTITY: 1,
@@ -83,6 +88,11 @@ const QUERY = {
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEYEARANDGENRE: 25,
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEGENRE: 26,
     FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST: 27,
+
+    INSERT_PLAYLIST: 100,
+    GET_PLAYLISTS: 101,
+    GET_PLAYLIST: 102,
+    DELETE_PLAYLIST: 103,
 };
 
 function stringTemplate(literal, params = "") {
@@ -246,6 +256,22 @@ class QueryFactory {
         return QUERY.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST;
     }
 
+    static get INSERT_PLAYLIST() {
+        return QUERY.INSERT_PLAYLIST;
+    }
+
+    static get GET_PLAYLISTS() {
+        return QUERY.GET_PLAYLISTS;
+    }
+
+    static get GET_PLAYLIST() {
+        return QUERY.GET_PLAYLIST;
+    }
+
+    static get DELETE_PLAYLIST() {
+        return QUERY.DELETE_PLAYLIST;
+    }
+
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
             case QueryFactory.GENRE_INFO:
@@ -323,7 +349,15 @@ class QueryFactory {
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_SAMEGENRE:
                 return this.buildQuery2(find_albums_recommendation_type_samegenre, entityValue);
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST:
-                return this.buildQuery2(find_albums_recommendation_type_relatedartist, entityValue);    
+                return this.buildQuery2(find_albums_recommendation_type_relatedartist, entityValue);
+            case QueryFactory.INSERT_PLAYLIST:
+                return this.buildQuery2(insert_playlist, entityValue);
+            case QueryFactory.GET_PLAYLISTS:
+                return this.buildQuery2(get_playlists, entityValue);
+            case QueryFactory.GET_PLAYLIST:
+                return this.buildQuery2(get_playlist, entityValue);
+            case QueryFactory.DELETE_PLAYLIST:
+                return this.buildQuery2(delete_playlist, entityValue);
         }
     }
 

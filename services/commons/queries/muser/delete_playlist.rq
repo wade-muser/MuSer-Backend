@@ -1,0 +1,8 @@
+DELETE { ?s ?p {{=it.id}} } WHERE { 
+    ?s ?p {{=it.id}} .
+    {{=it.id}} rdf:type muser:MusicalPlaylist .
+} ;
+DELETE { {{=it.id}} ?p ?o } WHERE { 
+    {{=it.id}} ?p ?o .
+    {{=it.id}} rdf:type muser:MusicalPlaylist .
+}

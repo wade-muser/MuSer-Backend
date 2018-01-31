@@ -1,0 +1,9 @@
+SELECT ?entity ?name ?dateCreated WHERE {
+    ?entity     rdf:type           ?type ;
+                muser:name         ?name ;
+                muser:uuidCreator  ?uuidCreator ;
+                muser:dateCreated  ?dateCreated .
+
+    FILTER(?type = muser:MusicalPlaylist)
+    FILTER(?uuidCreator = "{{=it.uuidCreator}}")
+}

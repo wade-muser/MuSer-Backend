@@ -1,4 +1,4 @@
-const normalizeSync = require("escape-diacritics")
+const normalizeSync = require("escape-diacritics");
 const async = require('async');
 
 const SongKickService = require("./songkick_service");

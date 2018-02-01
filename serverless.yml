@@ -23,6 +23,7 @@ provider:
   memorySize: 128
   stage : dev
   region: eu-west-1
+  timeout: 20
 
 functions:
   authorizer:
@@ -197,15 +198,15 @@ functions:
           # authorizer: authorizer
 
 
-  # ### Event ###
-  # getEvents:
-  #   handler: services/events/events.getEvents
-  #   events:
-  #     - http:
-  #         path: events
-  #         method: get
-  #         cors: true
-  #         # authorizer: authorizer
+  ### Event ###
+  getEvents:
+    handler: services/events/events.getEvents
+    events:
+      - http:
+          path: events
+          method: get
+          cors: true
+          # authorizer: authorizer
 
   # getEvent:
   #   handler: services/events/events.getEvent
@@ -255,6 +256,7 @@ functions:
 
   smartGeneration:
     handler: services/playlists/playlists.smartGeneration
+    timeout: 60
     events:
       - http:
           path: playlists/smartgens
@@ -293,12 +295,12 @@ functions:
 
 
 
-  cronjob:
-    handler: functions/cron/job.handler
-    events:
-      - schedule:
-            rate: cron(45 10 * * ? *)
-            enabled: true
+  # cronjob:
+  #   handler: functions/cron/job.handler
+  #   events:
+  #     - schedule:
+  #           rate: cron(45 10 * * ? *)
+  #           enabled: true
 
   test:
     handler: functions/test/test.handler

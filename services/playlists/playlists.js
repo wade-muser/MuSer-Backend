@@ -430,15 +430,16 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
             .build()
             .getLambdaResponse();
 
-            console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
+        console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
         mainCallback(null, AWSLambdaResponse);
         return;
     }
 
+    event.body = JSON.parse(event.body);
     const artists = event.body.artists;
     const emailCreator = event.body.emailCreator;
-    
-    
+
+
     async.waterfall([
         // get songs of all keywords-artists
         (callback) => {
@@ -446,7 +447,7 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                 artistsService.getArtistSongs(artist)
                     .then(res => {
                         Object.keys(res).forEach(songEntity => {
-                            res[songEntity].artist = [ artist ];
+                            res[songEntity].artist = [artist];
                         });
 
                         eachArtistCallback(null, res);
@@ -454,7 +455,7 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                     .catch(err => {
                         console.error(err);
                         eachArtistCallback(err);
-                    })
+                    });
             }, (err, allSongsList) => {
                 if (err) {
                     console.log(err);
@@ -468,13 +469,13 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                         if (allArtistsSongs[songEntity] === undefined) {
                             allArtistsSongs[songEntity] = songsDict[songEntity];
                         }
-                    })
+                    });
                 });
 
                 callback(null, allArtistsSongs);
             }); // async.map
         },
-        
+
         // get all playlists of user
         (songs1, callback) => {
             playlistsService.getPlaylists(emailCreator)
@@ -483,7 +484,7 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                     Object.keys(res).forEach(fullPlaylistEntity => {
                         playlists.push(fullPlaylistEntity.split("#")[1]);
                     });
-                    
+
                     callback(null, songs1, playlists);
                 })
                 .catch(err => {
@@ -504,7 +505,7 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                         console.error(err);
                         callback(err);
                         return;
-                    })
+                    });
             }, (err, allSongsList) => {
                 if (err) {
                     console.error(err);
@@ -517,7 +518,7 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                         if (allArtistsSongs[songEntity] === undefined) {
                             allArtistsSongs[songEntity] = songsDict[songEntity];
                         }
-                    })
+                    });
                 });
 
                 callback(null, songs1, allArtistsSongs);
@@ -531,17 +532,17 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                 shortNameSongs.push(song.split("#")[1]);
             });
 
-           async.map(shortNameSongs, (song, eachSongCallback) => {
-               songsService.getSongRecommendations(song, "artist")
-                .then(res => {
-                    eachSongCallback(null, res);
-                })
-                .catch(err => {
-                    console.error(err);
-                    eachSongCallback(err);
-                    return;
-                })
-           }, (err, allSongsList) => {
+            async.map(shortNameSongs, (song, eachSongCallback) => {
+                songsService.getSongRecommendations(song, "artist")
+                    .then(res => {
+                        eachSongCallback(null, res);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        eachSongCallback(err);
+                        return;
+                    });
+            }, (err, allSongsList) => {
                 if (err) {
                     console.error(err);
                     callback(err);
@@ -553,18 +554,18 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
                         if (allArtistsSongs[songEntity] === undefined) {
                             allArtistsSongs[songEntity] = songsDict[songEntity];
                         }
-                    })
+                    });
                 });
 
                 callback(null, songs1, allArtistsSongs);
-           });
+            });
         },
 
         // randomize and minimize
         (songs1, songs2, callback) => {
             let results = Object.assign({}, songs1, songs2);
             const songs = shuffle(Object.keys(results));
-            
+
             const randomResults = {};
             for (let i = 0; i < 15 && i < songs.length; i++) {
                 randomResults[songs[i]] = results[songs[i]];
@@ -575,18 +576,18 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
     ], (err, results) => {
         if (err) {
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
-            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
-            .body({
-                message: "Body wasn't provided"
-            })
-            .build()
-            .getLambdaResponse();
+                .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+                .body({
+                    message: "Body wasn't provided"
+                })
+                .build()
+                .getLambdaResponse();
 
             console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
             mainCallback(null, AWSLambdaResponse);
             return;
         }
-    
+
         const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
             .statusCode(HTTP_STATUS_CODES.OK)
             .body({
@@ -595,8 +596,8 @@ module.exports.smartGeneration = (event, context, mainCallback) => {
             .build()
             .getLambdaResponse();
 
-            console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
-            mainCallback(null, AWSLambdaResponse);
+        console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
+        mainCallback(null, AWSLambdaResponse);
     });
 };
 

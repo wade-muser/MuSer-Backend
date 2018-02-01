@@ -1,13 +1,16 @@
-select DISTINCT ?entity ?name  ?relatedArtist ?imageURL where {
+select DISTINCT ?entity ?name ?imageURL ?performer ?performerName ?performerImageURL where {
     ?album rdf:type ?type;
            muser:releasedBy ?artist .
-    ?artist muser:relatedMusicalAgent ?relatedArtist.
+    ?artist muser:relatedMusicalAgent ?performer.
     ?entity rdf:type ?type;
             muser:name ?name;
-            muser:releasedBy ?relatedArtist.
+            muser:releasedBy ?performer.
+   ?performer muser:name ?performerName
+    OPTIONAL{?performer muser:imageURL ?performerImageURL}
+   
     OPTIONAL {?entity muser:imageURL ?imageURL}
     FILTER(?type=muser:Album)            
     FILTER(?album = {{=it.id}} )
     FILTER(?entity != ?album)
-    FILTER(?artist!=?relatedArtist)
-} limit 100
+    FILTER(?artist!=?performer)
+} ORDER BY RAND() LIMIT 10

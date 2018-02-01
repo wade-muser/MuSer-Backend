@@ -44,6 +44,11 @@ const find_albums_recommendation_type_sameartist = fs.readFileSync("services/com
 const find_albums_recommendation_type_sameyearandgenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_sameyearandgenre.rq", "utf-8");
 const find_albums_recommendation_type_samegenre = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_samegenre.rq", "utf-8");
 const find_albums_recommendation_type_relatedartist = fs.readFileSync("services/commons/queries/muser/find_albums_recommendation_type_relatedartist.rq", "utf-8");
+const find_genre_related = fs.readFileSync("services/commons/queries/muser/find_genre_related.rq","utf-8");
+const find_genre_timeline_artists = fs.readFileSync("services/commons/queries/muser/find_genre_timeline_artists.rq","utf-8");
+const find_genre_timeline_albums = fs.readFileSync("services/commons/queries/muser/find_genre_timeline_albums.rq","utf-8");
+
+
 
 const insert_playlist = fs.readFileSync("services/commons/queries/muser/insert_playlist.rq", "utf-8");
 const get_playlists = fs.readFileSync("services/commons/queries/muser/get_playlists.rq", "utf-8");
@@ -95,6 +100,9 @@ const QUERY = {
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEYEARANDGENRE: 25,
     FIND_ALBUM_RECOMMENDATION_TYPE_SAMEGENRE: 26,
     FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST: 27,
+    FIND_GENRE_RELATED: 28,
+    FIND_GENRE_TIMELINE_ARTIST: 29,
+    FIND_GENRE_TIMELINE_ALBUM: 30,
 
     INSERT_PLAYLIST: 100,
     GET_PLAYLISTS: 101,
@@ -266,6 +274,18 @@ class QueryFactory {
         return QUERY.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST;
     }
 
+    static get FIND_GENRE_RELATED() {
+        return QUERY.FIND_GENRE_RELATED;
+    }
+
+    static get FIND_GENRE_TIMELINE_ARTIST() {
+        return QUERY.FIND_GENRE_TIMELINE_ARTIST;
+    }
+
+    static get FIND_GENRE_TIMELINE_ALBUM() {
+        return QUERY.FIND_GENRE_TIMELINE_ALBUM;
+    }
+
     static get FIND_ALBUMS_FOR_ARTIST() {
         return QUERY.FIND_ALBUMS_FOR_ARTIST;
     }
@@ -274,6 +294,7 @@ class QueryFactory {
         return QUERY.FIND_ARTIST_SONGS;
     }
 
+    
     static get INSERT_PLAYLIST() {
         return QUERY.INSERT_PLAYLIST;
     }
@@ -384,6 +405,12 @@ class QueryFactory {
                 return this.buildQuery2(find_albums_for_artist, entityValue);
             case QueryFactory.FIND_ARTIST_SONGS:
                 return this.buildQuery2(find_artist_songs, entityValue);
+            case QueryFactory.FIND_GENRE_RELATED:
+                return this.buildQuery2(find_genre_related, entityValue);
+            case QueryFactory.FIND_GENRE_TIMELINE_ARTIST:
+                return this.buildQuery2(find_genre_timeline_artists, entityValue);
+            case QueryFactory.FIND_GENRE_TIMELINE_ALBUM:
+                return this.buildQuery2(find_genre_timeline_albums, entityValue);
 
             case QueryFactory.INSERT_PLAYLIST:
                 return this.buildQuery2(insert_playlist, entityValue);

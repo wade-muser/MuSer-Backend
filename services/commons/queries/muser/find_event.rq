@@ -10,4 +10,5 @@ select ?entity ?label ?name ?eventPlace ?eventCity ?eventCountry ?performers ?st
 
     OPTIONAL {?entity muser:endDate ?endDate}
     FILTER   (?entity = {{=it.event}} )
-}
+} ORDER BY ?startDate ASC(?startDate)
+LIMIT 10

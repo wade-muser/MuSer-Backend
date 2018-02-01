@@ -1,0 +1,17 @@
+select  ?entity ?name ?inceptionDate ?retiringDate where {
+    ?genre rdf:type ?type;
+           muser:embracedBy ?entity.
+    ?entity  rdf:type ?entityType;
+             muser:name ?name ;
+             muser:inceptionDate ?inceptionDate.
+    
+    OPTIONAL {
+        ?entity muser:retiringDate ?retiringDate
+        FILTER((STR(YEAR(?retiringDate))) < "{{=it.end_date}}" )
+    }
+    FILTER(?type=muser:MusicalGenre)         
+    FILTER(?entityType=(muser:MusicalArtist))
+    FILTER(?genre = {{=it.id}} )
+    FILTER((STR(YEAR(?inceptionDate))) > "{{=it.start_date}}" )
+
+} limit 100

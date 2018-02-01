@@ -1,0 +1,10 @@
+select ?entity ?name ?about where {
+     ?genre rdf:type ?type;
+			muser:relatedMusicalGenre ?entity.
+    ?entity  muser:name ?name.
+	
+    OPTIONAL {?entity muser:about ?about}
+    FILTER(?type=muser:MusicalGenre)            
+    FILTER(?genre = {{=it.id}} )
+
+} limit 100

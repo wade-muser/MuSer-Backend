@@ -1,10 +1,11 @@
-select * where { 
-	?song rdf:type muser:Song;
-       	  muser:performedBy ?performer.
-   ?performer muser:performs ?entity.
-   ?entity muser:name ?songName;
-           muser:imageURL ?imageURL.
-    
-	FILTER(?song = {{=it.song}})    
+select DISTINCT ?entity ?name ?imageURL ?performer ?performerName ?performerImageURL where {
+    ?song rdf:type muser:Song;
+          muser:performedBy ?performer.
+    ?performer muser:performs ?entity;
+               muser:name ?performerName;
+               muser:imageURL ?performerImageURL.
+    ?entity muser:name ?name;
+            muser:imageURL ?imageURL.
+    FILTER(?song = {{=it.song}})    
     FILTER(?entity != ?song)
-} limit 100 
+} ORDER BY RAND() LIMIT 20

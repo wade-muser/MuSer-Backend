@@ -1,7 +1,4 @@
-const {
-    normalize,
-    normalizeSync
-} = require('normalize-diacritics');
+const normalizeSync = require("escape-diacritics")
 const async = require('async');
 
 const SongKickService = require("./songkick_service");
@@ -42,7 +39,7 @@ class MuserSongkickPopulator {
                         console.log("Retrieved artists:" + Object.keys(artists).length);
                         const results = {};
 
-                        async.each(Object.keys(artists),
+                        async.eachLimit(Object.keys(artists), 5,
                             (artist, eachArtistCallback) => {
                                 const artistName = artists[artist].name[0];
                                 console.log(`Retrieve artist id for:${artistName}`);
@@ -59,7 +56,7 @@ class MuserSongkickPopulator {
                                     })
                                     .catch(err => {
                                         console.error(err);
-                                        eachArtistCallback(err);
+                                        eachArtistCallback(null);
                                     });
 
                             },

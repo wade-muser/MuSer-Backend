@@ -33,6 +33,8 @@ class PlaylistsService {
                 return;
             }
 
+            let createdEntity;
+
             async.waterfall([
                 (callback) => {
                     const uuidPlaylist = uuidv1();
@@ -42,9 +44,10 @@ class PlaylistsService {
                         name: name,
                         uuidCreator: uuidCreator,
                         uuid: uuidPlaylist,
-                        entity: `Playlist_${uuidPlaylist}`,
+                        entity: this.getMuserEntity(`Playlist_${uuidPlaylist}`),
                         dateCreated: dateformat(new Date(), "yyyy-mm-dd"),
                     };
+                    createdEntity = values.entity.substring(1, values.entity - 1);
 
                     console.log(values);
 
@@ -73,7 +76,7 @@ class PlaylistsService {
                     return;
                 }
 
-                resolve();
+                resolve(createdEntity);
             });
         };
 
@@ -136,8 +139,9 @@ class PlaylistsService {
             async.waterfall([
                 (callback) => {
                     const query = this.queryFactory.getQuery(
-                        SparqlQueryFactory.GET_PLAYLIST,
-                        { id: this.getMuserEntity(id) }
+                        SparqlQueryFactory.GET_PLAYLIST, {
+                            id: this.getMuserEntity(id)
+                        }
                     );
 
                     callback(null, query);
@@ -179,8 +183,9 @@ class PlaylistsService {
             async.waterfall([
                 (callback) => {
                     const query = this.queryFactory.getQuery(
-                        SparqlQueryFactory.DELETE_PLAYLIST,
-                        { id : this.getMuserEntity(id) }
+                        SparqlQueryFactory.DELETE_PLAYLIST, {
+                            id: this.getMuserEntity(id)
+                        }
                     );
 
                     callback(null, query);
@@ -229,13 +234,12 @@ class PlaylistsService {
             async.waterfall([
                 (callback) => {
                     const query = this.queryFactory.getQuery(
-                        SparqlQueryFactory.INSERT_PLAYLIST_SONG, 
-                        { 
-                            id:     this.getMuserEntity(id),
+                        SparqlQueryFactory.INSERT_PLAYLIST_SONG, {
+                            id: this.getMuserEntity(id),
                             idSong: this.getMuserEntity(idSong),
                         }
                     );
-                    
+
                     callback(null, query);
                 },
 
@@ -276,8 +280,9 @@ class PlaylistsService {
             async.waterfall([
                 (callback) => {
                     const query = this.queryFactory.getQuery(
-                        SparqlQueryFactory.GET_PLAYLIST_SONGS,
-                        { id: this.getMuserEntity(id) }
+                        SparqlQueryFactory.GET_PLAYLIST_SONGS, {
+                            id: this.getMuserEntity(id)
+                        }
                     );
 
                     callback(null, query);
@@ -325,9 +330,8 @@ class PlaylistsService {
             async.waterfall([
                 (callback) => {
                     const query = this.queryFactory.getQuery(
-                        SparqlQueryFactory.DELETE_PLAYLIST_SONG,
-                        { 
-                            id:     this.getMuserEntity(id),
+                        SparqlQueryFactory.DELETE_PLAYLIST_SONG, {
+                            id: this.getMuserEntity(id),
                             idSong: this.getMuserEntity(idSong),
                         }
                     );

@@ -1,6 +1,10 @@
-SELECT ?entity WHERE { 
+SELECT ?entity ?name ?imageURL ?performer ?performerName ?performerImageURL WHERE {  
 	{{=it.id}}   rdf:type   muser:MusicalPlaylist ;
-                 muser:has  ?entity .
-    
-    ?entity 	     rdf:type   muser:Song .
+                 muser:has  ?entity.
+    ?entity      muser:name ?name;
+                 muser:imageURL ?imageURL;
+                 rdf:type   muser:Song;
+                 muser:performedBy ?performer.
+    ?performer muser:name ?performerName;
+               muser:imageURL ?performerImageURL.
 }

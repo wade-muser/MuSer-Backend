@@ -215,6 +215,7 @@ module.exports.insertPlaylistSong = (event, context, mainCallback) => {
         return;
     }
 
+    event.body = JSON.parse(event.body);
     const id = event.pathParameters.id;
     const idSong = event.body.idSong;
 
@@ -222,11 +223,11 @@ module.exports.insertPlaylistSong = (event, context, mainCallback) => {
         // Check if song exists
         (callback) => {
             songsService.getSong(idSong)
-                .then(res => { 
+                .then(res => {
                     sExists = Object.keys(res).length !== 0;
-                    callback(null, sExists, false); 
+                    callback(null, sExists, false);
                 })
-                .catch(err => { 
+                .catch(err => {
                     console.error(err);
                     callback(err);
                     return;
@@ -244,7 +245,7 @@ module.exports.insertPlaylistSong = (event, context, mainCallback) => {
                     console.error(err);
                     callback(err);
                     return;
-                })
+                });
         },
 
         // insert if both exist
@@ -382,7 +383,7 @@ module.exports.deletePlaylistSong = (event, context, callback) => {
             .build()
             .getLambdaResponse();
 
-            console.log("[PLAYLISTS] DELETE id/songs/id Response:", AWSLambdaResponse);
+        console.log("[PLAYLISTS] DELETE id/songs/id Response:", AWSLambdaResponse);
         callback(null, AWSLambdaResponse);
         return;
     }

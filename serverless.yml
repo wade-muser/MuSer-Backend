@@ -272,23 +272,17 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  updatePlaylistSongs:
-    handler: services/playlists/playlists.updatePlaylistSongs
-    events:
-      - http:
-          path: playlists/{id}/songs
-          method: put
-          cors: true
-          # authorizer: authorizer
-
   deletePlaylistSong:
     handler: services/playlists/playlists.deletePlaylistSong
     events:
       - http:
-          path: playlists/{id}/songs/{id}
+          path: playlists/{id}/songs/{idSong}
           method: delete
           cors: true
           # authorizer: authorizer
+
+
+
 
   cronjob:
     handler: functions/cron/job.handler

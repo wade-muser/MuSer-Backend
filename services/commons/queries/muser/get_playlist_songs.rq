@@ -1,0 +1,6 @@
+SELECT ?entity WHERE { 
+	{{=it.id}}   rdf:type   muser:MusicalPlaylist ;
+                 muser:has  ?entity .
+    
+    ?entity 	     rdf:type   muser:Song .
+}

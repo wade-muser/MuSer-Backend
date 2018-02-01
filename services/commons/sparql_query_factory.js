@@ -49,6 +49,9 @@ const insert_playlist = fs.readFileSync("services/commons/queries/muser/insert_p
 const get_playlists = fs.readFileSync("services/commons/queries/muser/get_playlists.rq", "utf-8");
 const get_playlist = fs.readFileSync("services/commons/queries/muser/get_playlist.rq", "utf-8");
 const delete_playlist = fs.readFileSync("services/commons/queries/muser/delete_playlist.rq", "utf-8");
+const insert_playlist_song = fs.readFileSync("services/commons/queries/muser/insert_playlist_song.rq", "utf-8");
+const get_playlist_songs = fs.readFileSync("services/commons/queries/muser/get_playlist_songs.rq", "utf-8");
+const delete_playlist_song = fs.readFileSync("services/commons/queries/muser/delete_playlist_song.rq", "utf-8");
 
 const QUERY = {
     GENRE_INFO: 0,
@@ -97,6 +100,9 @@ const QUERY = {
     GET_PLAYLISTS: 101,
     GET_PLAYLIST: 102,
     DELETE_PLAYLIST: 103,
+    INSERT_PLAYLIST_SONG: 104,
+    GET_PLAYLIST_SONGS: 105,
+    DELETE_PLAYLIST_SONG: 106,
 };
 
 function stringTemplate(literal, params = "") {
@@ -284,6 +290,17 @@ class QueryFactory {
         return QUERY.DELETE_PLAYLIST;
     }
 
+    static get INSERT_PLAYLIST_SONG() {
+        return QUERY.INSERT_PLAYLIST_SONG;
+    }
+
+    static get GET_PLAYLIST_SONGS() {
+        return QUERY.GET_PLAYLIST_SONGS;
+    }
+
+    static get DELETE_PLAYLIST_SONG() {
+        return QUERY.DELETE_PLAYLIST_SONG;
+    }
 
     getQuery(queryType, entityValue = undefined) {
         switch (queryType) {
@@ -363,6 +380,10 @@ class QueryFactory {
                 return this.buildQuery2(find_albums_recommendation_type_samegenre, entityValue);
             case QueryFactory.FIND_ALBUM_RECOMMENDATION_TYPE_RELATEDARTIST:
                 return this.buildQuery2(find_albums_recommendation_type_relatedartist, entityValue);
+            case QueryFactory.FIND_ALBUMS_FOR_ARTIST:
+                return this.buildQuery2(find_albums_for_artist, entityValue);
+            case QueryFactory.FIND_ARTIST_SONGS:
+                return this.buildQuery2(find_artist_songs, entityValue);
 
             case QueryFactory.INSERT_PLAYLIST:
                 return this.buildQuery2(insert_playlist, entityValue);
@@ -372,10 +393,12 @@ class QueryFactory {
                 return this.buildQuery2(get_playlist, entityValue);
             case QueryFactory.DELETE_PLAYLIST:
                 return this.buildQuery2(delete_playlist, entityValue);
-            case QueryFactory.FIND_ALBUMS_FOR_ARTIST:
-                return this.buildQuery2(find_albums_for_artist, entityValue);
-            case QueryFactory.FIND_ARTIST_SONGS:
-                return this.buildQuery2(find_artist_songs, entityValue);
+            case QueryFactory.INSERT_PLAYLIST_SONG:
+                return this.buildQuery2(insert_playlist_song, entityValue);
+            case QueryFactory.GET_PLAYLIST_SONGS:
+                return this.buildQuery2(get_playlist_songs, entityValue);
+            case QueryFactory.DELETE_PLAYLIST_SONG:
+                return this.buildQuery2(delete_playlist_song, entityValue);
         }
     }
 

@@ -1,0 +1,10 @@
+DELETE { {{=it.id}}      muser:has  {{=it.idSong}} } WHERE { 
+         {{=it.id}}      muser:has  {{=it.idSong}} .
+         {{=it.id}}      rdf:type   muser:MusicalPlaylist .
+         {{=it.idSong}}  rdf:type   muser:Song .
+} ;
+DELETE { {{=it.idSong}}  muser:partOf  {{=it.id}} } WHERE { 
+         {{=it.idSong}}  muser:partOf  {{=it.id}} .
+         {{=it.id}}      rdf:type   muser:MusicalPlaylist .
+         {{=it.idSong}}  rdf:type   muser:Song .
+}

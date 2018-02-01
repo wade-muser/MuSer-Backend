@@ -1,0 +1,7 @@
+INSERT {
+    {{=it.id}}        muser:has        {{=it.idSong}} .
+    {{=it.idSong}}    muser:partOf     {{=it.id}} .
+} WHERE {
+    {{=it.idSong}}    rdf:type         muser:Song .
+    {{=it.id}}        rdf:type         muser:MusicalPlaylist .
+}

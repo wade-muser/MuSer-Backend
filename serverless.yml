@@ -187,7 +187,7 @@ functions:
           cors: true
           # authorizer: authorizer
 
-  getGenre:
+  getGenreTimeline:
     handler: services/genres/genres.getGenreTimeline
     events:
       - http:
@@ -197,24 +197,24 @@ functions:
           # authorizer: authorizer
 
 
-  ### Event ###
-  getEvents:
-    handler: services/events/events.getEvents
-    events:
-      - http:
-          path: events
-          method: get
-          cors: true
-          # authorizer: authorizer
+  # ### Event ###
+  # getEvents:
+  #   handler: services/events/events.getEvents
+  #   events:
+  #     - http:
+  #         path: events
+  #         method: get
+  #         cors: true
+  #         # authorizer: authorizer
 
-  getEvent:
-    handler: services/events/events.getEvent
-    events:
-      - http:
-          path: events/{id}
-          method: get
-          cors: true
-          # authorizer: authorizer
+  # getEvent:
+  #   handler: services/events/events.getEvent
+  #   events:
+  #     - http:
+  #         path: events/{id}
+  #         method: get
+  #         cors: true
+  #         # authorizer: authorizer
 
   ### PlayList ###
   createPlaylist:
@@ -309,29 +309,29 @@ functions:
           cors: true
           authorizer: authorizer
 
-resources:
-  Resources:
-    Users:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: Users
-        AttributeDefinitions:
-          - AttributeName: email
-            AttributeType: S
-        KeySchema:
-          - AttributeName: email
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+# resources:
+#   Resources:
+#     Users:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: Users
+#         AttributeDefinitions:
+#           - AttributeName: email
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: email
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
     
-    Messages:
-      Type: AWS::SQS::Queue
-      Properties:
-        # QueueName: ${file(env/config.json):SQS_CRON_JOB_QUEUE_NAME}
-        QueueName: cron_job_queue
-        MessageRetentionPeriod: 1209600 # 2 weeks (second)
-        VisibilityTimeout: 60
+#     Messages:
+#       Type: AWS::SQS::Queue
+#       Properties:
+#         # QueueName: ${file(env/config.json):SQS_CRON_JOB_QUEUE_NAME}
+#         QueueName: cron_job_queue
+#         MessageRetentionPeriod: 1209600 # 2 weeks (second)
+#         VisibilityTimeout: 60
 
   # test:
   #   handler: functions/test/test.handler

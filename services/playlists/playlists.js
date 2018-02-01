@@ -27,6 +27,7 @@ module.exports.createPlaylist = (event, context, callback) => {
         return;
     }
 
+    event.body = JSON.parse(event.body);
     const name = event.body.name;
     const emailCreator = event.body.emailCreator;
 

@@ -36,7 +36,7 @@ module.exports.getGenres = (event, context, callback) => {
 };
 
 module.exports.getGenre = (event, context, callback) => {
-    
+
     const genreId = event.pathParameters.id;
 
     genresService.getGenre(genreId)
@@ -105,24 +105,30 @@ module.exports.getGenreTimeline = (event, context, callback) => {
     const genreId = event.pathParameters.id;
     const startDate = event.queryStringParameters.start_date;
     const endDate = event.queryStringParameters.end_date;
-    console.log(genreId+" "+startDate+" "+endDate);
+    console.log(genreId + " " + startDate + " " + endDate);
     genresService.getGenreTimeline(genreId, startDate, endDate)
         .then(results => {
             const agregated_results = Object.assign(results.artists_timeline, results.albums_timeline);
-            agregated_results_sorted = Object.keys(agregated_results)
-                        .sort(function(a,b){
-                            const first_date = new Date(agregated_results[a].inceptionDate[0]);
-                            const second_date = new Date(agregated_results[b].inceptionDate[0]);
-                            return first_date-second_date;
-            });
+            const sorted_entities = Object.keys(agregated_results)
+                .sort(function (a, b) {
+                    const first_date = new Date(agregated_results[a].inceptionDate[0]);
+                    const second_date = new Date(agregated_results[b].inceptionDate[0]);
+                    return first_date - second_date;
+                });
 
-            for(var entity of agregated_results_sorted){
-                console.log(entity+" "+agregated_results[entity].inceptionDate);
+            for (let entity of sorted_entities) {
+                console.log(entity + " " + agregated_results[entity].inceptionDate);
             }
+
+            const aggregated_sorted_results = [];
+            for (let entity of sorted_entities) {
+                aggregated_sorted_results.push(agregated_results[entity]);
+            }
+
             const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
                 .statusCode(HTTP_STATUS_CODES.OK)
                 .body({
-                    results: agregated_results
+                    results: aggregated_sorted_results,
                 })
                 .build()
                 .getLambdaResponse();

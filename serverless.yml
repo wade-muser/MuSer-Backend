@@ -253,6 +253,15 @@ functions:
           cors: true
           # authorizer: authorizer
 
+  smartGeneration:
+    handler: services/playlists/playlists.smartGeneration
+    events:
+      - http:
+          path: playlists/smartgens
+          method: post
+          cors: true
+          # authorizer: authorizer
+
   # PlaylistSongs #
   insertPlaylistSong:
     handler: services/playlists/playlists.insertPlaylistSong
@@ -280,7 +289,7 @@ functions:
           method: delete
           cors: true
           # authorizer: authorizer
-
+  
 
 
 

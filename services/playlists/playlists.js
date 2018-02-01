@@ -1,12 +1,15 @@
 const async = require("async");
+const shuffle = require("shuffle-array");
 const HttpResponse = require("../../commons/utils/http_response");
 const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 const PlaylistsService = require("./playlists_service");
 const SongsService = require("../songs/songs_service");
+const ArtistsService = require("../artists/artists_service");
 
 const playlistsService = new PlaylistsService();
 const songsService = new SongsService();
+const artistsService = new ArtistsService();
 
 module.exports.createPlaylist = (event, context, callback) => {
     if (!event.body) {
@@ -414,3 +417,186 @@ module.exports.deletePlaylistSong = (event, context, callback) => {
             callback(null, AWSLambdaResponse);
         });
 }; // deletePlaylist
+
+module.exports.smartGeneration = (event, context, mainCallback) => {
+    if (!event.body) {
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Body wasn't provided"
+            })
+            .build()
+            .getLambdaResponse();
+
+            console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
+        mainCallback(null, AWSLambdaResponse);
+        return;
+    }
+
+    const artists = event.body.artists;
+    const emailCreator = event.body.emailCreator;
+    
+    
+    async.waterfall([
+        // get songs of all keywords-artists
+        (callback) => {
+            async.map(artists, (artist, eachArtistCallback) => {
+                artistsService.getArtistSongs(artist)
+                    .then(res => {
+                        Object.keys(res).forEach(songEntity => {
+                            res[songEntity].artist = [ artist ];
+                        });
+
+                        eachArtistCallback(null, res);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        eachArtistCallback(err);
+                    })
+            }, (err, allSongsList) => {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                    return;
+                }
+                let allArtistsSongs = {};
+
+                allSongsList.forEach(songsDict => {
+                    Object.keys(songsDict).forEach(songEntity => {
+                        if (allArtistsSongs[songEntity] === undefined) {
+                            allArtistsSongs[songEntity] = songsDict[songEntity];
+                        }
+                    })
+                });
+
+                callback(null, allArtistsSongs);
+            }); // async.map
+        },
+        
+        // get all playlists of user
+        (songs1, callback) => {
+            playlistsService.getPlaylists(emailCreator)
+                .then(res => {
+                    let playlists = [];
+                    Object.keys(res).forEach(fullPlaylistEntity => {
+                        playlists.push(fullPlaylistEntity.split("#")[1]);
+                    });
+                    
+                    callback(null, songs1, playlists);
+                })
+                .catch(err => {
+                    console.error(err);
+                    callback(err);
+                    return;
+                });
+        },
+
+        // get all songs of all playlists of user
+        (songs1, playlists, callback) => {
+            async.map(playlists, (playlist, eachPlaylistCallback) => {
+                playlistsService.getPlaylistSongs(playlist)
+                    .then(res => {
+                        eachPlaylistCallback(null, res);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        callback(err);
+                        return;
+                    })
+            }, (err, allSongsList) => {
+                if (err) {
+                    console.error(err);
+                    callback(err);
+                    return;
+                }
+                let allArtistsSongs = {};
+                allSongsList.forEach(songsDict => {
+                    Object.keys(songsDict).forEach(songEntity => {
+                        if (allArtistsSongs[songEntity] === undefined) {
+                            allArtistsSongs[songEntity] = songsDict[songEntity];
+                        }
+                    })
+                });
+
+                callback(null, songs1, allArtistsSongs);
+            });
+        },
+
+        // get song recommendations for all songs of all playlists of user
+        (songs1, songs, callback) => {
+            let shortNameSongs = [];
+            Object.keys(songs).forEach(song => {
+                shortNameSongs.push(song.split("#")[1]);
+            });
+
+           async.map(shortNameSongs, (song, eachSongCallback) => {
+               songsService.getSongRecommendations(song, "artist")
+                .then(res => {
+                    eachSongCallback(null, res);
+                })
+                .catch(err => {
+                    console.error(err);
+                    eachSongCallback(err);
+                    return;
+                })
+           }, (err, allSongsList) => {
+                if (err) {
+                    console.error(err);
+                    callback(err);
+                    return;
+                }
+                let allArtistsSongs = {};
+                allSongsList.forEach(songsDict => {
+                    Object.keys(songsDict).forEach(songEntity => {
+                        if (allArtistsSongs[songEntity] === undefined) {
+                            allArtistsSongs[songEntity] = songsDict[songEntity];
+                        }
+                    })
+                });
+
+                callback(null, songs1, allArtistsSongs);
+           });
+        },
+
+        // randomize and minimize
+        (songs1, songs2, callback) => {
+            let results = Object.assign({}, songs1, songs2);
+            const songs = shuffle(Object.keys(results));
+            
+            const randomResults = {};
+            for (let i = 0; i < 15 && i < songs.length; i++) {
+                randomResults[songs[i]] = results[songs[i]];
+            }
+
+            callback(null, randomResults);
+        }
+    ], (err, results) => {
+        if (err) {
+            const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.BAD_REQUEST)
+            .body({
+                message: "Body wasn't provided"
+            })
+            .build()
+            .getLambdaResponse();
+
+            console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
+            mainCallback(null, AWSLambdaResponse);
+            return;
+        }
+    
+        const AWSLambdaResponse = new HttpResponse.HttpResponseBuilder()
+            .statusCode(HTTP_STATUS_CODES.OK)
+            .body({
+                results: results
+            })
+            .build()
+            .getLambdaResponse();
+
+            console.log("[PLAYLISTS] POST smartgens Response:", AWSLambdaResponse);
+            mainCallback(null, AWSLambdaResponse);
+    });
+};
+
+
+// timeline input

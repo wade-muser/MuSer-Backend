@@ -31,18 +31,18 @@ Muser microservices:
 
     - PlaylistManager
         - CRUD         cag@
-            - POST     playlists
-            - GET      playlists
-            - GET      playlists/{id}
-            - PATCH    playlists/{id}
-            - DELETE   playlists/{id}
+            - POST     playlists //DONE
+            - GET      playlists //DONE
+            - GET      playlists/{id} //DONE
+            - DELETE   playlists/{id} //DONE
 
-            - POST     playlists/{id}/songs
-            - GET      playlists/{id}/songs
-            - PUT      playlists/{id}/songs
-            - DELETE   playlists/{id}/songs/{id}
+            - POST     playlists/{id}/songs //DONE
+            - GET      playlists/{id}/songs //DONE
+            - DELETE   playlists/{id}/songs/{id} //DONE
 
-        - SMART generation: 'keyword artists', already created playlists, history?
+        - SMART generation
+            'keyword artists', //DONE
+            already created playlists,  //DONE
 
     
 

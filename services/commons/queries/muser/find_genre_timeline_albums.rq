@@ -1,9 +1,11 @@
-select  ?entity ?name ?inceptionDate where {
+select  ?entity ?name ?inceptionDate ?performer ?performerName where {
     ?genre rdf:type ?type;
            muser:embracedBy ?entity.
     ?entity  rdf:type ?entityType;
              muser:name ?name ;
-             muser:releaseDate ?inceptionDate.
+             muser:releaseDate ?inceptionDate;
+             muser:performedBy ?performer.
+    ?performer muser:name ?performerName    
     
     FILTER(?type=muser:MusicalGenre)         
     FILTER(?entityType=(muser:Album))

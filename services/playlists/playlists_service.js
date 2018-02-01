@@ -6,6 +6,8 @@ const dateformat = require("dateformat");
 const SparqlQueryFactory = require("../commons/sparql_query_factory");
 const GraphDBMuserService = require("../commons/graphdb_muser_service");
 const MAPPINGS = require("../commons/mappings");
+const CustomError = require("../../commons/utils/custom_error");
+const HTTP_STATUS_CODES = require("../../commons/utils/http_status_codes");
 
 class PlaylistsService {
     constructor() {
@@ -37,13 +39,13 @@ class PlaylistsService {
                     const uuidCreator = uuidv3(emailCreator, uuidv3.DNS);
 
                     const values = {
-                        name:        name,
+                        name: name,
                         uuidCreator: uuidCreator,
-                        uuid:        uuidPlaylist,
-                        entity:      `muser:Playlist_${uuidPlaylist}`,
+                        uuid: uuidPlaylist,
+                        entity: `Playlist_${uuidPlaylist}`,
                         dateCreated: dateformat(new Date(), "yyyy-mm-dd"),
                     };
-                    
+
                     console.log(values);
 
                     const query = this.queryFactory.getQuery(SparqlQueryFactory.INSERT_PLAYLIST, values);
@@ -91,7 +93,9 @@ class PlaylistsService {
                 (callback) => {
                     const uuidCreator = uuidv3(emailCreator, uuidv3.DNS);
 
-                    const query = this.queryFactory.getQuery(SparqlQueryFactory.GET_PLAYLISTS, { uuidCreator : uuidCreator });
+                    const query = this.queryFactory.getQuery(SparqlQueryFactory.GET_PLAYLISTS, {
+                        uuidCreator: uuidCreator
+                    });
 
                     callback(null, query);
                 },
